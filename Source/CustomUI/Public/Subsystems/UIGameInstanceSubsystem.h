@@ -31,5 +31,5 @@ public:
 	void RegisterCreatedPrimaryLayoutWidget(UWidgetPrimaryLayout* Widget_PrimaryLayoutToRegister);
 	
 	void PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidgetActivatableBase> WidgetSoftPtr, const FGameplayTag& Tag, 
-		TFunctionRef<void(EAsyncPushWidgetState, UWidgetActivatableBase&)> AsyncPushCallback);
+		TFunction<void(EAsyncPushWidgetState, UWidgetActivatableBase*)> AsyncPushCallback) const;
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Kismet/BlueprintAsyncActionBase.h"
 #include "AsyncAction_PushWidgetSoft.generated.h"
 
@@ -32,4 +33,13 @@ public:
 	FOnPushSoftWidgetDelegate OnWidgetCreatedAndBeforePush;
 	UPROPERTY(BlueprintAssignable)
 	FOnPushSoftWidgetDelegate OnWidgetCreatedAndPushed;
+	virtual void Activate() override;
+
+private:
+	
+	TWeakObjectPtr<UObject> CachedOwningWorld;
+	TWeakObjectPtr<APlayerController> CachedOwningPlayerController;
+	TSoftClassPtr<UWidgetActivatableBase> CachedWidgetSoftPtr;
+	FGameplayTag CachedWidgetTag; 
+	bool bCachedFocusOnNewlyPushedWidget = false;
 };

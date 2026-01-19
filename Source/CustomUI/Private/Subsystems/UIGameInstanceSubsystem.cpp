@@ -40,12 +40,12 @@ void UUIGameInstanceSubsystem::RegisterCreatedPrimaryLayoutWidget(UWidgetPrimary
 {
 	CHECK_NULL_RETURN(Widget_PrimaryLayoutToRegister);
 	CreatedPrimaryLayoutWidget = Widget_PrimaryLayoutToRegister;
-	PrintInLog("Registered Primary Layout.");
+	PrintInLog("Registered Primary Layout.", Display);
 }
 
 void UUIGameInstanceSubsystem::PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidgetActivatableBase> WidgetSoftPtr,
 	const FGameplayTag& Tag, 
-	TFunctionRef<void(EAsyncPushWidgetState, UWidgetActivatableBase&)> AsyncPushCallback)
+	TFunction<void(EAsyncPushWidgetState, UWidgetActivatableBase*)> AsyncPushCallback) const
 {
 	if (WidgetSoftPtr.IsNull()) {LOG_NULL_PTR(WidgetSoftPtr); return;}
 	using UWidgetContainer = UCommonActivatableWidgetContainerBase;
@@ -64,10 +64,10 @@ void UUIGameInstanceSubsystem::PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidg
 				FoundWidgetStack->AddWidget<UWidgetActivatableBase>(LoadedClass, 
 					[AsyncPushCallback](UWidgetActivatableBase& WidgetCreatedBeforePush)
 			{
-				AsyncPushCallback(EAsyncPushWidgetState::CreatedAndBeforePush, WidgetCreatedBeforePush);
+				AsyncPushCallback(EAsyncPushWidgetState::CreatedAndBeforePush, &WidgetCreatedBeforePush);
 			});
 			CHECK_NULL_RETURN(WidgetCreated);
-			AsyncPushCallback(EAsyncPushWidgetState::CreatedAndPushed, *WidgetCreated);
+			AsyncPushCallback(EAsyncPushWidgetState::CreatedAndPushed, WidgetCreated);
 			PrintInLog("Successfully pushed widget to stack asynchronously.", Display);
 		}));
 }

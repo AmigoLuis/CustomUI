@@ -73,7 +73,8 @@ inline void PrintInLog(const FString& Message,
 }
 
 #define LOG_ENTER_FUNCTION() \
-PrintInLog(TEXT("Entered Function: ") TEXT(__FUNCTION__) TEXT("."), ELogLevelUI::Display);
+PrintInLog(TEXT("Entered Function: ") TEXT(__FUNCTION__) TEXT(", line: ") \
+INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Display);
 // 两级宏：先展开，再字符串化
 #define SYMBOL_NAME_STR(x) #x
 #define INT_TO_STR(x) TEXT(SYMBOL_NAME_STR(x))
