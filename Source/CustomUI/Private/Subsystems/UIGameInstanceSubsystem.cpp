@@ -7,7 +7,7 @@
 #include "Engine/AssetManager.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 #include "Widgets/WidgetActivatableBase.h"
-#include "Widgets/Widget_PrimaryLayout.h"
+#include "Widgets/WidgetPrimaryLayout.h"
 
 
 UUIGameInstanceSubsystem* UUIGameInstanceSubsystem::Get(const UObject* WorldContextObject)
@@ -36,7 +36,7 @@ bool UUIGameInstanceSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 	return false;
 }
 
-void UUIGameInstanceSubsystem::RegisterCreatedPrimaryLayoutWidget(UWidget_PrimaryLayout* Widget_PrimaryLayoutToRegister)
+void UUIGameInstanceSubsystem::RegisterCreatedPrimaryLayoutWidget(UWidgetPrimaryLayout* Widget_PrimaryLayoutToRegister)
 {
 	CHECK_NULL_RETURN(Widget_PrimaryLayoutToRegister);
 	CreatedPrimaryLayoutWidget = Widget_PrimaryLayoutToRegister;
@@ -64,7 +64,7 @@ void UUIGameInstanceSubsystem::PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidg
 				FoundWidgetStack->AddWidget<UWidgetActivatableBase>(LoadedClass, 
 					[AsyncPushCallback](UWidgetActivatableBase& WidgetCreatedBeforePush)
 			{
-				AsyncPushCallback(EAsyncPushWidgetState::CreatedButNotPushed, WidgetCreatedBeforePush);
+				AsyncPushCallback(EAsyncPushWidgetState::CreatedAndBeforePush, WidgetCreatedBeforePush);
 			});
 			CHECK_NULL_RETURN(WidgetCreated);
 			AsyncPushCallback(EAsyncPushWidgetState::CreatedAndPushed, *WidgetCreated);

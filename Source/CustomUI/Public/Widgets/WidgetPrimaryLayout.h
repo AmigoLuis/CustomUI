@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-// #include "CommonActivatableWidgetContainerBase.h"
 #include "CommonUserWidget.h"
 #include "GameplayTagContainer.h"
-#include "Widget_PrimaryLayout.generated.h"
+#include "WidgetPrimaryLayout.generated.h"
 class UCommonActivatableWidgetContainerBase;
 /**
  * 
  */
 UCLASS(Abstract, BlueprintType, meta = (DisableNativeTick))
-class CUSTOMUI_API UWidget_PrimaryLayout : public UCommonUserWidget
+class CUSTOMUI_API UWidgetPrimaryLayout : public UCommonUserWidget
 {
 	GENERATED_BODY()
 	UPROPERTY(Transient)

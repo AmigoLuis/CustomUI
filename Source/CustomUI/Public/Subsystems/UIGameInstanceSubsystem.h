@@ -7,11 +7,11 @@
 #include "UIGameInstanceSubsystem.generated.h"
 
 struct FGameplayTag;
-class UWidget_PrimaryLayout;
+class UWidgetPrimaryLayout;
 class UWidgetActivatableBase;
 enum class EAsyncPushWidgetState : uint8
 {
-	CreatedButNotPushed,
+	CreatedAndBeforePush,
 	CreatedAndPushed
 };
 
@@ -23,12 +23,12 @@ class CUSTOMUI_API UUIGameInstanceSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 	UPROPERTY(Transient)
-	UWidget_PrimaryLayout* CreatedPrimaryLayoutWidget;
+	UWidgetPrimaryLayout* CreatedPrimaryLayoutWidget;
 public:
 	static  UUIGameInstanceSubsystem* Get(const UObject* WorldContextObject);
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 	UFUNCTION(BlueprintCallable)
-	void RegisterCreatedPrimaryLayoutWidget(UWidget_PrimaryLayout* Widget_PrimaryLayoutToRegister);
+	void RegisterCreatedPrimaryLayoutWidget(UWidgetPrimaryLayout* Widget_PrimaryLayoutToRegister);
 	
 	void PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidgetActivatableBase> WidgetSoftPtr, const FGameplayTag& Tag, 
 		TFunctionRef<void(EAsyncPushWidgetState, UWidgetActivatableBase&)> AsyncPushCallback);
