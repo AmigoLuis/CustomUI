@@ -1,0 +1,12 @@
+// Amigo Luis all rights reserved
+
+
+#include "FrontEndGameplayTags.h"
+
+namespace FrontEndGameplayTags
+{
+	UE_DEFINE_GAMEPLAY_TAG(FrontEnd_WidgetStack_Modal, "FrontEnd.WidgetStack.Modal");
+	UE_DEFINE_GAMEPLAY_TAG(FrontEnd_WidgetStack_GameMenu, "FrontEnd.WidgetStack.GameMenu");
+	UE_DEFINE_GAMEPLAY_TAG(FrontEnd_WidgetStack_GameHud, "FrontEnd.WidgetStack.GameHud");
+	UE_DEFINE_GAMEPLAY_TAG(FrontEnd_WidgetStack_FrontEnd, "FrontEnd.WidgetStack.FrontEnd");
+}

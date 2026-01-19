@@ -7,8 +7,10 @@ public class CustomUI : ModuleRules
 	public CustomUI(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+
+		PublicDependencyModuleNames.AddRange(new string[]
+			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "CommonUI", "UMG", 
+				 });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

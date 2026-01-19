@@ -1,0 +1,3 @@
+#include "UILogger.h"
+
+DEFINE_LOG_CATEGORY(M_CUSTOM_LOG_CATEGORY);
