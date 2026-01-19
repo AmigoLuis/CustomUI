@@ -13,5 +13,7 @@ UCLASS()
 class CUSTOMUI_API AFrontEndPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void OnPossess(APawn* aPawn) override;
 };
