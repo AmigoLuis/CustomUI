@@ -6,7 +6,7 @@
 // #include "CommonActivatableWidgetContainerBase.h"
 #include "CommonUserWidget.h"
 #include "GameplayTagContainer.h"
-#include "Widget_PrimaryLayout.generated.h" 
+#include "Widget_PrimaryLayout.generated.h"
 class UCommonActivatableWidgetContainerBase;
 /**
  * 
@@ -23,6 +23,6 @@ protected:
 		UCommonActivatableWidgetContainerBase* WidgetContainerBase);
 public:
 	UFUNCTION(BlueprintCallable)
-	UCommonActivatableWidgetContainerBase* TryGetWidgetStack(
+	UCommonActivatableWidgetContainerBase* FindWidgetStack(
 		UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag Tag);
 };

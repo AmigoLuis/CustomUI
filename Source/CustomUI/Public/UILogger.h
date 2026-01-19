@@ -39,7 +39,7 @@ enum ELogLevelUI : uint8
 #define SYMBOL_NAME_TEXT(x) TEXT(#x)
 // 定义日志类别
 #define M_CUSTOM_LOG_CATEGORY A_LogOfFrontEndUI
-DECLARE_LOG_CATEGORY_EXTERN(M_CUSTOM_LOG_CATEGORY, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(A_LogOfFrontEndUI, Log, All);
 
 // 留下这个注释以做警示，后续搞一个功能之前，一定一定要查一下有没有已经存在的功能！！
 #define M_LOCAL_LOG_PARAMS TEXT("%s"), *Message
@@ -74,7 +74,26 @@ inline void PrintInLog(const FString& Message,
 
 #define LOG_ENTER_FUNCTION() \
 PrintInLog(TEXT("Entered Function: ") TEXT(__FUNCTION__) TEXT("."), ELogLevelUI::Display);
+// 两级宏：先展开，再字符串化
+#define SYMBOL_NAME_STR(x) #x
+#define INT_TO_STR(x) TEXT(SYMBOL_NAME_STR(x))
 
+// 生成 Unreal Engine 宽字符串常量，例如 TEXT("42")
+#define LINE_AS_TEXT TEXT(INT_TO_STR(__LINE__))
+// 日志空指针错误宏
 #define LOG_NULL_PTR(PTR) \
-PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in Function:") TEXT(__FUNCTION__) TEXT("."), ELogLevelUI::Error);
+PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in function:") TEXT(__FUNCTION__) \
+TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Error);
 
+#define CHECK_NULL_RETURN_VALUE(PTR, VALUE) \
+if (PTR == nullptr)\
+{\
+LOG_NULL_PTR(PTR);\
+return VALUE;\
+}
+#define CHECK_NULL_RETURN(PTR) \
+if (PTR == nullptr)\
+{\
+LOG_NULL_PTR(PTR);\
+return;\
+}

@@ -9,9 +9,10 @@ void UWidget_PrimaryLayout::RegisterWidget(UPARAM(meta = (Categories = "FrontEnd
 {
 	if (IsDesignTime() || RegisteredWidgetStackMap.Contains(Tag)) return;
 	RegisteredWidgetStackMap.Add(Tag, WidgetContainerBase);
+	PrintInLog(TEXT("widget stack registered under the tag:") + Tag.ToString(), Display);
 }
 
-UCommonActivatableWidgetContainerBase* UWidget_PrimaryLayout::TryGetWidgetStack(
+UCommonActivatableWidgetContainerBase* UWidget_PrimaryLayout::FindWidgetStack(
 	UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag Tag)
 {
 	UCommonActivatableWidgetContainerBase* FoundWidgetStack = 
