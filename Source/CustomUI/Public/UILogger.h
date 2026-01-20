@@ -87,7 +87,7 @@ PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in function:") TEXT(__FUNCTIO
 TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Error);
 
 // 日志空指针警告宏
-#define WARN_LOG_NULL_PTR(PTR) \
+#define LOG_NULL_PTR_WARN(PTR) \
 PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in function:") TEXT(__FUNCTION__) \
 TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);
 
@@ -97,9 +97,21 @@ if (PTR == nullptr)\
 LOG_NULL_PTR(PTR);\
 return VALUE;\
 }
+#define CHECK_NULL_RETURN_VALUE_WARN(PTR, VALUE) \
+if (PTR == nullptr)\
+{\
+LOG_NULL_PTR_WARN(PTR);\
+return VALUE;\
+}
 #define CHECK_NULL_RETURN(PTR) \
 if (PTR == nullptr)\
 {\
 LOG_NULL_PTR(PTR);\
+return;\
+}
+#define CHECK_NULL_RETURN_WARN(PTR) \
+if (PTR == nullptr)\
+{\
+LOG_NULL_PTR_WARN(PTR);\
 return;\
 }

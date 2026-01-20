@@ -9,11 +9,15 @@
 struct FGameplayTag;
 class UWidgetPrimaryLayout;
 class UWidgetActivatableBase;
+class UFrontEndButtonBase;
 enum class EAsyncPushWidgetState : uint8
 {
 	CreatedAndBeforePush,
 	CreatedAndPushed
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionUpdatedDelegate, 
+	UFrontEndButtonBase*, ButtonToUpdate, FText, DescriptionTextToUpdate);
 
 /**
  * 
@@ -33,4 +37,6 @@ public:
 	void PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidgetActivatableBase> WidgetSoftPtr, 
 		const FGameplayTag& WidgetStackTag, 
 		TFunction<void(EAsyncPushWidgetState, UWidgetActivatableBase*)> AsyncPushCallback) const;
+	UPROPERTY(BlueprintAssignable)
+	FOnButtonDescriptionUpdatedDelegate OnButtonDescriptionUpdatedDelegate;
 };
