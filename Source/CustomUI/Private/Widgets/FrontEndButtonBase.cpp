@@ -21,3 +21,10 @@ void UFrontEndButtonBase::NativePreConstruct()
 	Super::NativePreConstruct();
 	SetButtonText(ButtonDisplayText);
 }
+
+void UFrontEndButtonBase::NativeOnCurrentTextStyleChanged()
+{
+	Super::NativeOnCurrentTextStyleChanged();
+	CHECK_NULL_RETURN(ButtonTextBlock);
+	ButtonTextBlock->SetStyle(GetCurrentTextStyleClass());
+}

@@ -30,4 +30,5 @@ private:
 
 protected:
 	virtual void NativePreConstruct() override;
+	virtual void NativeOnCurrentTextStyleChanged() override;
 };
