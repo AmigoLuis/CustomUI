@@ -5,14 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DeveloperSettings.h"
-#include "FrontEndUIDeveloperSettings.generated.h"
+#include "FrontEndDeveloperSettings.generated.h"
 
 class UWidgetActivatableBase;
 /**
  * 
  */
 UCLASS(Config= Game, DefaultConfig, meta = (DisplayName = "FrontEnd UI Settings"))
-class CUSTOMUI_API UFrontEndUIDeveloperSettings : public UDeveloperSettings
+class CUSTOMUI_API UFrontEndDeveloperSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
 public:

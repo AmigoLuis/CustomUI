@@ -27,7 +27,7 @@ public:
 		const UObject* WorldContextObject,
 		APlayerController* PlayerController,
 		TSoftClassPtr<UWidgetActivatableBase> InWidgetSoftPtr,
-		UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag InWidgetTag, 
+		UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag InWidgetStackTag, 
 		bool bFocusOnNewlyPushedWidget = true);
 	UPROPERTY(BlueprintAssignable)
 	FOnPushSoftWidgetDelegate OnWidgetCreatedAndBeforePush;
@@ -40,6 +40,6 @@ private:
 	TWeakObjectPtr<UObject> CachedOwningWorld;
 	TWeakObjectPtr<APlayerController> CachedOwningPlayerController;
 	TSoftClassPtr<UWidgetActivatableBase> CachedWidgetSoftPtr;
-	FGameplayTag CachedWidgetTag; 
+	FGameplayTag CachedWidgetStackTag; 
 	bool bCachedFocusOnNewlyPushedWidget = false;
 };

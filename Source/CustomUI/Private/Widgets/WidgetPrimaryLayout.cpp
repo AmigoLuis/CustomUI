@@ -13,11 +13,11 @@ void UWidgetPrimaryLayout::RegisterWidget(UPARAM(meta = (Categories = "FrontEnd.
 }
 
 UCommonActivatableWidgetContainerBase* UWidgetPrimaryLayout::FindWidgetStack(
-	UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag Tag)
+	UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag WidgetStackTag)
 {
 	UCommonActivatableWidgetContainerBase* FoundWidgetStack = 
-		RegisteredWidgetStackMap.FindRef(Tag);
+		RegisteredWidgetStackMap.FindRef(WidgetStackTag);
 	if (FoundWidgetStack == nullptr) 
-		PrintInLog(TEXT("Can not find the widget stack by the tag:") + Tag.ToString(), Error);
+		PrintInLog(TEXT("Can not find the widget stack by the tag:") + WidgetStackTag.ToString(), Error);
 	return FoundWidgetStack;
 }

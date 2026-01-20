@@ -11,7 +11,7 @@ UAsyncAction_PushWidgetSoft* UAsyncAction_PushWidgetSoft::PushWidgetSoftToStackA
 	const UObject* WorldContextObject,
 	APlayerController* PlayerController,
 	const TSoftClassPtr<UWidgetActivatableBase> InWidgetSoftPtr,
-	const FGameplayTag InWidgetTag,
+	const FGameplayTag InWidgetStackTag,
 	const bool bFocusOnNewlyPushedWidget)
 {
 	if (InWidgetSoftPtr.IsNull()) {LOG_NULL_PTR(InWidgetSoftPtr); return nullptr;}
@@ -26,7 +26,7 @@ UAsyncAction_PushWidgetSoft* UAsyncAction_PushWidgetSoft::PushWidgetSoftToStackA
 	Node->CachedOwningWorld = World;
 	Node->CachedOwningPlayerController = PlayerController;
 	Node->CachedWidgetSoftPtr = InWidgetSoftPtr;
-	Node->CachedWidgetTag = InWidgetTag;
+	Node->CachedWidgetStackTag = InWidgetStackTag;
 	Node->bCachedFocusOnNewlyPushedWidget = bFocusOnNewlyPushedWidget;
 	
 	Node->RegisterWithGameInstance(World);
@@ -42,7 +42,7 @@ void UAsyncAction_PushWidgetSoft::Activate()
 	
 	UIGameInstanceSubsystem->PushWidgetSoftPtrToStackAsync(
 		CachedWidgetSoftPtr,
-		CachedWidgetTag,
+		CachedWidgetStackTag,
 		[this](const EAsyncPushWidgetState InPushState, UWidgetActivatableBase* WidgetToPush)
 		{
 			LOG_ENTER_FUNCTION();

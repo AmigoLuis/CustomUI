@@ -23,5 +23,5 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable)
 	UCommonActivatableWidgetContainerBase* FindWidgetStack(
-		UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag Tag);
+		UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag WidgetStackTag);
 };

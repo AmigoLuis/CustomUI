@@ -44,20 +44,20 @@ void UUIGameInstanceSubsystem::RegisterCreatedPrimaryLayoutWidget(UWidgetPrimary
 }
 
 void UUIGameInstanceSubsystem::PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidgetActivatableBase> WidgetSoftPtr,
-	const FGameplayTag& Tag, 
+	const FGameplayTag& WidgetStackTag, 
 	TFunction<void(EAsyncPushWidgetState, UWidgetActivatableBase*)> AsyncPushCallback) const
 {
 	if (WidgetSoftPtr.IsNull()) {LOG_NULL_PTR(WidgetSoftPtr); return;}
 	using UWidgetContainer = UCommonActivatableWidgetContainerBase;
 	
 	UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(WidgetSoftPtr.ToSoftObjectPath(),
-		FStreamableDelegate::CreateLambda([this, WidgetSoftPtr, Tag, AsyncPushCallback]()
+		FStreamableDelegate::CreateLambda([this, WidgetSoftPtr, WidgetStackTag, AsyncPushCallback]()
 		{
 			UClass* LoadedClass = WidgetSoftPtr.Get();
 			CHECK_NULL_RETURN(LoadedClass);
 			CHECK_NULL_RETURN(this->CreatedPrimaryLayoutWidget);
 			
-			UWidgetContainer* FoundWidgetStack = CreatedPrimaryLayoutWidget->FindWidgetStack(Tag);
+			UWidgetContainer* FoundWidgetStack = CreatedPrimaryLayoutWidget->FindWidgetStack(WidgetStackTag);
 			CHECK_NULL_RETURN(FoundWidgetStack);
 			
 			UWidgetActivatableBase* WidgetCreated = 
