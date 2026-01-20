@@ -13,7 +13,7 @@ TSoftClassPtr<UWidgetActivatableBase> UUIFunctionLibrary::GetWidgetSoftFromSetti
 	CHECK_NULL_RETURN_VALUE(Settings, WidgetSoft);
 	if (!Settings->WidgetClassesMap.Contains(WidgetTag))
 	{
-		PrintInLog(TEXT("Can't find widget under the tag: ") + WidgetTag.ToString());
+		PrintInLog(TEXT("Can't find widget under the tag: ") + WidgetTag.ToString(), Error);
 		return WidgetSoft;
 	}
 	return Settings->WidgetClassesMap.FindRef(WidgetTag);
