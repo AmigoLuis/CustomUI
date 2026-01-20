@@ -56,8 +56,14 @@ void UAsyncAction_PushWidgetSoft::Activate()
 			case EAsyncPushWidgetState::CreatedAndPushed:
 				OnWidgetCreatedAndPushed.Broadcast(WidgetToPush);
 				if (UWidget* WidgetToFocus = 
-					bCachedFocusOnNewlyPushedWidget ? WidgetToPush->GetDesiredFocusTarget() : nullptr) 
-						WidgetToFocus->SetFocus();
+					bCachedFocusOnNewlyPushedWidget ? WidgetToPush->GetDesiredFocusTarget() : nullptr)
+					WidgetToFocus->SetFocus();
+				else 
+					PrintInLog(SYMBOL_NAME_TEXT(WidgetToPush) TEXT("'s name is ") + 
+						WidgetToPush->GetName() + 
+						TEXT(", and ") SYMBOL_NAME_TEXT(WidgetToPush->GetDesiredFocusTarget()) 
+						TEXT(" is nullptr in function:") TEXT(__FUNCTION__) 
+						TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."));
 				SetReadyToDestroy();
 				break;
 			default:
