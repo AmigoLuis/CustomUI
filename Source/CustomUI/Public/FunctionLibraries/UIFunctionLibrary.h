@@ -18,5 +18,9 @@ class CUSTOMUI_API UUIFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintPure, Category = "UI Library")
 	static TSoftClassPtr<UWidgetActivatableBase> GetWidgetSoftFromSettings(
-		UPARAM(meta = (Categories = "FrontEnd.Widget")) FGameplayTag WidgetTag);
+	UPARAM(meta = (Categories = "FrontEnd.Widget")) FGameplayTag WidgetTag);
+	UFUNCTION(BlueprintPure, Category = "UI Library")
+	static bool IsPlayerHaveRecord();
+	UFUNCTION(BlueprintPure, Category = "UI Library")
+	static bool IsPlayerHaveCompletedGameOnce();
 };

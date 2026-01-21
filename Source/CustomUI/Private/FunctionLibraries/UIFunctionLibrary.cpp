@@ -18,3 +18,13 @@ TSoftClassPtr<UWidgetActivatableBase> UUIFunctionLibrary::GetWidgetSoftFromSetti
 	}
 	return Settings->WidgetClassesMap.FindRef(WidgetTag);
 }
+
+bool UUIFunctionLibrary::IsPlayerHaveRecord()
+{
+	return false;
+}
+
+bool UUIFunctionLibrary::IsPlayerHaveCompletedGameOnce()
+{
+	return false;
+}

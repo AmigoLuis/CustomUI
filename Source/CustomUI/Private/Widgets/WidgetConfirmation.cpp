@@ -102,7 +102,9 @@ void UWidgetConfirmation::InitializeConfirmWidget(UConfirmWidgetInfoObject* InCo
 	{
 		switch (ButtonType) {
 		case EConfirmScreenButtonType::Confirmed:
-			return ICommonInputModule::GetSettings().GetDefaultClickAction();
+			// 这行会导致按钮聚焦到no按钮上面，点击确认键还是触发点击事件
+			// return ICommonInputModule::GetSettings().GetDefaultClickAction(); 
+			return  FDataTableRowHandle();
 		case EConfirmScreenButtonType::Canceled:
 			return ICommonInputModule::GetSettings().GetDefaultBackAction();
 		case EConfirmScreenButtonType::Closed:
@@ -120,7 +122,7 @@ void UWidgetConfirmation::InitializeConfirmWidget(UConfirmWidgetInfoObject* InCo
 		UFrontEndButtonBase* NewButton = ConfirmationButtons->CreateEntry<UFrontEndButtonBase>();
 		CHECK_NULL_RETURN_WARN(NewButton);
 		NewButton->SetButtonText(ButtonInfo.ButtonText);
-		NewButton->SetTriggeredInputAction(GetDataTableRowHandle(ButtonInfo.ConfirmationChoiceType));
+		NewButton->SetTriggeringInputAction(GetDataTableRowHandle(ButtonInfo.ConfirmationChoiceType));
 		NewButton->OnClicked().AddLambda(
 			[ClickedButtonCallback, ButtonInfo, this](){
 				ClickedButtonCallback(ButtonInfo.ConfirmationChoiceType);
