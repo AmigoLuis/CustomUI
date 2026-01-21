@@ -6,7 +6,7 @@
 #include "UILogger.h"
 #include "Settings/FrontEndDeveloperSettings.h"
 
-TSoftClassPtr<UWidgetActivatableBase> UUIFunctionLibrary::GetWidgetSoftFromSettings(FGameplayTag WidgetTag)
+TSoftClassPtr<UWidgetActivatableBase> UUIFunctionLibrary::GetWidgetSoftFromSettings(const FGameplayTag WidgetTag)
 {
 	TSoftClassPtr<UWidgetActivatableBase> WidgetSoft;
 	const UFrontEndDeveloperSettings* Settings = GetDefault<UFrontEndDeveloperSettings>();

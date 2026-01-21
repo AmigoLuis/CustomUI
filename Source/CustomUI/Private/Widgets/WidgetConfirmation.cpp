@@ -9,7 +9,7 @@
 #include "Widgets/FrontEndButtonBase.h"
 #include "ICommonInputModule.h"
 
-UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateOKConfirmWidget(const FText& Title, const FText& Message, 
+UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateConfirmWidget(const FText& Title, const FText& Message, 
                                                                           const EConfirmScreenType ConfirmationWidgetType)
 {
 	UConfirmWidgetInfoObject* InfoObject = NewObject<UConfirmWidgetInfoObject>();
@@ -18,12 +18,12 @@ UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateOKConfirmWidget(const 
 
 	if (ConfirmationWidgetType == EConfirmScreenType::OK)
 	{
-		
 		FConfirmWidgetButtonInfo ButtonInfo;
 		ButtonInfo.ButtonText = FText::FromString(TEXT("OK"));
 		ButtonInfo.ConfirmationChoiceType = EConfirmScreenButtonType::Closed;
 		InfoObject->AvailableButtonsInfo.Add(ButtonInfo);
-	} else if (ConfirmationWidgetType != EConfirmScreenType::Unknown)
+	}
+	else if (ConfirmationWidgetType != EConfirmScreenType::Unknown)
 	{
 		FText YesButtonText;
 		FText NoButtonText;

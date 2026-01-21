@@ -13,4 +13,5 @@ namespace FrontEndGameplayTags
 	// Widgets
 	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_PressAnyKey);
 	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_MainMenu);
+	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_Confirmation);
 }

@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UIGameInstanceSubsystem.generated.h"
 
+enum class EConfirmScreenButtonType : uint8;
+enum class EConfirmScreenType : uint8;
 struct FGameplayTag;
 class UWidgetPrimaryLayout;
 class UWidgetActivatableBase;
@@ -29,7 +31,7 @@ class CUSTOMUI_API UUIGameInstanceSubsystem : public UGameInstanceSubsystem
 	UPROPERTY(Transient)
 	UWidgetPrimaryLayout* CreatedPrimaryLayoutWidget;
 public:
-	static  UUIGameInstanceSubsystem* Get(const UObject* WorldContextObject);
+	static UUIGameInstanceSubsystem* Get(const UObject* WorldContextObject);
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 	UFUNCTION(BlueprintCallable)
 	void RegisterCreatedPrimaryLayoutWidget(UWidgetPrimaryLayout* Widget_PrimaryLayoutToRegister);
@@ -37,6 +39,10 @@ public:
 	void PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidgetActivatableBase> WidgetSoftPtr, 
 		const FGameplayTag& WidgetStackTag, 
 		TFunction<void(EAsyncPushWidgetState, UWidgetActivatableBase*)> AsyncPushCallback) const;
+	void PushConfirmWidgetToModalStackAsync(EConfirmScreenType ConfirmScreenType, 
+		const FText& InWidgetTitle,
+		const FText& InWidgetMessage,
+		const TFunction<void(EConfirmScreenButtonType)>& ConfirmCallback);
 	UPROPERTY(BlueprintAssignable)
 	FOnButtonDescriptionUpdatedDelegate OnButtonDescriptionUpdatedDelegate;
 };

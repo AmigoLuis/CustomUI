@@ -36,7 +36,7 @@ public:
 	UPROPERTY(Transient)
 	TArray<FConfirmWidgetButtonInfo> AvailableButtonsInfo;
 
-	static UConfirmWidgetInfoObject* CreateOKConfirmWidget(const FText& Title, const FText& Message,
+	static UConfirmWidgetInfoObject* CreateConfirmWidget(const FText& Title, const FText& Message,
 	                                                       const EConfirmScreenType ConfirmationWidgetType);
 	static void FillButtonTextBasedOnEConfirmationWidgetType(FText& InConfirmButtonText, FText& InCancelButtonText,
 	                                                         const EConfirmScreenType ConfirmationWidgetType);

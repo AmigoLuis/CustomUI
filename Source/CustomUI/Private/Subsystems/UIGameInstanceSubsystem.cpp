@@ -3,10 +3,13 @@
 
 #include "Subsystems/UIGameInstanceSubsystem.h"
 
+#include "FrontEndGameplayTags.h"
 #include "UILogger.h"
 #include "Engine/AssetManager.h"
+#include "FunctionLibraries/UIFunctionLibrary.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 #include "Widgets/WidgetActivatableBase.h"
+#include "Widgets/WidgetConfirmation.h"
 #include "Widgets/WidgetPrimaryLayout.h"
 
 
@@ -70,5 +73,30 @@ void UUIGameInstanceSubsystem::PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidg
 			AsyncPushCallback(EAsyncPushWidgetState::CreatedAndPushed, WidgetCreated);
 			PrintInLog("Successfully pushed widget to stack asynchronously.", Display);
 		}));
+}
+
+void UUIGameInstanceSubsystem::PushConfirmWidgetToModalStackAsync(
+	const EConfirmScreenType ConfirmScreenType,
+	const FText& InWidgetTitle, 
+	const FText& InWidgetMessage, 
+	const TFunction<void(EConfirmScreenButtonType)>& ConfirmCallback)
+{
+	CHECK_NULL_RETURN(ConfirmCallback);
+	UConfirmWidgetInfoObject* ConfirmWidgetInfoObject = 
+		UConfirmWidgetInfoObject::CreateConfirmWidget(InWidgetTitle, InWidgetMessage, ConfirmScreenType);
+	CHECK_NULL_RETURN(ConfirmWidgetInfoObject);
+
+	PushWidgetSoftPtrToStackAsync(UUIFunctionLibrary::GetWidgetSoftFromSettings(
+		FrontEndGameplayTags::FrontEnd_Widget_Confirmation),FrontEndGameplayTags::FrontEnd_WidgetStack_Modal,
+		[ConfirmCallback, ConfirmWidgetInfoObject](
+			const EAsyncPushWidgetState PushWidgetState, UWidgetActivatableBase* InWidget)
+		{
+			if (PushWidgetState == EAsyncPushWidgetState::CreatedAndBeforePush)
+			{
+				UWidgetConfirmation* ConfirmWidget = Cast<UWidgetConfirmation>(InWidget);
+				CHECK_NULL_RETURN(ConfirmWidget);
+				ConfirmWidget->InitializeConfirmWidget(ConfirmWidgetInfoObject, ConfirmCallback);
+			}
+		});
 }
 
