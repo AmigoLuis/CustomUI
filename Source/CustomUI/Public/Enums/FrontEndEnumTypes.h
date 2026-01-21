@@ -1,7 +1,7 @@
 #pragma once
 
 UENUM(BlueprintType)
-enum class EConfirmationWidgetType : uint8
+enum class EConfirmScreenType : uint8
 {
     OK			    UMETA(DisplayName = "OK"),
     YesNo			UMETA(DisplayName = "YesNo"),
@@ -11,7 +11,7 @@ enum class EConfirmationWidgetType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EConfirmationChoiceType : uint8
+enum class EConfirmScreenButtonType : uint8
 {
     Confirmed	    UMETA(DisplayName = "Confirmed"),
     Canceled		UMETA(DisplayName = "Canceled"),

@@ -7,7 +7,7 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetConfirmation.generated.h"
 
-enum class EConfirmationChoiceType : uint8;
+enum class EConfirmScreenButtonType : uint8;
 class UDynamicEntryBox;
 class UCommonTextBlock;
 
@@ -15,10 +15,10 @@ USTRUCT(BlueprintType)
 struct FConfirmWidgetButtonInfo
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EConfirmationChoiceType ConfirmationChoiceType = EConfirmationChoiceType::Unknown;
-	
+	EConfirmScreenButtonType ConfirmationChoiceType = EConfirmScreenButtonType::Unknown;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText ButtonText;
 };
@@ -30,16 +30,16 @@ class UConfirmWidgetInfoObject : public UObject
 
 public:
 	UPROPERTY(Transient)
-	FText Title;
+	FText WidgetTitle;
 	UPROPERTY(Transient)
-	FText Message;
+	FText WidgetMessage;
 	UPROPERTY(Transient)
-	TArray<FConfirmWidgetButtonInfo> ButtonsInfo;
-	
-	static UConfirmWidgetInfoObject* CreateOKConfirmWidget(const FText& Title, const FText& Message, 
-		const EConfirmationWidgetType ConfirmationWidgetType);
+	TArray<FConfirmWidgetButtonInfo> AvailableButtonsInfo;
+
+	static UConfirmWidgetInfoObject* CreateOKConfirmWidget(const FText& Title, const FText& Message,
+	                                                       const EConfirmScreenType ConfirmationWidgetType);
 	static void FillButtonTextBasedOnEConfirmationWidgetType(FText& InConfirmButtonText, FText& InCancelButtonText,
-		const EConfirmationWidgetType ConfirmationWidgetType);
+	                                                         const EConfirmScreenType ConfirmationWidgetType);
 };
 
 /**
@@ -55,4 +55,8 @@ class CUSTOMUI_API UWidgetConfirmation : public UWidgetActivatableBase
 	UCommonTextBlock* MessageToConfirmTextBlock;
 	UPROPERTY(meta = (BindWidget))
 	UDynamicEntryBox* ConfirmationButtons;
+
+public:
+	void InitializeConfirmWidget(UConfirmWidgetInfoObject* InConfirmationInfo,
+	                             TFunction<void(EConfirmScreenButtonType)> ClickedButtonCallback);
 };

@@ -9,8 +9,10 @@ public class CustomUI : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[]
-			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "CommonUI", "UMG", 
-				 });
+		{
+			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "CommonUI", "UMG", 
+			"CommonInput",
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

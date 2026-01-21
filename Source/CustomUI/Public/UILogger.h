@@ -91,27 +91,68 @@ TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Error);
 PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in function:") TEXT(__FUNCTION__) \
 TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);
 
+// 检查参数1是否为nullptr，是的话打印Error日志然后返回参数2
 #define CHECK_NULL_RETURN_VALUE(PTR, VALUE) \
 if (PTR == nullptr)\
 {\
 LOG_NULL_PTR(PTR);\
 return VALUE;\
 }
+
+// 检查参数1是否为nullptr，是的话打印Warn日志然后返回参数2
 #define CHECK_NULL_RETURN_VALUE_WARN(PTR, VALUE) \
 if (PTR == nullptr)\
 {\
 LOG_NULL_PTR_WARN(PTR);\
 return VALUE;\
 }
+
+// 检查参数是否为nullptr，是的话打印Error日志然后返回
 #define CHECK_NULL_RETURN(PTR) \
 if (PTR == nullptr)\
 {\
 LOG_NULL_PTR(PTR);\
 return;\
 }
+
+// 检查参数是否为nullptr，是的话打印Warn日志然后返回
 #define CHECK_NULL_RETURN_WARN(PTR) \
 if (PTR == nullptr)\
 {\
 LOG_NULL_PTR_WARN(PTR);\
 return;\
 }
+
+// 日志bool为真警告宏
+#define LOG_BOOL_TRUE_WARN(Condition) \
+	do{\
+		if(Condition)\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true in function:") TEXT(__FUNCTION__) \
+				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+	}while(0)
+
+// 日志bool为假警告宏
+#define LOG_BOOL_FALSE_WARN(Condition) \
+	do{\
+		if(!Condition)\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false in function:") TEXT(__FUNCTION__) \
+				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+	}while(0)
+
+// 检查参数Condition是否为true，是的话打印Warn日志然后返回
+#define CHECK_BOOL_TRUE_RETURN_WARN(Condition) \
+	do{\
+		if (Condition){\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true in function:") TEXT(__FUNCTION__) \
+				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+			return;}\
+	}while(0)
+
+// 检查参数Condition是否为false，是的话打印Warn日志然后返回
+#define CHECK_BOOL_FALSE_RETURN_WARN(Condition) \
+	do{\
+		if (!Condition){\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false in function:") TEXT(__FUNCTION__) \
+				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+			return;}\
+	}while(0)
