@@ -1,3 +1,5 @@
+// Amigo Luis all rights reserved
+
 #pragma once
 
 enum ELogLevelUI : uint8
