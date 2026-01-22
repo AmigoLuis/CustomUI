@@ -71,7 +71,8 @@ void UUIGameInstanceSubsystem::PushWidgetSoftPtrToStackAsync(TSoftClassPtr<UWidg
 			});
 			CHECK_NULL_RETURN(WidgetCreated);
 			AsyncPushCallback(EAsyncPushWidgetState::CreatedAndPushed, WidgetCreated);
-			PrintInLog("Successfully pushed widget to stack asynchronously.", Display);
+			PrintInLog(FString::Format(TEXT("Successfully pushed widget {0} to stack asynchronously."),
+				{WidgetCreated->GetName()}), Display);
 		}));
 }
 

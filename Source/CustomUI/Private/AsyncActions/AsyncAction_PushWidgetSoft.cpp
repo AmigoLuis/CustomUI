@@ -36,7 +36,7 @@ UAsyncAction_PushWidgetSoft* UAsyncAction_PushWidgetSoft::PushWidgetSoftToStackA
 void UAsyncAction_PushWidgetSoft::Activate()
 {
 	LOG_ENTER_FUNCTION();
-	UUIGameInstanceSubsystem* UIGameInstanceSubsystem = 
+	const UUIGameInstanceSubsystem* UIGameInstanceSubsystem = 
 		UUIGameInstanceSubsystem::Get(CachedOwningWorld.Get());
 	CHECK_NULL_RETURN(UIGameInstanceSubsystem)
 	
