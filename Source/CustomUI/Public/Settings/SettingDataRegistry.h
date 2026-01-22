@@ -25,7 +25,7 @@ private:
 	TArray<UListSettingDataObjectCollection*> RegisteredSettingsCollectionTabs;
 
 public:
-	[[nodiscard]] FORCEINLINE const TArray<UListSettingDataObjectCollection*>& GetRegisteredSettingsCollectionTabs() const
+	[[nodiscard]] FORCEINLINE const TArray<UListSettingDataObjectCollection*>& GetRegisteredSettingTabCollections() const
 	{
 		return RegisteredSettingsCollectionTabs;
 	}

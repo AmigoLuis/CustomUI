@@ -26,4 +26,5 @@ public:
 #if WITH_EDITOR
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
 #endif
+	void RequestRegisterTab(const FName& InTabId, const FText& InTabDisplayName);
 };

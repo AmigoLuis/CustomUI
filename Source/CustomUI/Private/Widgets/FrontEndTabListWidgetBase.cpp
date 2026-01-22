@@ -24,3 +24,9 @@ void UFrontEndTabListWidgetBase::ValidateCompiledDefaults(IWidgetCompilerLog& Co
 }
 #endif
 
+
+void UFrontEndTabListWidgetBase::RequestRegisterTab(const FName& InTabId, const FText& InTabDisplayName)
+{
+	
+}
+

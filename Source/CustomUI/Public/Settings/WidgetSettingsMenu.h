@@ -6,6 +6,8 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetSettingsMenu.generated.h"
 
+class UFrontEndTabListWidgetBase;
+class USettingDataRegistry;
 /**
  * 
  */
@@ -15,6 +17,7 @@ class CUSTOMUI_API UWidgetSettingsMenu : public UWidgetActivatableBase
 	GENERATED_BODY()
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void NativeOnActivated() override;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "FrontEnd Settings Menu", meta = (RowType = "/Script/CommonUI.CommonInputActionDataBase"))
@@ -22,4 +25,13 @@ private:
 	FUIActionBindingHandle ResetActionHandle;
 	void OnResetActionTriggeredInSettingsMenu();
 	void OnBackActionTriggeredInSettingsMenu();
+	//*** Bound widgets ***//
+	UPROPERTY(meta=(BindWidget))
+	UFrontEndTabListWidgetBase* SettingsTabList;
+	//*** Bound widgets ***//
+	
+	// dont access this directly
+	UPROPERTY(Transient)
+	USettingDataRegistry* SettingsDataRegistry;
+	USettingDataRegistry* GetOrCreateSettingsDataRegistry();
 };
