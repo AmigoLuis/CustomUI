@@ -11,7 +11,7 @@ void UFrontEndButtonBase::SetButtonText(FText NewButtonText)
 	CHECK_NULL_RETURN(ButtonTextBlock);
 	if (NewButtonText.IsEmpty())
 	{
-		PrintInLog(TEXT("Can't set empty text to button."), Error);
+		PrintInLog(TEXT("Can't set empty text to button."), Warning);
 		return;
 	}
 	ButtonTextBlock->SetText(bUseUpperCaseForButtonText ? NewButtonText.ToUpper() : NewButtonText);

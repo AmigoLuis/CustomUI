@@ -27,6 +27,10 @@ void UFrontEndTabListWidgetBase::ValidateCompiledDefaults(IWidgetCompilerLog& Co
 
 void UFrontEndTabListWidgetBase::RequestRegisterTab(const FName& InTabId, const FText& InTabDisplayName)
 {
+	RegisterTab(InTabId, TabButtonEntryClass, nullptr);
 	
+	UFrontEndButtonBase* FoundButton = Cast<UFrontEndButtonBase>(GetTabButtonBaseByID(InTabId));
+	CHECK_NULL_RETURN_WARN(FoundButton);
+	FoundButton->SetButtonText(InTabDisplayName);
 }
 
