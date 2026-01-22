@@ -24,7 +24,7 @@ public:
 		), DisplayName="Push Confirmation Widget To Stack  Async")
 	static UAsyncPushConfirmationWidget* PushConfirmWidgetToStackAsync(
 		const UObject* WorldContextObject,
-		EConfirmScreenType ConfirmScreenType,
+		const EConfirmScreenType ConfirmScreenType,
 		const FText& InTitleText,
 		const FText& InMessageText);
 	UPROPERTY(BlueprintAssignable)
