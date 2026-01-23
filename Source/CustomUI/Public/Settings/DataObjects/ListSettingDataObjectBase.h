@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class CUSTOMUI_API UListSettingDataObjectBase : public UObject
 {
 	GENERATED_BODY()
