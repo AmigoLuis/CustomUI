@@ -8,7 +8,7 @@
 
 void UFrontEndButtonBase::SetButtonText(FText NewButtonText)
 {
-	CHECK_NULL_RETURN(ButtonTextBlock);
+	CHECK_NULL_RETURN_WARN(ButtonTextBlock);
 	if (NewButtonText.IsEmpty())
 	{
 		PrintInLog(TEXT("Can't set empty text to button."), Warning);
@@ -26,7 +26,7 @@ void UFrontEndButtonBase::NativePreConstruct()
 void UFrontEndButtonBase::NativeOnCurrentTextStyleChanged()
 {
 	Super::NativeOnCurrentTextStyleChanged();
-	CHECK_NULL_RETURN(ButtonTextBlock);
+	CHECK_NULL_RETURN_WARN(ButtonTextBlock);
 	CHECK_NULL_RETURN_WARN(GetCurrentTextStyleClass());
 	ButtonTextBlock->SetStyle(GetCurrentTextStyleClass());
 }
