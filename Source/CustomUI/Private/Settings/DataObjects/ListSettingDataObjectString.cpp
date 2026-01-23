@@ -9,6 +9,38 @@ void UListSettingDataObjectString::AddSettingEntry(const FString& NewSettingName
 	AllSettingNameText.Add(NewSettingNameText);
 }
 
+void UListSettingDataObjectString::ToPreviousStringAndText()
+{
+	if (AllSettingNameString.IsEmpty() || AllSettingNameText.IsEmpty()) return;
+	const int32 CurrentIndex = AllSettingNameString.IndexOfByKey(CurrentSettingNameString);
+	const int PreviousIndex = CurrentIndex - 1;
+	if (AllSettingNameString.IsValidIndex(PreviousIndex))
+	{
+		CurrentSettingNameString = AllSettingNameString[PreviousIndex];
+	}
+	else
+	{
+		CurrentSettingNameString = AllSettingNameString[0];
+	}
+	TrySetTextAccordingToString(CurrentSettingNameString);
+}
+
+void UListSettingDataObjectString::ToNextStringAndText()
+{
+	if (AllSettingNameString.IsEmpty() || AllSettingNameText.IsEmpty()) return;
+	const auto CurrentIndex = AllSettingNameString.IndexOfByKey(CurrentSettingNameString);
+	const auto NextIndex = CurrentIndex + 1;
+	if (AllSettingNameString.IsValidIndex(NextIndex))
+	{
+		CurrentSettingNameString = AllSettingNameString[NextIndex];
+	}
+	else
+	{
+		CurrentSettingNameString = AllSettingNameString.Last();
+	}
+	TrySetTextAccordingToString(CurrentSettingNameString);
+}
+
 void UListSettingDataObjectString::OnInitializeDataObject()
 {
 	Super::OnInitializeDataObject();

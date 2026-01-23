@@ -26,6 +26,9 @@ public:
 		return AllSettingNameText;
 	}
 
+	void ToPreviousStringAndText();
+	void ToNextStringAndText();
+	
 protected:
 	FString CurrentSettingNameString;
 	FText CurrentSettingNameText;

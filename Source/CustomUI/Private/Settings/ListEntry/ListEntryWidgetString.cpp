@@ -28,9 +28,17 @@ void UListEntryWidgetString::NativeOnInitialized()
 void UListEntryWidgetString::OnDecreaseValueButtonClicked()
 {
 	LOG_ENTER_FUNCTION();
+	if (OwningListItemObject != nullptr)
+	{
+		OwningListItemObject->ToPreviousStringAndText();
+	}
 }
 
 void UListEntryWidgetString::OnIncreaseValueButtonClicked()
 {
 	LOG_ENTER_FUNCTION();
+	if (OwningListItemObject != nullptr)
+	{
+		OwningListItemObject->ToNextStringAndText();
+	}
 }

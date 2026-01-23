@@ -16,11 +16,11 @@ void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPl
 }
 
 #undef INIT_COLLECTION_TAB
-#define INIT_COLLECTION_TAB \
-UListSettingDataObjectCollection* COLLECTION_NAME##Collection = NewObject<UListSettingDataObjectCollection>();\
-COLLECTION_NAME##Collection->SetDataID(FName(SYMBOL_NAME_TEXT(COLLECTION_NAME)TEXT("Collection")));\
-COLLECTION_NAME##Collection->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(COLLECTION_NAME)));\
-RegisteredSettingsCollectionTabs.Add(COLLECTION_NAME##Collection);\
+#define INIT_COLLECTION_TAB(CollectionName) \
+UListSettingDataObjectCollection* CollectionName##Collection = NewObject<UListSettingDataObjectCollection>();\
+CollectionName##Collection->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)TEXT("Collection")));\
+CollectionName##Collection->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(CollectionName)));\
+RegisteredSettingsCollectionTabs.Add(CollectionName##Collection);\
 
 #undef INIT_CHILD_DATA_AND_SET_ID_NAME
 #define INIT_CHILD_DATA_AND_SET_ID_NAME(ChileName) \
@@ -29,7 +29,7 @@ ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
 
 #undef ADD_CHILD_TO_COLLECTION
-#define ADD_CHILD_TO_COLLECTION(ChileName) COLLECTION_NAME##Collection->AddChildData(ChileName);
+#define ADD_CHILD_TO_COLLECTION(ChileName, CollectionName) CollectionName##Collection->AddChildData(ChileName);
 
 #undef ADD_CHILD_SETTING_NAME
 #define ADD_CHILD_SETTING_NAME(ChileName,SettingName) \
@@ -49,43 +49,31 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 
 void USettingDataRegistry::InitGamePlayCollectionTab()
 {
-#undef COLLECTION_NAME
-#define COLLECTION_NAME Gameplay
-	INIT_COLLECTION_TAB;
+	INIT_COLLECTION_TAB(Gameplay);
 	INIT_CHILD_DATA_AND_SET_ID_NAME(Difficulty);
 	ADD_CHILD_SETTING_NAME(Difficulty, Easy);
 	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
 	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
-	ADD_CHILD_TO_COLLECTION(Difficulty);
+	ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
 	
 	INIT_CHILD_DATA_AND_SET_ID_NAME(AutoSave);
 	ADD_CHILD_SETTING_NAME(AutoSave, On);
 	ADD_CHILD_SETTING_NAME(AutoSave, Off);
-	ADD_CHILD_TO_COLLECTION(AutoSave);
-#undef COLLECTION_NAME
+	ADD_CHILD_TO_COLLECTION(AutoSave, Gameplay);
 }
 
 void USettingDataRegistry::InitAudioCollectionTab()
 {
-#undef COLLECTION_NAME
-#define COLLECTION_NAME Audio
-	INIT_COLLECTION_TAB;
-#undef COLLECTION_NAME
+	INIT_COLLECTION_TAB(Audio);
 }
 
 void USettingDataRegistry::InitVideoCollectionTab()
 {
-#undef COLLECTION_NAME
-#define COLLECTION_NAME Video
-	INIT_COLLECTION_TAB;
-#undef COLLECTION_NAME
+	INIT_COLLECTION_TAB(Video);
 }
 
 void USettingDataRegistry::InitControlCollectionTab()
 {
-#undef COLLECTION_NAME
-#define COLLECTION_NAME Control
-	INIT_COLLECTION_TAB;
-#undef COLLECTION_NAME
+	INIT_COLLECTION_TAB(Control);
 }
 #undef INIT_COLLECTION_TAB
