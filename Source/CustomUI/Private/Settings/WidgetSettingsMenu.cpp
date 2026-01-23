@@ -27,6 +27,8 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 		FSimpleDelegate::CreateUObject(
 			this, 
 			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu)));
+	SettingsTabList->OnTabSelected.AddUniqueDynamic(
+		this, &UWidgetSettingsMenu::OnTabSelectedInSettingsMenu);
 }
 
 void UWidgetSettingsMenu::NativeOnActivated()
@@ -66,4 +68,9 @@ USettingDataRegistry* UWidgetSettingsMenu::GetOrCreateSettingsDataRegistry()
 	}
 	CHECK_NULL_RETURN_VALUE(SettingsDataRegistry, nullptr);
 	return SettingsDataRegistry;
+}
+
+void UWidgetSettingsMenu::OnTabSelectedInSettingsMenu(FName TabID)
+{
+	PrintInLog(TEXT("Tab Selected from Settings Menu, Tab id:") + TabID.ToString(), Display);
 }

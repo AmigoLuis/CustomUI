@@ -34,4 +34,7 @@ private:
 	UPROPERTY(Transient)
 	USettingDataRegistry* SettingsDataRegistry;
 	USettingDataRegistry* GetOrCreateSettingsDataRegistry();
+	
+	UFUNCTION()
+	void OnTabSelectedInSettingsMenu(FName TabID);
 };
