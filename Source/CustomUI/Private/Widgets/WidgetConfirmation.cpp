@@ -6,7 +6,7 @@
 #include "UILogger.h"
 #include "Components/DynamicEntryBox.h"
 #include "Enums/FrontEndEnumTypes.h"
-#include "Widgets/FrontEndButtonBase.h"
+#include "Widgets/Components/FrontEndButtonBase.h"
 #include "ICommonInputModule.h"
 
 UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateConfirmWidget(const FText& Title, const FText& Message, 

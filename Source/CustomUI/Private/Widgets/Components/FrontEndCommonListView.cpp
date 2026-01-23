@@ -1,7 +1,7 @@
 // Amigo Luis all rights reserved
 
 
-#include "Widgets/FrontEndCommonListView.h"
+#include "Widgets/Components/FrontEndCommonListView.h"
 
 #include "UILogger.h"
 #include "Editor/WidgetCompilerLog.h"

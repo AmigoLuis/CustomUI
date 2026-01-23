@@ -1,7 +1,7 @@
 // Amigo Luis all rights reserved
 
 
-#include "Widgets/FrontEndButtonBase.h"
+#include "Widgets/Components/FrontEndButtonBase.h"
 #include "CommonTextBlock.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"

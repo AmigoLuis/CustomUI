@@ -1,16 +1,16 @@
 // Amigo Luis all rights reserved
 
 
-#include "Settings/WidgetSettingsMenu.h"
+#include "Widgets/WidgetSettingsMenu.h"
 
 #include "ICommonInputModule.h"
 #include "UILogger.h"
-#include "Widgets/FrontEndButtonBase.h"
+#include "Widgets/Components/FrontEndButtonBase.h"
 #include "Input/CommonUIInputTypes.h"
 #include "Settings/SettingDataRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
-#include "Widgets/FrontEndCommonListView.h"
-#include "Widgets/FrontEndTabListWidgetBase.h"
+#include "Widgets/Components/FrontEndCommonListView.h"
+#include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
 void UWidgetSettingsMenu::NativeOnInitialized()
 {

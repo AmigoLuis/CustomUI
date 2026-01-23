@@ -1,11 +1,11 @@
 // Amigo Luis all rights reserved
 
 
-#include "Widgets/FrontEndTabListWidgetBase.h"
+#include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
 #include "UILogger.h"
 #include "Editor/WidgetCompilerLog.h"
-#include "Widgets/FrontEndButtonBase.h"
+#include "Widgets/Components/FrontEndButtonBase.h"
 
 #if WITH_EDITOR
 M_VALIDATE_COMPILED_DEFAULTS_DEFINE(UFrontEndTabListWidgetBase, TabButtonEntryClass, UFrontEndButtonBase)
