@@ -6,6 +6,7 @@
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "ListEntryWidgetString.generated.h"
 
+class UListSettingDataObjectString;
 class UFrontEndCommonRotator;
 class UFrontEndButtonBase;
 /**
@@ -15,6 +16,11 @@ UCLASS(Abstract, BlueprintType, meta = (DisableNativeTick))
 class CUSTOMUI_API UListEntryWidgetString : public UListEntryWidgetBase
 {
 	GENERATED_BODY()
+
+protected:
+	// UListEntryWidgetBase
+	virtual void OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject) override;
+	// UListEntryWidgetBase
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
 	UFrontEndButtonBase* DecreaseValueButton;
@@ -22,4 +28,6 @@ private:
 	UFrontEndCommonRotator* SettingEntryValueRotator;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
 	UFrontEndButtonBase* IncreaseValueButton;
+	UPROPERTY(Transient)
+	UListSettingDataObjectString* OwningListItemObject;
 };

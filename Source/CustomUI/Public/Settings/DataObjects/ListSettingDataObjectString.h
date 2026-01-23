@@ -15,6 +15,17 @@ class CUSTOMUI_API UListSettingDataObjectString : public UListSettingDataObjectV
 	GENERATED_BODY()
 public:
 	void AddSettingEntry(const FString& NewSettingNameString, const FText& NewSettingNameText);
+
+	[[nodiscard]] FORCEINLINE const FText& GetCurrentSettingNameText() const
+	{
+		return CurrentSettingNameText;
+	}
+
+	[[nodiscard]] FORCEINLINE const TArray<FText>& GetAllSettingNameText() const
+	{
+		return AllSettingNameText;
+	}
+
 protected:
 	FString CurrentSettingNameString;
 	FText CurrentSettingNameText;
