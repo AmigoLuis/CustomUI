@@ -3,7 +3,21 @@
 
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 
+#include "CommonTextBlock.h"
+#include "UILogger.h"
+#include "Settings/DataObjects/ListSettingDataObjectBase.h"
+
 void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	IUserObjectListEntry::NativeOnListItemObjectSet(ListItemObject);
+	OnListItemObjectSet(Cast<UListSettingDataObjectBase>(ListItemObject));
+}
+
+void UListEntryWidgetBase::OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject)
+{
+	CHECK_NULL_RETURN(InOwningListItemObject);
+	if (SettingEntryNameTextBlock)
+	{
+		SettingEntryNameTextBlock->SetText(InOwningListItemObject->GetDataDisplayName());
+	}
 }

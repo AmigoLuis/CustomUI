@@ -7,6 +7,7 @@
 #include "Blueprint/IUserObjectListEntry.h"
 #include "ListEntryWidgetBase.generated.h"
 
+class UListSettingDataObjectBase;
 class UCommonTextBlock;
 /**
  * 
@@ -18,6 +19,9 @@ class CUSTOMUI_API UListEntryWidgetBase : public UCommonUserWidget, public IUser
 
 protected:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	
+	// child should override this function to handle list item data, super call is needed
+	virtual void OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject);
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
 	UCommonTextBlock* SettingEntryNameTextBlock;
