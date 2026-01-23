@@ -6,6 +6,7 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetSettingsMenu.generated.h"
 
+class UFrontEndCommonListView;
 class UFrontEndTabListWidgetBase;
 class USettingDataRegistry;
 /**
@@ -28,6 +29,8 @@ private:
 	//*** Bound widgets ***//
 	UPROPERTY(meta=(BindWidget))
 	UFrontEndTabListWidgetBase* SettingsTabList;
+	UPROPERTY(meta=(BindWidget))
+	UFrontEndCommonListView* SettingsListView;
 	//*** Bound widgets ***//
 	
 	// dont access this directly
