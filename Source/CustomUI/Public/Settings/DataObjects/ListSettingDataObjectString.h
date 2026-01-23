@@ -20,4 +20,8 @@ protected:
 	FText CurrentSettingNameText;
 	TArray<FString> AllSettingNameString;
 	TArray<FText> AllSettingNameText;
+	// UListSettingDataObjectBase
+	virtual void OnInitializeDataObject() override;
+	// UListSettingDataObjectBase
+	bool TrySetTextAccordingToString(const FString& InSettingNameString);
 };
