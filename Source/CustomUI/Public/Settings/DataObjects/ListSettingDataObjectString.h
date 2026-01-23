@@ -13,5 +13,11 @@ UCLASS()
 class CUSTOMUI_API UListSettingDataObjectString : public UListSettingDataObjectValue
 {
 	GENERATED_BODY()
-	
+public:
+	void AddSettingEntry(const FString& NewSettingNameString, const FText& NewSettingNameText);
+protected:
+	FString CurrentSettingNameString;
+	FText CurrentSettingNameText;
+	TArray<FString> AllSettingNameString;
+	TArray<FText> AllSettingNameText;
 };
