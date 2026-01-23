@@ -158,3 +158,10 @@ return;\
 				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
 			return;}\
 	}while(0)
+
+
+// 日志打印字符串值
+#define LOG_STRING_PTR(StringVariable) \
+do{PrintInLog(SYMBOL_NAME_TEXT(StringVariable) TEXT(" is ") + StringVariable +\
+TEXT(" in function:") TEXT(__FUNCTION__) \
+TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Display);}while(0);

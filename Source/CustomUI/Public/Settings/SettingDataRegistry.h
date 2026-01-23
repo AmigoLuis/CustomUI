@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "SettingDataRegistry.generated.h"
 
+class UListSettingDataObjectBase;
 class UListSettingDataObjectCollection;
 /**
  * 
@@ -16,6 +17,11 @@ class CUSTOMUI_API USettingDataRegistry : public UObject
 	GENERATED_BODY()
 public:
 	void InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer);
+	[[nodiscard]] FORCEINLINE const TArray<UListSettingDataObjectCollection*>& GetRegisteredSettingTabCollections() const
+	{
+		return RegisteredSettingsCollectionTabs;
+	}
+	TArray<UListSettingDataObjectBase*> GetListSourceItemsBySelectedTabId(const FName& InCollectionID); 
 private:
 	void InitGamePlayCollectionTab();
 	void InitAudioCollectionTab();
@@ -23,10 +29,4 @@ private:
 	void InitControlCollectionTab();
 	UPROPERTY(Transient)
 	TArray<UListSettingDataObjectCollection*> RegisteredSettingsCollectionTabs;
-
-public:
-	[[nodiscard]] FORCEINLINE const TArray<UListSettingDataObjectCollection*>& GetRegisteredSettingTabCollections() const
-	{
-		return RegisteredSettingsCollectionTabs;
-	}
 };

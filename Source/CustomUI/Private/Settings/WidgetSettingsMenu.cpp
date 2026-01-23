@@ -9,6 +9,7 @@
 #include "Input/CommonUIInputTypes.h"
 #include "Settings/SettingDataRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
+#include "Widgets/FrontEndCommonListView.h"
 #include "Widgets/FrontEndTabListWidgetBase.h"
 
 void UWidgetSettingsMenu::NativeOnInitialized()
@@ -70,7 +71,16 @@ USettingDataRegistry* UWidgetSettingsMenu::GetOrCreateSettingsDataRegistry()
 	return SettingsDataRegistry;
 }
 
-void UWidgetSettingsMenu::OnTabSelectedInSettingsMenu(FName TabID)
+void UWidgetSettingsMenu::OnTabSelectedInSettingsMenu(const FName TabID)
 {
 	PrintInLog(TEXT("Tab Selected from Settings Menu, Tab id:") + TabID.ToString(), Display);
+	const auto& FoundListSourceItems = GetOrCreateSettingsDataRegistry()->GetListSourceItemsBySelectedTabId(TabID);
+	
+	SettingsListView->SetListItems(FoundListSourceItems);
+	SettingsListView->RequestRefresh();
+	if (SettingsListView->GetNumItems() != 0)
+	{
+		SettingsListView->NavigateToIndex(0);
+		SettingsListView->SetSelectedIndex(0);
+	}
 }

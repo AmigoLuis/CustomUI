@@ -4,6 +4,7 @@
 #include "Settings/SettingDataRegistry.h"
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
+#include "Settings/DataObjects/ListSettingDataObjectString.h"
 
 
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
@@ -21,9 +22,33 @@ CollectionName##Collection->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)TEXT
 CollectionName##Collection->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(CollectionName)));\
 RegisteredSettingsCollectionTabs.Add(CollectionName##Collection);\
 
+#undef ADD_CHILD_DATA_IN_COLLECTION
+#define ADD_CHILD_DATA_IN_COLLECTION(ChileName,CollectionName) \
+do{\
+	UListSettingDataObjectString* ChileName = NewObject<UListSettingDataObjectString>();\
+	ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
+	ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+	CollectionName##Collection->AddChildData(ChileName);\
+}while (false);
+
+
+TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySelectedTabId(const FName& InCollectionID)
+{
+	const auto FoundCollectionPtr = 
+		RegisteredSettingsCollectionTabs.FindByPredicate([&InCollectionID](const UListSettingDataObjectBase* Item)
+	{
+		return InCollectionID == Item->GetDataID();
+	});
+	LOG_STRING_PTR(InCollectionID.ToString());
+	CHECK_NULL_RETURN_VALUE(FoundCollectionPtr, TArray<UListSettingDataObjectBase*>());
+	return (*FoundCollectionPtr)->GetAllChildrenDataObjects();
+}
+
 void USettingDataRegistry::InitGamePlayCollectionTab()
 {
 	INIT_COLLECTION_TAB(Gameplay);
+	ADD_CHILD_DATA_IN_COLLECTION(Difficulty, Gameplay);
+	ADD_CHILD_DATA_IN_COLLECTION(AutoSave, Gameplay);
 }
 
 void USettingDataRegistry::InitAudioCollectionTab()
