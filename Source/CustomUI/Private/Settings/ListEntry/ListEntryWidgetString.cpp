@@ -5,6 +5,7 @@
 
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
+#include "Widgets/Components/FrontEndButtonBase.h"
 #include "Widgets/Components/FrontEndCommonRotator.h"
 
 void UListEntryWidgetString::OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject)
@@ -15,4 +16,21 @@ void UListEntryWidgetString::OnListItemObjectSet(UListSettingDataObjectBase* InO
 	
 	SettingEntryValueRotator->PopulateTextLabels(OwningListItemObject->GetAllSettingNameText());
 	SettingEntryValueRotator->SetSelectedItemByText(OwningListItemObject->GetCurrentSettingNameText());
+}
+
+void UListEntryWidgetString::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+	DecreaseValueButton->OnClicked().AddUObject(this, &UListEntryWidgetString::OnDecreaseValueButtonClicked);
+	IncreaseValueButton->OnClicked().AddUObject(this, &UListEntryWidgetString::OnIncreaseValueButtonClicked);
+}
+
+void UListEntryWidgetString::OnDecreaseValueButtonClicked()
+{
+	LOG_ENTER_FUNCTION();
+}
+
+void UListEntryWidgetString::OnIncreaseValueButtonClicked()
+{
+	LOG_ENTER_FUNCTION();
 }

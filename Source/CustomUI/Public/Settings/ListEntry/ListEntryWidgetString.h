@@ -21,6 +21,9 @@ protected:
 	// UListEntryWidgetBase
 	virtual void OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject) override;
 	// UListEntryWidgetBase
+	// UUserWidget
+	virtual void NativeOnInitialized() override;
+	// UUserWidget
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
 	UFrontEndButtonBase* DecreaseValueButton;
@@ -30,4 +33,7 @@ private:
 	UFrontEndButtonBase* IncreaseValueButton;
 	UPROPERTY(Transient)
 	UListSettingDataObjectString* OwningListItemObject;
+	
+	void OnDecreaseValueButtonClicked();
+	void OnIncreaseValueButtonClicked();
 };
