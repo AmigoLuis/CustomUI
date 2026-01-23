@@ -6,6 +6,7 @@
 #include "CommonListView.h"
 #include "FrontEndCommonListView.generated.h"
 
+class UDA_DataListEntryMapping;
 /**
  * 
  */
@@ -14,4 +15,14 @@ class CUSTOMUI_API UFrontEndCommonListView : public UCommonListView
 {
 	GENERATED_BODY()
 	
+private:
+	UPROPERTY(EditAnywhere, Category= "FrontEnd List View")
+	UDA_DataListEntryMapping* DataListEntryMapping;
+
+protected:
+	virtual UUserWidget& OnGenerateEntryWidgetInternal(UObject* Item, TSubclassOf<UUserWidget> DesiredEntryClass,
+		const TSharedRef<STableViewBase>& OwnerTable) override;
+
+public:
+	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
 };

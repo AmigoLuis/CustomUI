@@ -165,3 +165,42 @@ return;\
 do{PrintInLog(SYMBOL_NAME_TEXT(StringVariable) TEXT(" is ") + StringVariable +\
 TEXT(" in function:") TEXT(__FUNCTION__) \
 TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Display);}while(0);
+
+
+
+// 定义一个 ValidateCompiledDefaults 函数，检查ClassName类的MemberVariableToValidate是否为空
+// 需要先 #include "Editor/WidgetCompilerLog.h" ，然后宏需要包含在 #if WITH_EDITOR 和 #endif 之间
+#define M_VALIDATE_COMPILED_DEFAULTS_DEFINE(ClassName, MemberVariableToValidate, MemberVariableClass) \
+void ClassName::ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const\
+{\
+	Super::ValidateCompiledDefaults(CompileLog);\
+	if (!MemberVariableToValidate)/*这里是判断条件*/\
+	{\
+		const FString& ErrorMessage = FString::Format(TEXT("The variable {0} has not been set.\n"\
+			"Please set it to a valid subclass of {1}.\n"\
+			"{2} needs a valid {0} to function properly."),\
+			{SYMBOL_NAME_TEXT(MemberVariableToValidate),\
+				SYMBOL_NAME_TEXT(MemberVariableClass),\
+				GetClass()->GetName()});\
+		CompileLog.Error(FText::FromString(ErrorMessage));\
+	}\
+}\
+
+// 定义一个 ValidateCompiledDefaults 函数，检查ClassName类的MemberVariableToValidate是否为空
+// 需要先 #include "Editor/WidgetCompilerLog.h" ，然后宏需要包含在 #if WITH_EDITOR 和 #endif 之间
+#define M_VALIDATE_COMPILED_DEFAULTS_DEFINE_CUSTOM_CONDITION(ClassName, ErrorCondition, \
+	MemberVariableToValidate, MemberVariableClass) \
+void ClassName::ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const\
+{\
+Super::ValidateCompiledDefaults(CompileLog);\
+if (ErrorCondition)/*这里是判断条件*/\
+{\
+const FString& ErrorMessage = FString::Format(TEXT("The variable {0} has not been set.\n"\
+"Please set it to a valid subclass of {1}.\n"\
+"{2} needs a valid {0} to function properly."),\
+{SYMBOL_NAME_TEXT(MemberVariableToValidate),\
+SYMBOL_NAME_TEXT(MemberVariableClass),\
+GetClass()->GetName()});\
+CompileLog.Error(FText::FromString(ErrorMessage));\
+}\
+}\
