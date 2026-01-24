@@ -41,4 +41,6 @@ private:
 	
 	UFUNCTION()
 	void OnTabSelectedInSettingsMenu(FName TabID);
+	void OnListViewItemHovered(UObject* InHoveredItem, bool bIsHovered);
+	void OnListViewItemSelectionChanged(UObject* InHoveredItem);
 };

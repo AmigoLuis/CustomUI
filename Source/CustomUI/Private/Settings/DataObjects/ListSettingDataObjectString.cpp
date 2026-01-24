@@ -37,7 +37,7 @@ void UListSettingDataObjectString::ToPreviousStringAndText()
 			PrintInLog(
 				TEXT("Current ") 
 				SYMBOL_NAME_TEXT(DataDynamicGetter->GetValueAsString()) 
-				TEXT(" is :") + DataDynamicGetter->GetValueAsString(), Display);	
+				TEXT(" is : ") + DataDynamicGetter->GetValueAsString(), Display);	
 		}
 		NotifyListDataModified(this);
 	}
@@ -68,7 +68,7 @@ void UListSettingDataObjectString::ToNextStringAndText()
 			PrintInLog(
 				TEXT("Current ") 
 				SYMBOL_NAME_TEXT(DataDynamicGetter->GetValueAsString()) 
-				TEXT(" is :") + DataDynamicGetter->GetValueAsString(), Display);	
+				TEXT(" is : ") + DataDynamicGetter->GetValueAsString(), Display);	
 		}
 		NotifyListDataModified(this);
 	}

@@ -31,6 +31,12 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu)));
 	SettingsTabList->OnTabSelected.AddUniqueDynamic(
 		this, &UWidgetSettingsMenu::OnTabSelectedInSettingsMenu);
+	
+	SettingsListView->OnItemIsHoveredChanged().AddUObject(
+		this, &UWidgetSettingsMenu::OnListViewItemHovered);
+	
+	SettingsListView->OnItemSelectionChanged().AddUObject(
+		this, &UWidgetSettingsMenu::OnListViewItemSelectionChanged);
 }
 
 void UWidgetSettingsMenu::NativeOnDeactivated()
@@ -90,4 +96,27 @@ void UWidgetSettingsMenu::OnTabSelectedInSettingsMenu(const FName TabID)
 		SettingsListView->NavigateToIndex(0);
 		SettingsListView->SetSelectedIndex(0);
 	}
+}
+
+void UWidgetSettingsMenu::OnListViewItemHovered(UObject* InHoveredItem, bool bIsHovered)
+{
+	CHECK_NULL_RETURN_WARN(InHoveredItem);
+	const UListSettingDataObjectBase* HoveredDataObject = 
+		Cast<UListSettingDataObjectBase>(InHoveredItem);
+	CHECK_NULL_RETURN_WARN(HoveredDataObject);
+	
+	const FString& DisplayName = HoveredDataObject->GetDataDisplayName().ToString();
+	PrintInLog(DisplayName + TEXT("'s hover state is : ") + 
+		(bIsHovered ? TEXT("hovered") : TEXT("unhovered")), Display);
+}
+
+void UWidgetSettingsMenu::OnListViewItemSelectionChanged(UObject* InHoveredItem)
+{
+	CHECK_NULL_RETURN_WARN(InHoveredItem);
+	const UListSettingDataObjectBase* HoveredDataObject = 
+		Cast<UListSettingDataObjectBase>(InHoveredItem);
+	CHECK_NULL_RETURN_WARN(HoveredDataObject);
+	
+	const FString& DisplayName = HoveredDataObject->GetDataDisplayName().ToString();
+	PrintInLog(DisplayName + TEXT("'s hover state is selected"), Display);
 }
