@@ -81,17 +81,15 @@ INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Display);
 #define SYMBOL_NAME_STR(x) #x
 #define INT_TO_STR(x) TEXT(SYMBOL_NAME_STR(x))
 
-// 生成 Unreal Engine 宽字符串常量，例如 TEXT("42")
-#define LINE_AS_TEXT TEXT(INT_TO_STR(__LINE__))
+// 生成 函数名 + 行号字符串的宏
+#define IN_FUNC_AND_LINE TEXT("in function: ") TEXT(__FUNCTION__) TEXT(", line: ") INT_TO_STR(__LINE__) TEXT(".")
 // 日志空指针错误宏
 #define LOG_NULL_PTR(PTR) \
-PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in function:") TEXT(__FUNCTION__) \
-TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Error);
+PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr ") IN_FUNC_AND_LINE, ELogLevelUI::Error);
 
 // 日志空指针警告宏
 #define LOG_NULL_PTR_WARN(PTR) \
-PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr in function:") TEXT(__FUNCTION__) \
-TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);
+PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);
 
 // 检查参数1是否为nullptr，是的话打印Error日志然后返回参数2
 #define CHECK_NULL_RETURN_VALUE(PTR, VALUE) \
@@ -129,24 +127,21 @@ return;\
 #define LOG_BOOL_TRUE_WARN(Condition) \
 	do{\
 		if(Condition)\
-			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true in function:") TEXT(__FUNCTION__) \
-				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);\
 	}while(0)
 
 // 日志bool为假警告宏
 #define LOG_BOOL_FALSE_WARN(Condition) \
 	do{\
 		if(!Condition)\
-			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false in function:") TEXT(__FUNCTION__) \
-				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);\
 	}while(0)
 
 // 检查参数Condition是否为true，是的话打印Warn日志然后返回
 #define CHECK_BOOL_TRUE_RETURN_WARN(Condition) \
 	do{\
 		if (Condition){\
-			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true in function:") TEXT(__FUNCTION__) \
-				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);\
 			return;}\
 	}while(0)
 
@@ -154,8 +149,7 @@ return;\
 #define CHECK_BOOL_FALSE_RETURN_WARN(Condition) \
 	do{\
 		if (!Condition){\
-			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false in function:") TEXT(__FUNCTION__) \
-				TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Warning);\
+			PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);\
 			return;}\
 	}while(0)
 
@@ -163,8 +157,7 @@ return;\
 // 日志打印字符串值
 #define LOG_STRING_PTR(StringVariable) \
 do{PrintInLog(SYMBOL_NAME_TEXT(StringVariable) TEXT(" is ") + StringVariable +\
-TEXT(" in function:") TEXT(__FUNCTION__) \
-TEXT(", line: ") INT_TO_STR(__LINE__) TEXT("."), ELogLevelUI::Display);}while(0);
+TEXT(" in ") IN_FUNC_AND_LINE, ELogLevelUI::Display);}while(0);
 
 
 

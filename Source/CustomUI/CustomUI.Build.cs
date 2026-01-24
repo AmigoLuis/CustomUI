@@ -11,7 +11,7 @@ public class CustomUI : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "CommonUI", "UMG", 
-			"CommonInput",
+			"CommonInput", "PropertyPath"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
