@@ -7,6 +7,7 @@
 #include "UILogger.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
 #include "Input/CommonUIInputTypes.h"
+#include "Settings/FrontendGameUserSettings.h"
 #include "Settings/SettingDataRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Widgets/Components/FrontEndCommonListView.h"
@@ -32,6 +33,12 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 		this, &UWidgetSettingsMenu::OnTabSelectedInSettingsMenu);
 }
 
+void UWidgetSettingsMenu::NativeOnDeactivated()
+{
+	Super::NativeOnDeactivated();
+	UFrontendGameUserSettings::Get()->ApplySettings(true);
+}
+
 void UWidgetSettingsMenu::NativeOnActivated()
 {
 	Super::NativeOnActivated();
@@ -39,7 +46,7 @@ void UWidgetSettingsMenu::NativeOnActivated()
 	CHECK_NULL_RETURN(SettingsDataRegistry);
 	const auto& TabCollections = 
 		SettingsDataRegistry->GetRegisteredSettingTabCollections();
-	for (UListSettingDataObjectCollection* TabCollection : TabCollections)
+	for (const UListSettingDataObjectCollection* TabCollection : TabCollections)
 	{
 		if (TabCollection == nullptr) continue;
 		const FName& TabDataID = TabCollection->GetDataID();

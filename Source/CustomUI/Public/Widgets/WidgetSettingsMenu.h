@@ -18,6 +18,7 @@ class CUSTOMUI_API UWidgetSettingsMenu : public UWidgetActivatableBase
 	GENERATED_BODY()
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void NativeOnDeactivated() override;
 	virtual void NativeOnActivated() override;
 
 private:

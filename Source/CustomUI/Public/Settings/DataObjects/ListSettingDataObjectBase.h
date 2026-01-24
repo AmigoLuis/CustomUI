@@ -25,6 +25,7 @@ public:
 	GETTER_AND_SETTER_REFERENCE(FText, DisabledRichText);
 	GETTER_AND_SETTER_REFERENCE(TSoftObjectPtr<UTexture2D>, SoftDescriptionImage);
 	GETTER_AND_SETTER_VALUE(UListSettingDataObjectBase*, ParentDataRaw);
+	GETTER_AND_SETTER_VALUE(bool, bShouldApplySettingChangeImmediately);
 	
 	void InitializeDataObject();
 	
@@ -50,4 +51,6 @@ private:
 	
 	UPROPERTY(Transient)
 	UListSettingDataObjectBase* ParentDataRaw;
+	
+	bool bShouldApplySettingChangeImmediately = false;
 };

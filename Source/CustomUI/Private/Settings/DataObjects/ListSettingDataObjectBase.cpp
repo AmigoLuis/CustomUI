@@ -3,6 +3,8 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectBase.h"
 
+#include "Settings/FrontendGameUserSettings.h"
+
 void UListSettingDataObjectBase::InitializeDataObject()
 {
 	OnInitializeDataObject();
@@ -16,4 +18,8 @@ void UListSettingDataObjectBase::NotifyListDataModified(UListSettingDataObjectBa
 	const ESettingsListDataModifyReason ModifyReason)
 {
 	OnListDataModifiedDelegate.Broadcast(ModifiedData, ModifyReason);
+	if (bShouldApplySettingChangeImmediately)
+	{
+		UFrontendGameUserSettings::Get()->ApplySettings(true);
+	}
 }

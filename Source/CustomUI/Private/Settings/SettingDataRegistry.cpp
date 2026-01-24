@@ -28,7 +28,8 @@ RegisteredSettingsCollectionTabs.Add(CollectionName##Collection);\
 #define INIT_CHILD_DATA_AND_SET_ID_NAME(ChileName) \
 UListSettingDataObjectString* ChileName = NewObject<UListSettingDataObjectString>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
+ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef ADD_CHILD_TO_COLLECTION
 #define ADD_CHILD_TO_COLLECTION(ChileName, CollectionName) CollectionName##Collection->AddChildData(ChileName);

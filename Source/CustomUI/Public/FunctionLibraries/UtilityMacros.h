@@ -21,7 +21,7 @@ ClassMemberName = In##ClassMemberName;\
 {\
 return ClassMemberName;\
 }\
-void Set##ClassMemberName(Type In##ClassMemberName)\
+FORCEINLINE void Set##ClassMemberName(Type In##ClassMemberName)\
 {\
 ClassMemberName = In##ClassMemberName;\
 }
