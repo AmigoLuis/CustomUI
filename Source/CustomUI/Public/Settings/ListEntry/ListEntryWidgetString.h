@@ -20,6 +20,8 @@ class CUSTOMUI_API UListEntryWidgetString : public UListEntryWidgetBase
 protected:
 	// UListEntryWidgetBase
 	virtual void OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject) override;
+	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData, 
+		ESettingsListDataModifyReason ModifyReason) override;
 	// UListEntryWidgetBase
 	// UUserWidget
 	virtual void NativeOnInitialized() override;

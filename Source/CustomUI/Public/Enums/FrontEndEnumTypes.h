@@ -18,3 +18,11 @@ enum class EConfirmScreenButtonType : uint8
     Closed	        UMETA(DisplayName = "Closed"),
     Unknown			UMETA(Hidden)
 };
+
+UENUM(BlueprintType)
+enum class ESettingsListDataModifyReason : uint8
+{
+    DirectlyModified	    UMETA(DisplayName = "DirectlyModified"),
+    DependencyModified		UMETA(DisplayName = "DependencyModified"),
+    ResetToDefault	        UMETA(DisplayName = "ResetToDefault")
+};

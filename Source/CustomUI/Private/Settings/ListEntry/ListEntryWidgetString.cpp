@@ -18,6 +18,14 @@ void UListEntryWidgetString::OnListItemObjectSet(UListSettingDataObjectBase* InO
 	SettingEntryValueRotator->SetSelectedItemByText(OwningListItemObject->GetCurrentSettingNameText());
 }
 
+void UListEntryWidgetString::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
+	ESettingsListDataModifyReason ModifyReason)
+{
+	Super::OnOwningListItemObjectModified(ModifiedData, ModifyReason);
+	CHECK_NULL_RETURN(OwningListItemObject);
+	SettingEntryValueRotator->SetSelectedItemByText(OwningListItemObject->GetCurrentSettingNameText());
+}
+
 void UListEntryWidgetString::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();

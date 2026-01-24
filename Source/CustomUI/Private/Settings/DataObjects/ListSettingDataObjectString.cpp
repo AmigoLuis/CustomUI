@@ -20,9 +20,10 @@ void UListSettingDataObjectString::ToPreviousStringAndText()
 	}
 	else
 	{
-		CurrentSettingNameString = AllSettingNameString[0];
+		CurrentSettingNameString = AllSettingNameString.Last();
 	}
 	TrySetTextAccordingToString(CurrentSettingNameString);
+	NotifyListDataModified(this);
 }
 
 void UListSettingDataObjectString::ToNextStringAndText()
@@ -36,9 +37,10 @@ void UListSettingDataObjectString::ToNextStringAndText()
 	}
 	else
 	{
-		CurrentSettingNameString = AllSettingNameString.Last();
+		CurrentSettingNameString = AllSettingNameString[0];
 	}
 	TrySetTextAccordingToString(CurrentSettingNameString);
+	NotifyListDataModified(this);
 }
 
 void UListSettingDataObjectString::OnInitializeDataObject()

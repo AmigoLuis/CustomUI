@@ -20,4 +20,14 @@ void UListEntryWidgetBase::OnListItemObjectSet(UListSettingDataObjectBase* InOwn
 	{
 		SettingEntryNameTextBlock->SetText(InOwningListItemObject->GetDataDisplayName());
 	}
+	if (!InOwningListItemObject->OnListDataModifiedDelegate.IsBoundToObject(this))
+	{
+		InOwningListItemObject->OnListDataModifiedDelegate.AddUObject(this, 
+			&UListEntryWidgetBase::OnOwningListItemObjectModified);	
+	}
+}
+
+void UListEntryWidgetBase::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
+	ESettingsListDataModifyReason ModifyReason)
+{
 }

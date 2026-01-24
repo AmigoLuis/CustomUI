@@ -11,3 +11,9 @@ void UListSettingDataObjectBase::InitializeDataObject()
 void UListSettingDataObjectBase::OnInitializeDataObject()
 {
 }
+
+void UListSettingDataObjectBase::NotifyListDataModified(UListSettingDataObjectBase* ModifiedData,
+	const ESettingsListDataModifyReason ModifyReason)
+{
+	OnListDataModifiedDelegate.Broadcast(ModifiedData, ModifyReason);
+}
