@@ -3,6 +3,9 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 
+#include "UILogger.h"
+#include "Settings/FSettingDataInteractionHelper.h"
+
 void UListSettingDataObjectString::AddSettingEntry(const FString& NewSettingNameString, const FText& NewSettingNameText)
 {
 	AllSettingNameString.Add(NewSettingNameString);
@@ -23,7 +26,21 @@ void UListSettingDataObjectString::ToPreviousStringAndText()
 		CurrentSettingNameString = AllSettingNameString.Last();
 	}
 	TrySetTextAccordingToString(CurrentSettingNameString);
-	NotifyListDataModified(this);
+	// Save setting value
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueAsString(CurrentSettingNameString);
+		PrintInLog(SYMBOL_NAME_TEXT(CurrentSettingNameString) 
+			TEXT(" is : ") + CurrentSettingNameString, Display);
+		if (DataDynamicGetter)
+		{
+			PrintInLog(
+				TEXT("Current ") 
+				SYMBOL_NAME_TEXT(DataDynamicGetter->GetValueAsString()) 
+				TEXT(" is :") + DataDynamicGetter->GetValueAsString(), Display);	
+		}
+		NotifyListDataModified(this);
+	}
 }
 
 void UListSettingDataObjectString::ToNextStringAndText()
@@ -40,7 +57,21 @@ void UListSettingDataObjectString::ToNextStringAndText()
 		CurrentSettingNameString = AllSettingNameString[0];
 	}
 	TrySetTextAccordingToString(CurrentSettingNameString);
-	NotifyListDataModified(this);
+	// Save setting value
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueAsString(CurrentSettingNameString);
+		PrintInLog(SYMBOL_NAME_TEXT(CurrentSettingNameString) 
+			TEXT(" is : ") + CurrentSettingNameString, Display);
+		if (DataDynamicGetter)
+		{
+			PrintInLog(
+				TEXT("Current ") 
+				SYMBOL_NAME_TEXT(DataDynamicGetter->GetValueAsString()) 
+				TEXT(" is :") + DataDynamicGetter->GetValueAsString(), Display);	
+		}
+		NotifyListDataModified(this);
+	}
 }
 
 void UListSettingDataObjectString::OnInitializeDataObject()
@@ -50,8 +81,12 @@ void UListSettingDataObjectString::OnInitializeDataObject()
 	if (AllSettingNameString.Num() > 0)
 	{
 		CurrentSettingNameString = AllSettingNameString[0];
-		
 	}
+	if (DataDynamicGetter && !DataDynamicGetter->GetValueAsString().IsEmpty())
+	{
+		CurrentSettingNameString = DataDynamicGetter->GetValueAsString();
+	}
+	
 	if (!TrySetTextAccordingToString(CurrentSettingNameString))
 	{
 		CurrentSettingNameText = FText::FromString(TEXT("Invalid Setting Name"));

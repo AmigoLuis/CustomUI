@@ -18,4 +18,18 @@ public:
 private:
 	UPROPERTY(Config)
 	FString CurrentGameDifficulty;
+
+public:
+	//*** Game Collection Tab
+	UFUNCTION()
+	[[nodiscard]] FORCEINLINE FString GetCurrentGameDifficulty() const
+	{
+		return CurrentGameDifficulty;
+	}
+	UFUNCTION()
+	FORCEINLINE void SetCurrentGameDifficulty(const FString& InCurrentGameDifficulty)
+	{
+		this->CurrentGameDifficulty = InCurrentGameDifficulty;
+	}
+	//*** Game Collection Tab
 };

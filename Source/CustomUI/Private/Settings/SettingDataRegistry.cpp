@@ -3,6 +3,8 @@
 
 #include "Settings/SettingDataRegistry.h"
 #include "UILogger.h"
+#include "Settings/FrontendGameUserSettings.h"
+#include "Settings/FSettingDataInteractionHelper.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 
@@ -35,6 +37,14 @@ ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
 #define ADD_CHILD_SETTING_NAME(ChileName,SettingName) \
 ChileName->AddSettingEntry(SYMBOL_NAME_TEXT(SettingName), FText::FromString(SYMBOL_NAME_TEXT(SettingName)));
 
+
+#undef ADD_CHILD_DYNAMIC_GETTER_AND_SETTER
+#define ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ChileName) \
+ChileName->SetDataDynamicGetter(MakeShared<FSettingDataInteractionHelper>(\
+GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,GetCurrentGame##ChileName)));\
+ChileName->SetDataDynamicSetter(MakeShared<FSettingDataInteractionHelper>(\
+GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,SetCurrentGame##ChileName)));
+
 TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySelectedTabId(const FName& InCollectionID)
 {
 	const auto FoundCollectionPtr = 
@@ -54,6 +64,7 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 	ADD_CHILD_SETTING_NAME(Difficulty, Easy);
 	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
 	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
+	ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
 	ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
 	
 	INIT_CHILD_DATA_AND_SET_ID_NAME(AutoSave);
