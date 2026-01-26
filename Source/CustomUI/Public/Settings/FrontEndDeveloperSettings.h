@@ -19,4 +19,7 @@ public:
 	UPROPERTY(Config, EditAnywhere, Category = "Widgets Reference", 
 		meta=(ForceInlineRow, Categories = "FrontEnd.Widget"))
 	TMap<FGameplayTag, TSoftClassPtr<UWidgetActivatableBase>> WidgetClassesMap;
+	UPROPERTY(Config, EditAnywhere, Category = "Settings Detail Image Reference", 
+		meta=(ForceInlineRow, Categories = "FrontEnd.Image"))
+	TMap<FGameplayTag, TSoftObjectPtr<UTexture2D>> SettingsDetailSoftImageMap;
 };

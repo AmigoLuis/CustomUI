@@ -18,8 +18,12 @@ void UWidgetSettingDetailsView::UpdateDetailViewInfo(UListSettingDataObjectBase*
 	if (const TSoftObjectPtr<UTexture2D> SoftImage = InDataObject->GetSoftDescriptionImage(); 
 		!SoftImage.IsNull())
 	{
-		LazyImageDescription->SetBrushFromLazyTexture(SoftImage.Get());
+		LazyImageDescription->SetBrushFromLazyTexture(SoftImage);
 		LazyImageDescription->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	}
+	else
+	{
+		LazyImageDescription->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	RichTextBlockDescription->SetText(InDataObject->GetDescriptionRichText());
 #undef DYNAMIC_DETAILS_TEXT_STYLE

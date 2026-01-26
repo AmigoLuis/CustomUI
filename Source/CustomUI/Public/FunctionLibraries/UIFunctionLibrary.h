@@ -19,6 +19,11 @@ public:
 	UFUNCTION(BlueprintPure, Category = "UI Library")
 	static TSoftClassPtr<UWidgetActivatableBase> GetWidgetSoftFromSettings(
 	UPARAM(meta = (Categories = "FrontEnd.Widget")) FGameplayTag WidgetTag);
+	
+	UFUNCTION(BlueprintPure, Category = "UI Library")
+	static TSoftObjectPtr<UTexture2D> GetSoftImageByTagFromSettings(
+	UPARAM(meta = (Categories = "FrontEnd.Image")) FGameplayTag InImageTag);
+	
 	UFUNCTION(BlueprintPure, Category = "UI Library")
 	static bool IsPlayerHaveRecord();
 	UFUNCTION(BlueprintPure, Category = "UI Library")

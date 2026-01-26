@@ -2,7 +2,10 @@
 
 
 #include "Settings/SettingDataRegistry.h"
+
+#include "FrontEndGameplayTags.h"
 #include "UILogger.h"
+#include "FunctionLibraries/UIFunctionLibrary.h"
 #include "Settings/FrontendGameUserSettings.h"
 #include "Settings/FSettingDataInteractionHelper.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
@@ -80,6 +83,11 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 	INIT_CHILD_DATA_AND_SET_ID_NAME(AutoSave);
 	ADD_CHILD_SETTING_NAME(AutoSave, On);
 	ADD_CHILD_SETTING_NAME(AutoSave, Off);
+	AutoSave->SetSoftDescriptionImage(UUIFunctionLibrary::GetSoftImageByTagFromSettings(
+		FrontEndGameplayTags::FrontEnd_Image_SettingsMenuDetailTest));
+	AutoSave->SetDescriptionRichText(FText::FromString(
+		TEXT("The image to display can be specified in the project settings."
+	   " It can be anything the developer assigned in there")));
 	ADD_CHILD_TO_COLLECTION(AutoSave, Gameplay);
 }
 

@@ -19,6 +19,19 @@ TSoftClassPtr<UWidgetActivatableBase> UUIFunctionLibrary::GetWidgetSoftFromSetti
 	return Settings->WidgetClassesMap.FindRef(WidgetTag);
 }
 
+TSoftObjectPtr<UTexture2D> UUIFunctionLibrary::GetSoftImageByTagFromSettings(const FGameplayTag InImageTag)
+{
+	TSoftObjectPtr<UTexture2D> ImageSoft;
+	const UFrontEndDeveloperSettings* Settings = GetDefault<UFrontEndDeveloperSettings>();
+	CHECK_NULL_RETURN_VALUE(Settings, ImageSoft);
+	if (!Settings->SettingsDetailSoftImageMap.Contains(InImageTag))
+	{
+		PrintInLog(TEXT("Can't find soft image under the tag: ") + InImageTag.ToString(), Error);
+		return ImageSoft;
+	}
+	return Settings->SettingsDetailSoftImageMap.FindRef(InImageTag);
+}
+
 bool UUIFunctionLibrary::IsPlayerHaveRecord()
 {
 	return false;
