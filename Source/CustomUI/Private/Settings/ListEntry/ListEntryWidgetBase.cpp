@@ -5,6 +5,7 @@
 
 #include "CommonTextBlock.h"
 #include "UILogger.h"
+#include "Components/ListView.h"
 #include "Settings/DataObjects/ListSettingDataObjectBase.h"
 
 void UListEntryWidgetBase::NativeOnListEntryWidgetHovered(const bool bIsHovered)
@@ -38,4 +39,11 @@ void UListEntryWidgetBase::OnListItemObjectSet(UListSettingDataObjectBase* InOwn
 void UListEntryWidgetBase::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
 	ESettingsListDataModifyReason ModifyReason)
 {
+}
+
+void UListEntryWidgetBase::SelectThisEntryWidget()
+{
+	UListView* OwningListView = Cast<UListView>(GetOwningListView());
+	CHECK_NULL_RETURN(OwningListView);
+	OwningListView->SetSelectedItem(GetListItem());
 }

@@ -31,6 +31,7 @@ void UListEntryWidgetString::NativeOnInitialized()
 	Super::NativeOnInitialized();
 	DecreaseValueButton->OnClicked().AddUObject(this, &UListEntryWidgetString::OnDecreaseValueButtonClicked);
 	IncreaseValueButton->OnClicked().AddUObject(this, &UListEntryWidgetString::OnIncreaseValueButtonClicked);
+	SettingEntryValueRotator->OnClicked().AddUObject(this, &UListEntryWidgetString::SelectThisEntryWidget);
 }
 
 void UListEntryWidgetString::OnDecreaseValueButtonClicked()
@@ -40,6 +41,7 @@ void UListEntryWidgetString::OnDecreaseValueButtonClicked()
 	{
 		OwningListItemObject->ToPreviousStringAndText();
 	}
+	SelectThisEntryWidget();
 }
 
 void UListEntryWidgetString::OnIncreaseValueButtonClicked()
@@ -49,4 +51,5 @@ void UListEntryWidgetString::OnIncreaseValueButtonClicked()
 	{
 		OwningListItemObject->ToNextStringAndText();
 	}
+	SelectThisEntryWidget();
 }

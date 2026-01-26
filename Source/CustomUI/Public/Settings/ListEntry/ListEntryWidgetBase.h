@@ -30,6 +30,8 @@ protected:
 	// child should override this function to update UI values based on list item data, super call is not needed
 	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData, 
 		ESettingsListDataModifyReason ModifyReason);
+	
+	void SelectThisEntryWidget();
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
 	UCommonTextBlock* SettingEntryNameTextBlock;
