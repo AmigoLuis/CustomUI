@@ -166,6 +166,23 @@ return;\
 	}while(0)
 
 
+// 检查参数Condition是否为true，是的话打印Warn日志然后返回ReturnValue
+#define CHECK_BOOL_TRUE_RETURN_VALUE_WARN(Condition, ReturnValue) \
+do{\
+if (Condition){\
+PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is true ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);\
+return ReturnValue;}\
+}while(0)
+
+// 检查参数Condition是否为false，是的话打印Warn日志然后返回ReturnValue
+#define CHECK_BOOL_FALSE_RETURN_VALUE_WARN(Condition, ReturnValue) \
+do{\
+if (!Condition){\
+PrintInLog(SYMBOL_NAME_TEXT(Condition) TEXT(" is false ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);\
+return ReturnValue;}\
+}while(0)
+
+
 // 日志打印字符串值
 #define LOG_STRING_PTR(StringVariable) \
 do{PrintInLog(SYMBOL_NAME_TEXT(StringVariable) TEXT(" is ") + StringVariable +\

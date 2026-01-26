@@ -8,7 +8,7 @@
 #include "Enums/FrontEndEnumTypes.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
 #include "ICommonInputModule.h"
-
+//TODO:键盘目前还没有完全支持，很多地方不能导航，聚焦或点击
 UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateConfirmWidget(const FText& Title, const FText& Message, 
                                                                           const EConfirmScreenType ConfirmationWidgetType)
 {

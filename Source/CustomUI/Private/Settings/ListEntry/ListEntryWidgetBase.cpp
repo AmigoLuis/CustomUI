@@ -3,6 +3,7 @@
 
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 
+#include "CommonInputSubsystem.h"
 #include "CommonTextBlock.h"
 #include "UILogger.h"
 #include "Components/ListView.h"
@@ -20,6 +21,29 @@ void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
 	SetVisibility(ESlateVisibility::Visible);
 	
 	OnListItemObjectSet(Cast<UListSettingDataObjectBase>(ListItemObject));
+}
+
+FReply UListEntryWidgetBase::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)
+{
+#undef LOCAL_DEFAULT_VALUE
+#define LOCAL_DEFAULT_VALUE Super::NativeOnFocusReceived(InGeometry, InFocusEvent);
+	
+	const UCommonInputSubsystem* InputSubsystem = GetInputSubsystem();
+	CHECK_NULL_RETURN_VALUE(InputSubsystem, LOCAL_DEFAULT_VALUE);
+	
+	if (InputSubsystem->GetCurrentInputType() == ECommonInputType::Gamepad)
+	{
+		const UWidget* const WidgetToFocus = BP_GetWidgetToFocusForGamepad();
+		CHECK_NULL_RETURN_VALUE(WidgetToFocus, LOCAL_DEFAULT_VALUE);
+		
+		const TSharedPtr<SWidget> CachedWidgetToFocus = WidgetToFocus->GetCachedWidget();
+		CHECK_BOOL_FALSE_RETURN_VALUE_WARN(CachedWidgetToFocus.IsValid(), LOCAL_DEFAULT_VALUE);
+		
+		return FReply::Handled().SetUserFocus(CachedWidgetToFocus.ToSharedRef());
+	}
+	return LOCAL_DEFAULT_VALUE;
+	
+#undef LOCAL_DEFAULT_VALUE
 }
 
 void UListEntryWidgetBase::OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject)
