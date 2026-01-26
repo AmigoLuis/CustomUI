@@ -38,4 +38,5 @@ private:
 	
 	void OnDecreaseValueButtonClicked();
 	void OnIncreaseValueButtonClicked();
+	void OnRotatorValueChanged(int32 InValue, bool bUserInitiated);
 };

@@ -74,6 +74,25 @@ void UListSettingDataObjectString::ToNextStringAndText()
 	}
 }
 
+void UListSettingDataObjectString::OnTextChanged(const FText& InNewSelectedText)
+{
+	const int32 FoundIndex = AllSettingNameText.IndexOfByPredicate(
+		[&InNewSelectedText](const FText& SettingNameText)
+	{
+		return InNewSelectedText.EqualTo(SettingNameText);
+	});
+	if (AllSettingNameString.IsValidIndex(FoundIndex))
+	{
+		CurrentSettingNameText = InNewSelectedText;
+		CurrentSettingNameString = AllSettingNameString[FoundIndex];
+		if (DataDynamicSetter)
+		{
+			DataDynamicSetter->SetValueFromString(CurrentSettingNameString);
+			NotifyListDataModified(this);
+		}
+	}
+}
+
 void UListSettingDataObjectString::OnInitializeDataObject()
 {
 	Super::OnInitializeDataObject();

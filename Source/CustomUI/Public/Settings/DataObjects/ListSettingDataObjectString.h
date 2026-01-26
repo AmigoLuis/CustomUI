@@ -28,7 +28,7 @@ public:
 
 	void ToPreviousStringAndText();
 	void ToNextStringAndText();
-	
+	void OnTextChanged(const FText& InNewSelectedText);
 protected:
 	FString CurrentSettingNameString;
 	FText CurrentSettingNameText;

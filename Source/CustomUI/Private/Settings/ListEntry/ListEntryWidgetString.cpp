@@ -3,6 +3,7 @@
 
 #include "Settings/ListEntry/ListEntryWidgetString.h"
 
+#include "CommonInputSubsystem.h"
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
@@ -16,6 +17,7 @@ void UListEntryWidgetString::OnListItemObjectSet(UListSettingDataObjectBase* InO
 	
 	SettingEntryValueRotator->PopulateTextLabels(OwningListItemObject->GetAllSettingNameText());
 	SettingEntryValueRotator->SetSelectedItemByText(OwningListItemObject->GetCurrentSettingNameText());
+	SettingEntryValueRotator->OnRotatedEvent.AddUObject(this, &UListEntryWidgetString::OnRotatorValueChanged);
 }
 
 void UListEntryWidgetString::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
@@ -52,4 +54,18 @@ void UListEntryWidgetString::OnIncreaseValueButtonClicked()
 		OwningListItemObject->ToNextStringAndText();
 	}
 	SelectThisEntryWidget();
+}
+
+void UListEntryWidgetString::OnRotatorValueChanged(int32 InValue, bool bUserInitiated)
+{
+	CHECK_NULL_RETURN(OwningListItemObject);
+	CHECK_NULL_RETURN(SettingEntryValueRotator);
+	CHECK_BOOL_FALSE_RETURN_WARN(bUserInitiated);
+	const UCommonInputSubsystem* InputSubsystem = GetInputSubsystem();
+	CHECK_NULL_RETURN(InputSubsystem);
+	
+	if (InputSubsystem->GetCurrentInputType() == ECommonInputType::Gamepad)
+	{
+		OwningListItemObject->OnTextChanged(SettingEntryValueRotator->GetSelectedText());
+	}
 }
