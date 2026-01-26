@@ -91,6 +91,10 @@ PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr ") IN_FUNC_AND_LINE, ELogLeve
 #define LOG_NULL_PTR_WARN(PTR) \
 PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr ") IN_FUNC_AND_LINE, ELogLevelUI::Warning);
 
+// 日志空指针记录宏
+#define LOG_NULL_PTR_DISPLAY(PTR) \
+PrintInLog(SYMBOL_NAME_TEXT(PTR) TEXT(" is nullptr ") IN_FUNC_AND_LINE, ELogLevelUI::Display);
+
 // 检查参数1是否为nullptr，是的话打印Error日志然后返回参数2
 #define CHECK_NULL_RETURN_VALUE(PTR, VALUE) \
 if (PTR == nullptr)\
@@ -120,6 +124,14 @@ return;\
 if (PTR == nullptr)\
 {\
 LOG_NULL_PTR_WARN(PTR);\
+return;\
+}
+
+// 检查参数是否为nullptr，是的话打印Warn日志然后返回
+#define CHECK_NULL_RETURN_DISPLAY(PTR) \
+if (PTR == nullptr)\
+{\
+LOG_NULL_PTR_DISPLAY(PTR);\
 return;\
 }
 

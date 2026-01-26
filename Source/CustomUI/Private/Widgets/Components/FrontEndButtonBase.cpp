@@ -8,13 +8,19 @@
 
 void UFrontEndButtonBase::SetButtonText(FText NewButtonText)
 {
-	CHECK_NULL_RETURN_WARN(ButtonTextBlock);
+	CHECK_NULL_RETURN_DISPLAY(ButtonTextBlock);
 	if (NewButtonText.IsEmpty())
 	{
 		PrintInLog(TEXT("Can't set empty text to button."), Warning);
 		return;
 	}
 	ButtonTextBlock->SetText(bUseUpperCaseForButtonText ? NewButtonText.ToUpper() : NewButtonText);
+}
+
+FText UFrontEndButtonBase::GetButtonText() const
+{
+	if (ButtonTextBlock) return ButtonTextBlock->GetText();
+	return FText();
 }
 
 void UFrontEndButtonBase::NativePreConstruct()

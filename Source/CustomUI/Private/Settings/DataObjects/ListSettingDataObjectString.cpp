@@ -77,14 +77,18 @@ void UListSettingDataObjectString::ToNextStringAndText()
 void UListSettingDataObjectString::OnInitializeDataObject()
 {
 	Super::OnInitializeDataObject();
-	//TODO:: 尝试设置存储的设置名为当前设置名
 	if (AllSettingNameString.Num() > 0)
 	{
 		CurrentSettingNameString = AllSettingNameString[0];
 	}
+	//尝试设置存储的设置名为当前设置名
 	if (DataDynamicGetter && !DataDynamicGetter->GetValueAsString().IsEmpty())
 	{
 		CurrentSettingNameString = DataDynamicGetter->GetValueAsString();
+	}
+	else if (HasDefaultValue()) // 从设置中读取设置名失败，设置默认值
+	{
+		CurrentSettingNameString = GetDefaultValueAsString();
 	}
 	
 	if (!TrySetTextAccordingToString(CurrentSettingNameString))

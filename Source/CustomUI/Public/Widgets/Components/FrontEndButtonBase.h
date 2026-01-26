@@ -17,6 +17,8 @@ class CUSTOMUI_API UFrontEndButtonBase : public UCommonButtonBase
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(FText NewButtonText);
+	UFUNCTION(BlueprintCallable)
+	FText GetButtonText() const;
 private:
 	UPROPERTY(meta=(BindWidgetOptional))
 	UCommonTextBlock* ButtonTextBlock;

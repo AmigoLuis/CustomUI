@@ -12,6 +12,7 @@
 #include "Settings/WidgetSettingDetailsView.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
+#include "Subsystems/UIGameInstanceSubsystem.h"
 #include "Widgets/Components/FrontEndCommonListView.h"
 #include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
@@ -68,6 +69,31 @@ void UWidgetSettingsMenu::NativeOnActivated()
 void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 {
 	PrintInLog(TEXT("Reset Action Triggered from Settings Menu"), Display);
+	CHECK_BOOL_TRUE_RETURN_WARN(ResettableDataArray.IsEmpty());
+
+	const UFrontEndButtonBase* TabButtonBase = 
+		Cast<UFrontEndButtonBase>(SettingsTabList->GetTabButtonBaseByID(SettingsTabList->GetActiveTab()));
+	CHECK_NULL_RETURN(TabButtonBase);
+	
+	UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
+		EConfirmScreenType::YesNo,
+		FText::FromString(TEXT("Reset")),
+		FText::FromString(TEXT("Are you sure you want to reset all settings in this ")
+			+ TabButtonBase->GetButtonText().ToString() 
+			+ TEXT(" tab to default values?")),[](const EConfirmScreenButtonType ConfirmScreenButtonType)
+			{
+				switch (ConfirmScreenButtonType) {
+				case EConfirmScreenButtonType::Confirmed:
+					break;
+				case EConfirmScreenButtonType::Canceled:
+					break;
+				case EConfirmScreenButtonType::Closed:
+					break;
+				case EConfirmScreenButtonType::Unknown:
+					break;
+				}
+			});
+	
 }
 
 void UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu()
