@@ -26,6 +26,7 @@ protected:
 	UWidget* BP_GetWidgetToFocusForGamepad() const;
 	// IUserObjectListEntry
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	virtual void NativeOnEntryReleased() override;
 	// IUserObjectListEntry
 	// UUserWidget
 	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;

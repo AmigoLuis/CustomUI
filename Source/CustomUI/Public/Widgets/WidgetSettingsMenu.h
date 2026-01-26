@@ -23,6 +23,7 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeOnDeactivated() override;
 	virtual void NativeOnActivated() override;
+	virtual UWidget* NativeGetDesiredFocusTarget() const override;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "FrontEnd Settings Menu", meta = (RowType = "/Script/CommonUI.CommonInputActionDataBase"))

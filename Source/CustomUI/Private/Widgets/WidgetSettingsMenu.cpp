@@ -66,6 +66,15 @@ void UWidgetSettingsMenu::NativeOnActivated()
 	
 }
 
+UWidget* UWidgetSettingsMenu::NativeGetDesiredFocusTarget() const
+{
+	const UObject* SelectedObject = SettingsListView->GetSelectedItem();
+	CHECK_NULL_RETURN_VALUE(SelectedObject, Super::NativeGetDesiredFocusTarget());
+	UUserWidget* SelectedEntryWidget = SettingsListView->GetEntryWidgetFromItem(SelectedObject);
+	CHECK_NULL_RETURN_VALUE(SelectedEntryWidget, Super::NativeGetDesiredFocusTarget());
+	return SelectedEntryWidget;
+}
+
 void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 {
 	PrintInLog(TEXT("Reset Action Triggered from Settings Menu"), Display);

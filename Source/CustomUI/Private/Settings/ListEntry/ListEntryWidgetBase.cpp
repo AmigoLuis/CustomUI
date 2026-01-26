@@ -23,6 +23,12 @@ void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
 	OnListItemObjectSet(Cast<UListSettingDataObjectBase>(ListItemObject));
 }
 
+void UListEntryWidgetBase::NativeOnEntryReleased()
+{
+	IUserObjectListEntry::NativeOnEntryReleased();
+	NativeOnListEntryWidgetHovered(false);
+}
+
 FReply UListEntryWidgetBase::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)
 {
 #undef LOCAL_DEFAULT_VALUE
