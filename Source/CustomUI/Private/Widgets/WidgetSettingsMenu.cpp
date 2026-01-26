@@ -10,6 +10,7 @@
 #include "Settings/FrontendGameUserSettings.h"
 #include "Settings/SettingDataRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
+#include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "Widgets/Components/FrontEndCommonListView.h"
 #include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
@@ -108,6 +109,10 @@ void UWidgetSettingsMenu::OnListViewItemHovered(UObject* InHoveredItem, bool bIs
 	const FString& DisplayName = HoveredDataObject->GetDataDisplayName().ToString();
 	PrintInLog(DisplayName + TEXT("'s hover state is : ") + 
 		(bIsHovered ? TEXT("hovered") : TEXT("unhovered")), Display);
+	UListEntryWidgetBase* HoveredEntryWidget = SettingsListView->GetEntryWidgetFromItem<
+		UListEntryWidgetBase>(HoveredDataObject);
+	CHECK_NULL_RETURN(HoveredEntryWidget)
+	HoveredEntryWidget->NativeOnListEntryWidgetHovered(bIsHovered);
 }
 
 void UWidgetSettingsMenu::OnListViewItemSelectionChanged(UObject* InHoveredItem)

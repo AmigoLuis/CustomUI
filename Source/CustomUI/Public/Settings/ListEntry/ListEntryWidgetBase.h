@@ -17,7 +17,10 @@ UCLASS(Abstract, BlueprintType, meta = (DisableNativeTick))
 class CUSTOMUI_API UListEntryWidgetBase : public UCommonUserWidget, public IUserObjectListEntry
 {
 	GENERATED_BODY()
-
+public:
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName="On List Entry Widget Hovered"))
+	void BP_OnListEntryWidgetHovered(bool bIsHovered, bool bIsEntryStillSelected);
+	void NativeOnListEntryWidgetHovered(bool bIsHovered);
 protected:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	

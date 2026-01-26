@@ -7,6 +7,11 @@
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectBase.h"
 
+void UListEntryWidgetBase::NativeOnListEntryWidgetHovered(const bool bIsHovered)
+{
+	BP_OnListEntryWidgetHovered(bIsHovered, IsListItemSelected());
+}
+
 void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	IUserObjectListEntry::NativeOnListItemObjectSet(ListItemObject);
