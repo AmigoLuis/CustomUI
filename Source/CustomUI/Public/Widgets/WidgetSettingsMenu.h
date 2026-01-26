@@ -31,6 +31,7 @@ private:
 	
 	UPROPERTY(Transient)
 	TArray<UListSettingDataObjectBase*> ResettableDataArray;
+	bool bIsResettingData = false;
 	void OnResetActionTriggeredInSettingsMenu();
 	void OnBackActionTriggeredInSettingsMenu();
 	FString TryGetEntryWidgetClassName(UObject* InOwningListItem) const;

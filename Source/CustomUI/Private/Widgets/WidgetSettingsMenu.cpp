@@ -80,18 +80,34 @@ void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 		FText::FromString(TEXT("Reset")),
 		FText::FromString(TEXT("Are you sure you want to reset all settings in this ")
 			+ TabButtonBase->GetButtonText().ToString() 
-			+ TEXT(" tab to default values?")),[](const EConfirmScreenButtonType ConfirmScreenButtonType)
+			+ TEXT(" tab to default values?")),[this](const EConfirmScreenButtonType ConfirmScreenButtonType)
 			{
-				switch (ConfirmScreenButtonType) {
-				case EConfirmScreenButtonType::Confirmed:
-					break;
-				case EConfirmScreenButtonType::Canceled:
-					break;
-				case EConfirmScreenButtonType::Closed:
-					break;
-				case EConfirmScreenButtonType::Unknown:
-					break;
+				if (ConfirmScreenButtonType != EConfirmScreenButtonType::Confirmed)
+				{
+					PrintInLog(TEXT("Reset Action Not Confirmed"), Display);
+					return;
 				}
+				this->bIsResettingData = true;
+				bool bIsAnyDataFailedToReset = false;
+				for (UListSettingDataObjectBase* ResettableData : ResettableDataArray)
+				{
+					if (ResettableData == nullptr) continue;
+					if (ResettableData->TryResetToDefaultValue())
+					{
+						PrintInLog(ResettableData->GetDataDisplayName().ToString() + TEXT(" was reset."), Display);
+					}
+					else
+					{
+						bIsAnyDataFailedToReset = true;
+						PrintInLog(ResettableData->GetDataDisplayName().ToString() + TEXT(" was failed to reset."));
+					}
+				}
+				if (!bIsAnyDataFailedToReset)
+				{
+					ResettableDataArray.Empty();
+					RemoveActionBinding(ResetActionHandle);
+				}
+				this->bIsResettingData = false;
 			});
 	
 }
@@ -113,6 +129,7 @@ void UWidgetSettingsMenu::OnListDataModified(UListSettingDataObjectBase* InModif
 	ESettingsListDataModifyReason InModifiedReason)
 {
 	CHECK_NULL_RETURN(InModifiedData);
+	if (bIsResettingData) return; //正在重置数据时，不处理数据修改回调
 	if (InModifiedData->CanResetToDefaultValue())
 	{
 		ResettableDataArray.AddUnique(InModifiedData);
