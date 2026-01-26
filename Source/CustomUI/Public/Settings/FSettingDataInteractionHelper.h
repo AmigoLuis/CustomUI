@@ -14,7 +14,7 @@ class CUSTOMUI_API FSettingDataInteractionHelper
 public:
 	explicit FSettingDataInteractionHelper(const FString& InSetterOrGetterFuncPath);
 	FString GetValueAsString() const;
-	void SetValueAsString(const FString& InStringValue) const;
+	void SetValueFromString(const FString& InStringValue) const;
 private:
 	FCachedPropertyPath CachedDynamicFunctionPath;
 	TWeakObjectPtr<UFrontendGameUserSettings> CachedWeakGameSettings;

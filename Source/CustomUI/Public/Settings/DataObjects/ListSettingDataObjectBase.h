@@ -39,7 +39,7 @@ public:
 	// child class should override it if it supports default value
 	virtual bool HasDefaultValue() const {return false;}
 	virtual bool CanResetToDefaultValue() const {return false;}
-	virtual bool TryResetToDefaultValue() const {return false;}
+	virtual bool TryResetToDefaultValue() {return false;}
 protected:
 	// called in InitializeDataObject, children can override it to do custom initialization
 	virtual void OnInitializeDataObject();

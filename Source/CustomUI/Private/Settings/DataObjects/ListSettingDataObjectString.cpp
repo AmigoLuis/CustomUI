@@ -29,7 +29,7 @@ void UListSettingDataObjectString::ToPreviousStringAndText()
 	// Save setting value
 	if (DataDynamicSetter)
 	{
-		DataDynamicSetter->SetValueAsString(CurrentSettingNameString);
+		DataDynamicSetter->SetValueFromString(CurrentSettingNameString);
 		PrintInLog(SYMBOL_NAME_TEXT(CurrentSettingNameString) 
 			TEXT(" is : ") + CurrentSettingNameString, Display);
 		if (DataDynamicGetter)
@@ -60,7 +60,7 @@ void UListSettingDataObjectString::ToNextStringAndText()
 	// Save setting value
 	if (DataDynamicSetter)
 	{
-		DataDynamicSetter->SetValueAsString(CurrentSettingNameString);
+		DataDynamicSetter->SetValueFromString(CurrentSettingNameString);
 		PrintInLog(SYMBOL_NAME_TEXT(CurrentSettingNameString) 
 			TEXT(" is : ") + CurrentSettingNameString, Display);
 		if (DataDynamicGetter)
@@ -91,6 +91,27 @@ void UListSettingDataObjectString::OnInitializeDataObject()
 	{
 		CurrentSettingNameText = FText::FromString(TEXT("Invalid Setting Name"));
 	}
+}
+
+bool UListSettingDataObjectString::CanResetToDefaultValue() const
+{
+	return HasDefaultValue() && (CurrentSettingNameString != GetDefaultValueAsString());
+}
+
+bool UListSettingDataObjectString::TryResetToDefaultValue()
+{
+	if (CanResetToDefaultValue())
+	{
+		CurrentSettingNameString = GetDefaultValueAsString();
+		TrySetTextAccordingToString(CurrentSettingNameString);
+		if (DataDynamicSetter)
+		{
+			DataDynamicSetter->SetValueFromString(CurrentSettingNameString);
+			NotifyListDataModified(this, ESettingsListDataModifyReason::ResetToDefault);
+			return true;
+		}
+	}
+	return false;
 }
 
 bool UListSettingDataObjectString::TrySetTextAccordingToString(const FString& InSettingNameString)

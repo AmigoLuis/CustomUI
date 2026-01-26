@@ -22,7 +22,7 @@ FString FSettingDataInteractionHelper::GetValueAsString() const
 	return OutValue;
 }
 
-void FSettingDataInteractionHelper::SetValueAsString(const FString& InStringValue) const
+void FSettingDataInteractionHelper::SetValueFromString(const FString& InStringValue) const
 {
 	UFrontendGameUserSettings* CachedGameSettings = CachedWeakGameSettings.Get();
 	CHECK_NULL_RETURN(CachedGameSettings);

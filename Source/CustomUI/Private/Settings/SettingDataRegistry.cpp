@@ -38,6 +38,9 @@ ChileName->SetbShouldApplySettingChangeImmediately(true);
 #define ADD_CHILD_SETTING_NAME(ChileName,SettingName) \
 ChileName->AddSettingEntry(SYMBOL_NAME_TEXT(SettingName), FText::FromString(SYMBOL_NAME_TEXT(SettingName)));
 
+#undef SET_CHILD_DEFAULT_VALUE_FROM_STRING
+#define SET_CHILD_DEFAULT_VALUE_FROM_STRING(ChileName,DefaultValueString) \
+ChileName->SetDefaultValueFromString(SYMBOL_NAME_TEXT(DefaultValueString));
 
 #undef ADD_CHILD_DYNAMIC_GETTER_AND_SETTER
 #define ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ChileName) \
@@ -65,6 +68,7 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 	ADD_CHILD_SETTING_NAME(Difficulty, Easy);
 	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
 	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
+	SET_CHILD_DEFAULT_VALUE_FROM_STRING(Difficulty, Normal);
 	ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
 	Difficulty->SetDescriptionRichText(FText::FromString(TEXT("Adjusts the difficulty of the game experience.\n\n"
 	"<Bold>Easy:</> Focuses on the story experience. Provides the most relaxing combat.\n\n"

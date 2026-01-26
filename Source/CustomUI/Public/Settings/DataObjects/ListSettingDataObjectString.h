@@ -38,4 +38,10 @@ protected:
 	virtual void OnInitializeDataObject() override;
 	// UListSettingDataObjectBase
 	bool TrySetTextAccordingToString(const FString& InSettingNameString);
+
+public:
+	// UListSettingDataObjectBase
+	virtual bool CanResetToDefaultValue() const override;
+	virtual bool TryResetToDefaultValue() override;
+	// UListSettingDataObjectBase
 };
