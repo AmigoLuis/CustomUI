@@ -6,6 +6,8 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetSettingsMenu.generated.h"
 
+enum class ESettingsListDataModifyReason : uint8;
+class UListSettingDataObjectBase;
 class UWidgetSettingDetailsView;
 class UFrontEndCommonListView;
 class UFrontEndTabListWidgetBase;
@@ -26,9 +28,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "FrontEnd Settings Menu", meta = (RowType = "/Script/CommonUI.CommonInputActionDataBase"))
 	FDataTableRowHandle ResetAction;
 	FUIActionBindingHandle ResetActionHandle;
+	
+	UPROPERTY(Transient)
+	TArray<UListSettingDataObjectBase*> ResettableDataArray;
 	void OnResetActionTriggeredInSettingsMenu();
 	void OnBackActionTriggeredInSettingsMenu();
 	FString TryGetEntryWidgetClassName(UObject* InOwningListItem) const;
+	void OnListDataModified(UListSettingDataObjectBase* InModifiedData, ESettingsListDataModifyReason InModifiedReason);
 	//*** Bound widgets ***//
 	UPROPERTY(meta=(BindWidget))
 	UFrontEndTabListWidgetBase* SettingsTabList;

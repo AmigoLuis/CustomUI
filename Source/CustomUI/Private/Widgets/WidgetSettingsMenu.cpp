@@ -31,6 +31,7 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 		FSimpleDelegate::CreateUObject(
 			this, 
 			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu)));
+	
 	SettingsTabList->OnTabSelected.AddUniqueDynamic(
 		this, &UWidgetSettingsMenu::OnTabSelectedInSettingsMenu);
 	
@@ -82,6 +83,28 @@ FString UWidgetSettingsMenu::TryGetEntryWidgetClassName(UObject* InOwningListIte
 	return FoundWidget->GetClass()->GetName();
 }
 
+void UWidgetSettingsMenu::OnListDataModified(UListSettingDataObjectBase* InModifiedData,
+	ESettingsListDataModifyReason InModifiedReason)
+{
+	CHECK_NULL_RETURN(InModifiedData);
+	if (InModifiedData->CanResetToDefaultValue())
+	{
+		ResettableDataArray.AddUnique(InModifiedData);
+		if (!GetActionBindings().Contains(ResetActionHandle))
+		{
+			AddActionBinding(ResetActionHandle);
+		}
+	}
+	else if (ResettableDataArray.Contains(InModifiedData)) //不能重置为默认值，需要从可重置数据中剔除
+	{
+		ResettableDataArray.Remove(InModifiedData);
+	}
+	if (ResettableDataArray.IsEmpty())
+	{
+		RemoveActionBinding(ResetActionHandle);
+	}
+}
+
 USettingDataRegistry* UWidgetSettingsMenu::GetOrCreateSettingsDataRegistry()
 {
 	if (!SettingsDataRegistry)
@@ -107,6 +130,31 @@ void UWidgetSettingsMenu::OnTabSelectedInSettingsMenu(const FName TabID)
 	{
 		SettingsListView->NavigateToIndex(0);
 		SettingsListView->SetSelectedIndex(0);
+	}
+	
+	ResettableDataArray.Empty();
+	for (auto FoundListSourceItem: FoundListSourceItems)
+	{
+		if (!FoundListSourceItem) continue;
+		
+		if (!FoundListSourceItem->OnListDataModifiedDelegate.IsBoundToObject(this))
+		{
+			FoundListSourceItem->OnListDataModifiedDelegate.AddUObject(this, &UWidgetSettingsMenu::OnListDataModified);
+		} 
+		
+		if (FoundListSourceItem->CanResetToDefaultValue())
+		{
+			ResettableDataArray.AddUnique(FoundListSourceItem);
+		}
+	}
+	
+	if (ResettableDataArray.IsEmpty())
+	{
+		RemoveActionBinding(ResetActionHandle);	
+	}
+	else if (!GetActionBindings().Contains(ResetActionHandle))
+	{
+		AddActionBinding(ResetActionHandle);
 	}
 }
 
