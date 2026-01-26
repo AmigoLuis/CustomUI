@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Distributions/Distribution.h"
 #include "Settings/DataObjects/ListSettingDataObjectBase.h"
 #include "ListSettingDataObjectValue.generated.h"
 
@@ -15,11 +16,6 @@ class CUSTOMUI_API UListSettingDataObjectValue : public UListSettingDataObjectBa
 {
 	GENERATED_BODY()
 public:
-protected:
-	TSharedPtr<FSettingDataInteractionHelper> DataDynamicGetter;
-	TSharedPtr<FSettingDataInteractionHelper> DataDynamicSetter;
-
-public:
 	FORCEINLINE void SetDataDynamicGetter(const TSharedPtr<FSettingDataInteractionHelper>& InDataDynamicGetter)
 	{
 		this->DataDynamicGetter = InDataDynamicGetter;
@@ -28,4 +24,17 @@ public:
 	{
 		this->DataDynamicSetter = InDataDynamicSetter;
 	}
+	FORCEINLINE void SetDefaultValueFromString(const FString& InDefaultValue) {	DefaultStringValue = InDefaultValue; }
+
+	// UListSettingDataObjectBase
+	virtual bool HasDefaultValue() const override { return DefaultStringValue.IsSet(); }
+	// UListSettingDataObjectBase
+protected:
+	FORCEINLINE FString GetDefaultValueAsString() const {return DefaultStringValue.GetValue();}
+	
+	TSharedPtr<FSettingDataInteractionHelper> DataDynamicGetter;
+	TSharedPtr<FSettingDataInteractionHelper> DataDynamicSetter;
+
+private: 
+	TOptional<FString> DefaultStringValue;
 };

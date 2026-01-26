@@ -96,7 +96,10 @@ USettingDataRegistry* UWidgetSettingsMenu::GetOrCreateSettingsDataRegistry()
 void UWidgetSettingsMenu::OnTabSelectedInSettingsMenu(const FName TabID)
 {
 	PrintInLog(TEXT("Tab Selected from Settings Menu, Tab id:") + TabID.ToString(), Display);
-	const auto& FoundListSourceItems = GetOrCreateSettingsDataRegistry()->GetListSourceItemsBySelectedTabId(TabID);
+	
+	SettingDetailsView->ClearDetailViewInfo();
+	const auto& FoundListSourceItems = 
+		GetOrCreateSettingsDataRegistry()->GetListSourceItemsBySelectedTabId(TabID);
 	
 	SettingsListView->SetListItems(FoundListSourceItems);
 	SettingsListView->RequestRefresh();
