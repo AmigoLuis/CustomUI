@@ -6,6 +6,7 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetSettingsMenu.generated.h"
 
+class UWidgetSettingDetailsView;
 class UFrontEndCommonListView;
 class UFrontEndTabListWidgetBase;
 class USettingDataRegistry;
@@ -27,11 +28,14 @@ private:
 	FUIActionBindingHandle ResetActionHandle;
 	void OnResetActionTriggeredInSettingsMenu();
 	void OnBackActionTriggeredInSettingsMenu();
+	FString TryGetEntryWidgetClassName(UObject* InOwningListItem) const;
 	//*** Bound widgets ***//
 	UPROPERTY(meta=(BindWidget))
 	UFrontEndTabListWidgetBase* SettingsTabList;
 	UPROPERTY(meta=(BindWidget))
 	UFrontEndCommonListView* SettingsListView;
+	UPROPERTY(meta=(BindWidget))
+	UWidgetSettingDetailsView* SettingDetailsView;
 	//*** Bound widgets ***//
 	
 	// dont access this directly
@@ -42,5 +46,5 @@ private:
 	UFUNCTION()
 	void OnTabSelectedInSettingsMenu(FName TabID);
 	void OnListViewItemHovered(UObject* InHoveredItem, bool bIsHovered);
-	void OnListViewItemSelectionChanged(UObject* InHoveredItem);
+	void OnListViewItemSelectionChanged(UObject* InSelectedItem);
 };

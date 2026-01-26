@@ -9,6 +9,7 @@
 #include "Input/CommonUIInputTypes.h"
 #include "Settings/FrontendGameUserSettings.h"
 #include "Settings/SettingDataRegistry.h"
+#include "Settings/WidgetSettingDetailsView.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "Widgets/Components/FrontEndCommonListView.h"
@@ -74,6 +75,13 @@ void UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu()
 	DeactivateWidget();
 }
 
+FString UWidgetSettingsMenu::TryGetEntryWidgetClassName(UObject* InOwningListItem) const
+{
+	const UUserWidget* FoundWidget = SettingsListView->GetEntryWidgetFromItem(InOwningListItem);
+	CHECK_NULL_RETURN_VALUE(FoundWidget, FString(TEXT("InvalidEntryWidget")));
+	return FoundWidget->GetClass()->GetName();
+}
+
 USettingDataRegistry* UWidgetSettingsMenu::GetOrCreateSettingsDataRegistry()
 {
 	if (!SettingsDataRegistry)
@@ -113,15 +121,31 @@ void UWidgetSettingsMenu::OnListViewItemHovered(UObject* InHoveredItem, bool bIs
 		UListEntryWidgetBase>(HoveredDataObject);
 	CHECK_NULL_RETURN(HoveredEntryWidget)
 	HoveredEntryWidget->NativeOnListEntryWidgetHovered(bIsHovered);
+	if (bIsHovered)
+	{
+		SettingDetailsView->UpdateDetailViewInfo(Cast<UListSettingDataObjectBase>(InHoveredItem), 
+			TryGetEntryWidgetClassName(InHoveredItem));
+	}
+	else
+	{
+		UListSettingDataObjectBase* SettingDataObject = 
+			SettingsListView->GetSelectedItem<UListSettingDataObjectBase>();
+		CHECK_NULL_RETURN(SettingDataObject);
+		SettingDetailsView->UpdateDetailViewInfo(SettingDataObject, 
+			TryGetEntryWidgetClassName(SettingDataObject));
+	}
 }
 
-void UWidgetSettingsMenu::OnListViewItemSelectionChanged(UObject* InHoveredItem)
+void UWidgetSettingsMenu::OnListViewItemSelectionChanged(UObject* InSelectedItem)
 {
-	CHECK_NULL_RETURN_WARN(InHoveredItem);
-	const UListSettingDataObjectBase* HoveredDataObject = 
-		Cast<UListSettingDataObjectBase>(InHoveredItem);
-	CHECK_NULL_RETURN_WARN(HoveredDataObject);
+	CHECK_NULL_RETURN_WARN(InSelectedItem);
+	const UListSettingDataObjectBase* SelectedDataObject = 
+		Cast<UListSettingDataObjectBase>(InSelectedItem);
+	CHECK_NULL_RETURN_WARN(SelectedDataObject);
 	
-	const FString& DisplayName = HoveredDataObject->GetDataDisplayName().ToString();
+	const FString& DisplayName = SelectedDataObject->GetDataDisplayName().ToString();
 	PrintInLog(DisplayName + TEXT("'s hover state is selected"), Display);
+	
+	SettingDetailsView->UpdateDetailViewInfo(Cast<UListSettingDataObjectBase>(InSelectedItem), 
+		TryGetEntryWidgetClassName(InSelectedItem));
 }

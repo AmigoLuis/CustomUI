@@ -66,6 +66,11 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
 	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
 	ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
+	Difficulty->SetDescriptionRichText(FText::FromString(TEXT("Adjusts the difficulty of the game experience.\n\n"
+	"<Bold>Easy:</> Focuses on the story experience. Provides the most relaxing combat.\n\n"
+	"<Bold>Normal:</> Offers slightly harder combat experience\n\n"
+	"<Bold>Hard:</> Offers a much more challenging combat experience\n\n"
+	"<Bold>Vert Hard:</> Provides the most challenging combat experience. Not recommended for first play through.")));
 	ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
 	
 	INIT_CHILD_DATA_AND_SET_ID_NAME(AutoSave);
