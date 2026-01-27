@@ -6,6 +6,7 @@
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "ListEntryWidgetScalar.generated.h"
 
+class UListSettingDataObjectScalar;
 class UCommonNumericTextBlock;
 class UAnalogSlider;
 /**
@@ -26,8 +27,12 @@ protected:
 	virtual void NativeOnInitialized() override;
 	// UUserWidget
 private:
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
+	// BindWidget
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget, AllowPrivateAccess="true"))
 	UCommonNumericTextBlock* SettingEntryNumericTextBlock;
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget, AllowPrivateAccess="true"))
 	UAnalogSlider* SettingEntryAnalogSlider;
+	// BindWidget
+	UPROPERTY(Transient)
+	UListSettingDataObjectScalar* CachedDataObjectScalar;
 };

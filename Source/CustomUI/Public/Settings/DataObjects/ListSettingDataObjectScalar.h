@@ -22,10 +22,14 @@ public:
 	
 	static FCommonNumberFormattingOptions NoDecimal();
 	static FCommonNumberFormattingOptions WithDecimal(int32 NumFracDigit);
+	
+	float GetCurrentValue() const;
 private:
 	TRange<float> DisplayValueRange = TRange<float>(0.0f, 1.0f);
 	TRange<float> OutputValueRange = TRange<float>(0.0f, 1.0f);
 	float SliderStepSize = 0.1f;
 	ECommonNumericType DisplayNumericType = ECommonNumericType::Number;
 	FCommonNumberFormattingOptions DisplayFormattingOptions;
+	
+	float StringToFloat(const FString& InValueString) const;
 };
