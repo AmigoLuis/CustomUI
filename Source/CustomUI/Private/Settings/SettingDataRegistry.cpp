@@ -22,20 +22,27 @@ void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPl
 
 #undef INIT_COLLECTION_TAB
 #define INIT_COLLECTION_TAB(CollectionName) \
-UListSettingDataObjectCollection* CollectionName##Collection = NewObject<UListSettingDataObjectCollection>();\
-CollectionName##Collection->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)TEXT("Collection")));\
-CollectionName##Collection->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(CollectionName)));\
-RegisteredSettingsCollectionTabs.Add(CollectionName##Collection);\
+UListSettingDataObjectCollection* CollectionName = NewObject<UListSettingDataObjectCollection>();\
+CollectionName->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)TEXT("Collection")));\
+CollectionName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(CollectionName)));\
+RegisteredSettingsCollectionTabs.Add(CollectionName);\
 
-#undef INIT_CHILD_DATA_AND_SET_ID_NAME
-#define INIT_CHILD_DATA_AND_SET_ID_NAME(ChileName) \
+#undef INIT_CHILD_STRING_DATA_AND_SET_ID_NAME
+#define INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(ChileName) \
 UListSettingDataObjectString* ChileName = NewObject<UListSettingDataObjectString>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
+#undef INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME
+#define INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(ChileName) \
+UListSettingDataObjectCollection* ChileName = NewObject<UListSettingDataObjectCollection>();\
+ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
+// ChileName->SetbShouldApplySettingChangeImmediately(true);
+
 #undef ADD_CHILD_TO_COLLECTION
-#define ADD_CHILD_TO_COLLECTION(ChileName, CollectionName) CollectionName##Collection->AddChildData(ChileName);
+#define ADD_CHILD_TO_COLLECTION(ChileName, CollectionName) CollectionName->AddChildData(ChileName);
 
 #undef ADD_CHILD_SETTING_NAME
 #define ADD_CHILD_SETTING_NAME(ChileName,SettingName) \
@@ -67,7 +74,7 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 void USettingDataRegistry::InitGamePlayCollectionTab()
 {
 	INIT_COLLECTION_TAB(Gameplay);
-	INIT_CHILD_DATA_AND_SET_ID_NAME(Difficulty);
+	INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(Difficulty);
 	ADD_CHILD_SETTING_NAME(Difficulty, Easy);
 	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
 	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
@@ -80,7 +87,7 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 	"<Bold>Vert Hard:</> Provides the most challenging combat experience. Not recommended for first play through.")));
 	ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
 	
-	INIT_CHILD_DATA_AND_SET_ID_NAME(AutoSave);
+	INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(AutoSave);
 	ADD_CHILD_SETTING_NAME(AutoSave, On);
 	ADD_CHILD_SETTING_NAME(AutoSave, Off);
 	AutoSave->SetSoftDescriptionImage(UUIFunctionLibrary::GetSoftImageByTagFromSettings(
@@ -94,8 +101,16 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 void USettingDataRegistry::InitAudioCollectionTab()
 {
 	INIT_COLLECTION_TAB(Audio);
-	INIT_CHILD_DATA_AND_SET_ID_NAME(Volume);
-	ADD_CHILD_TO_COLLECTION(Volume, Audio);
+	// Volume
+	{
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Volume);
+		ADD_CHILD_TO_COLLECTION(Volume, Audio);
+		// Test Item
+		{
+			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(TestItem);
+			ADD_CHILD_TO_COLLECTION(TestItem, Volume);
+		}
+	}
 }
 
 void USettingDataRegistry::InitVideoCollectionTab()
