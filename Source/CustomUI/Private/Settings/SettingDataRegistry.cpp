@@ -155,6 +155,20 @@ void USettingDataRegistry::InitAudioCollectionTab()
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(MusicVolume);
 			ADD_CHILD_TO_COLLECTION(MusicVolume, Volume);
 		}
+		// SoundFX Volume
+		{
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(SoundFXVolume);
+			SoundFXVolume->SetDescriptionRichText(FText::FromString(
+				TEXT("SoundFX Volume Currently is not affecting real game sound volume")));
+			SoundFXVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
+			SoundFXVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
+			SoundFXVolume->SetSliderStepSize(1.0f);
+			SoundFXVolume->SetDefaultValueFromString(LexToString(1.0f));
+			SoundFXVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			SoundFXVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(SoundFXVolume);
+			ADD_CHILD_TO_COLLECTION(SoundFXVolume, Volume);
+		}
 		// test 
 		{
 			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(TestSetting);

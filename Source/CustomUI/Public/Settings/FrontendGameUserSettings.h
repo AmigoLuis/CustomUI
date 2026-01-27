@@ -45,6 +45,14 @@ public:
 	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置CurrentGameMusicVolume的值
 	UFUNCTION()
 	FORCEINLINE void SetCurrentGameMusicVolume(const float& InVolume);
+	UFUNCTION()
+	[[nodiscard]] FORCEINLINE float GetCurrentGameSoundFXVolume() const
+	{
+		return CurrentGameSoundFXVolume;
+	}
+	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置CurrentGameSoundFXVolume的值
+	UFUNCTION()
+	FORCEINLINE void SetCurrentGameSoundFXVolume(const float& InVolume);
 	//*** Audio Collection Tab
 private:
 	// Gameplay Tab
@@ -57,5 +65,7 @@ private:
 	float CurrentGameOverallVolume;
 	UPROPERTY(Config)
 	float CurrentGameMusicVolume;
+	UPROPERTY(Config)
+	float CurrentGameSoundFXVolume;
 	// Audio Tab
 };
