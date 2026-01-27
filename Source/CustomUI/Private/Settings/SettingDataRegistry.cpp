@@ -94,6 +94,8 @@ void USettingDataRegistry::InitGamePlayCollectionTab()
 void USettingDataRegistry::InitAudioCollectionTab()
 {
 	INIT_COLLECTION_TAB(Audio);
+	INIT_CHILD_DATA_AND_SET_ID_NAME(Volume);
+	ADD_CHILD_TO_COLLECTION(Volume, Audio);
 }
 
 void USettingDataRegistry::InitVideoCollectionTab()
