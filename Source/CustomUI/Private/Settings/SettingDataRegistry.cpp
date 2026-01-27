@@ -68,7 +68,22 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 	});
 	LOG_STRING_PTR(InCollectionID.ToString());
 	CHECK_NULL_RETURN_VALUE(FoundCollectionPtr, TArray<UListSettingDataObjectBase*>());
-	return (*FoundCollectionPtr)->GetAllChildrenDataObjects();
+	TArray<UListSettingDataObjectBase*> AllChildItems;
+	TArray<UListSettingDataObjectBase*> AllParentToGetChildFrom = {*FoundCollectionPtr};
+	// 递归遍历，获取所有FoundCollectionPtr下面的子孙节点
+	while (!AllParentToGetChildFrom.IsEmpty())
+	{
+		const UListSettingDataObjectBase* Parent = AllParentToGetChildFrom.Pop();
+		if (Parent == nullptr) continue;
+		const TArray<UListSettingDataObjectBase*>& TempAllChildItems = Parent->GetAllChildrenDataObjects(); 
+		AllChildItems.Append(TempAllChildItems);
+		for (auto TempAllChildItem : TempAllChildItems)
+		{
+			if (TempAllChildItem != nullptr && TempAllChildItem->HasChildrenData()) 
+				AllParentToGetChildFrom.Add(TempAllChildItem);
+		}
+	}
+	return AllChildItems;
 }
 
 void USettingDataRegistry::InitGamePlayCollectionTab()
