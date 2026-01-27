@@ -33,6 +33,19 @@ float UListSettingDataObjectScalar::GetCurrentValue() const
 	return 0.0f;
 }
 
+void UListSettingDataObjectScalar::SetCurrentValue(float InNewValue)
+{
+	if (DataDynamicSetter)
+	{
+		const float ClampedNewValue = FMath::GetMappedRangeValueClamped(
+			DisplayValueRange,
+			OutputValueRange,
+			InNewValue);
+		DataDynamicSetter->SetValueFromString(LexToString(ClampedNewValue));
+		NotifyListDataModified(this);
+	}
+}
+
 float UListSettingDataObjectScalar::StringToFloat(const FString& InValueString) const
 {
 	float ConvertedValue = 0.0f;

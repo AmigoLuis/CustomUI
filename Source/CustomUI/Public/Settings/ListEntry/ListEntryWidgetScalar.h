@@ -35,4 +35,7 @@ private:
 	// BindWidget
 	UPROPERTY(Transient)
 	UListSettingDataObjectScalar* CachedDataObjectScalar;
+	
+	UFUNCTION()
+	void OnSliderValueChanged(float InValue);
 };

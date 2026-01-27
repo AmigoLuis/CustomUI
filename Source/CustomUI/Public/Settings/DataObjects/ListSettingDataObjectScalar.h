@@ -24,6 +24,7 @@ public:
 	static FCommonNumberFormattingOptions WithDecimal(int32 NumFracDigit);
 	
 	float GetCurrentValue() const;
+	void SetCurrentValue(float InNewValue);
 private:
 	TRange<float> DisplayValueRange = TRange<float>(0.0f, 1.0f);
 	TRange<float> OutputValueRange = TRange<float>(0.0f, 1.0f);

@@ -10,6 +10,13 @@
 void UListEntryWidgetScalar::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
+	SettingEntryAnalogSlider->OnValueChanged.AddUniqueDynamic(this, &UListEntryWidgetScalar::OnSliderValueChanged);
+}
+
+void UListEntryWidgetScalar::OnSliderValueChanged(float InValue)
+{
+	CHECK_NULL_RETURN(CachedDataObjectScalar);
+	CachedDataObjectScalar->SetCurrentValue(InValue);
 }
 
 void UListEntryWidgetScalar::OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject)
