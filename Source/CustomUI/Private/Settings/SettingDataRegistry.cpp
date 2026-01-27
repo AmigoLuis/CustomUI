@@ -139,8 +139,21 @@ void USettingDataRegistry::InitAudioCollectionTab()
 			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			OverallVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallVolume);
-			//TODO:add dynamic getter and setter
 			ADD_CHILD_TO_COLLECTION(OverallVolume, Volume);
+		}
+		// Music Volume
+		{
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(MusicVolume);
+			MusicVolume->SetDescriptionRichText(FText::FromString(
+				TEXT("Music Volume Currently is not affecting real game sound volume")));
+			MusicVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
+			MusicVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
+			MusicVolume->SetSliderStepSize(1.0f);
+			MusicVolume->SetDefaultValueFromString(LexToString(1.0f));
+			MusicVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			MusicVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(MusicVolume);
+			ADD_CHILD_TO_COLLECTION(MusicVolume, Volume);
 		}
 		// test 
 		{

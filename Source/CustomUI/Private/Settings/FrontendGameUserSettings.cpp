@@ -5,7 +5,7 @@
 
 #include "UILogger.h"
 
-UFrontendGameUserSettings::UFrontendGameUserSettings() : CurrentGameOverallVolume(1.0f)
+UFrontendGameUserSettings::UFrontendGameUserSettings() : CurrentGameOverallVolume(1.0f), CurrentGameMusicVolume(1.0f)
 {
 }
 
@@ -26,5 +26,10 @@ UFrontendGameUserSettings* UFrontendGameUserSettings::Get()
 void UFrontendGameUserSettings::SetCurrentGameOverallVolume(const float& InVolume)
 {
 	CurrentGameOverallVolume = InVolume;
+}
+
+void UFrontendGameUserSettings::SetCurrentGameMusicVolume(const float& InVolume)
+{
+	CurrentGameMusicVolume = InVolume;
 }
 
