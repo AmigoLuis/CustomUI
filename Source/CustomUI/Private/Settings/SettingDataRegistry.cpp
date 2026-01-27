@@ -45,7 +45,8 @@ ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
 #define INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChileName) \
 UListSettingDataObjectScalar* ChileName = NewObject<UListSettingDataObjectScalar>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
+ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef ADD_CHILD_TO_COLLECTION
 #define ADD_CHILD_TO_COLLECTION(ChileName, CollectionName) CollectionName->AddChildData(ChileName);
@@ -130,12 +131,13 @@ void USettingDataRegistry::InitAudioCollectionTab()
 		{
 			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(OverallVolume);
 			OverallVolume->SetDescriptionRichText(FText::FromString(TEXT("This is description of Overall Volume")));
-			OverallVolume->SetDisplayValueRange(TRange<float>(0.0f, 100.0f));
-			OverallVolume->SetOutputValueRange(TRange<float>(0.0f, 200.0f));
+			OverallVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
+			OverallVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
 			OverallVolume->SetSliderStepSize(1.0f);
-			OverallVolume->SetDefaultValueFromString(LexToString(100.0f));
+			OverallVolume->SetDefaultValueFromString(LexToString(1.0f));
 			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			OverallVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallVolume);
 			//TODO:add dynamic getter and setter
 			ADD_CHILD_TO_COLLECTION(OverallVolume, Volume);
 		}

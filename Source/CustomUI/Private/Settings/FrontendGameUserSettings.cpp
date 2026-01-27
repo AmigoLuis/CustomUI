@@ -5,6 +5,10 @@
 
 #include "UILogger.h"
 
+UFrontendGameUserSettings::UFrontendGameUserSettings() : CurrentGameOverallVolume(1.0f)
+{
+}
+
 UFrontendGameUserSettings* UFrontendGameUserSettings::Get()
 {
 	CHECK_NULL_RETURN_VALUE(GEngine, nullptr);
@@ -18,3 +22,9 @@ UFrontendGameUserSettings* UFrontendGameUserSettings::Get()
 	}
 	return Settings;
 }
+
+void UFrontendGameUserSettings::SetCurrentGameOverallVolume(const float& InVolume)
+{
+	CurrentGameOverallVolume = InVolume;
+}
+
