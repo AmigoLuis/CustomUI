@@ -11,6 +11,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/DataObjects/ListSettingDataObjectScalar.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
+#include "Settings/DataObjects/ListSettingDataObjectStringBool.h"
 
 
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
@@ -26,7 +27,7 @@ void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPl
 UListSettingDataObjectCollection* CollectionName = NewObject<UListSettingDataObjectCollection>();\
 CollectionName->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)TEXT("Collection")));\
 CollectionName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(CollectionName)));\
-RegisteredSettingsCollectionTabs.Add(CollectionName);\
+RegisteredSettingsCollectionTabs.Add(CollectionName);
 
 #undef INIT_CHILD_STRING_DATA_AND_SET_ID_NAME
 #define INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(ChileName) \
@@ -44,6 +45,13 @@ ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
 #undef INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME
 #define INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChileName) \
 UListSettingDataObjectScalar* ChileName = NewObject<UListSettingDataObjectScalar>();\
+ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetbShouldApplySettingChangeImmediately(true);
+
+#undef INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME
+#define INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(ChileName) \
+UListSettingDataObjectStringBool* ChileName = NewObject<UListSettingDataObjectStringBool>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
@@ -66,6 +74,20 @@ GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,GetCurrentGame##Chile
 ChileName->SetDataDynamicSetter(MakeShared<FSettingDataInteractionHelper>(\
 GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,SetCurrentGame##ChileName)));
 
+// 递归遍历，获取所有FoundCollectionPtr下面的子孙节点, 
+// 注意这里需要按照树的顺序去添加，所以不好改成迭代写法
+static void GetAllChildRecursivelyInOrder(const UListSettingDataObjectBase* ParentNode, 
+	TArray<UListSettingDataObjectBase*>& AllChildItems)
+{
+	if (ParentNode == nullptr || !ParentNode->HasChildrenData()) return;
+	for (UListSettingDataObjectBase* Child : ParentNode->GetAllChildrenDataObjects())
+	{
+		if (Child == nullptr) continue;
+		AllChildItems.Add(Child);
+		if (Child->HasChildrenData()) GetAllChildRecursivelyInOrder(Child, AllChildItems);
+	}
+}
+
 TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySelectedTabId(const FName& InCollectionID)
 {
 	const auto FoundCollectionPtr = 
@@ -76,20 +98,7 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 	LOG_STRING_PTR(InCollectionID.ToString());
 	CHECK_NULL_RETURN_VALUE(FoundCollectionPtr, TArray<UListSettingDataObjectBase*>());
 	TArray<UListSettingDataObjectBase*> AllChildItems;
-	TArray<UListSettingDataObjectBase*> AllParentToGetChildFrom = {*FoundCollectionPtr};
-	// 递归遍历，获取所有FoundCollectionPtr下面的子孙节点
-	while (!AllParentToGetChildFrom.IsEmpty())
-	{
-		const UListSettingDataObjectBase* Parent = AllParentToGetChildFrom.Pop();
-		if (Parent == nullptr) continue;
-		const TArray<UListSettingDataObjectBase*>& TempAllChildItems = Parent->GetAllChildrenDataObjects(); 
-		AllChildItems.Append(TempAllChildItems);
-		for (auto TempAllChildItem : TempAllChildItems)
-		{
-			if (TempAllChildItem != nullptr && TempAllChildItem->HasChildrenData()) 
-				AllParentToGetChildFrom.Add(TempAllChildItem);
-		}
-	}
+	GetAllChildRecursivelyInOrder(*FoundCollectionPtr, AllChildItems);
 	return AllChildItems;
 }
 
@@ -169,15 +178,17 @@ void USettingDataRegistry::InitAudioCollectionTab()
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(SoundFXVolume);
 			ADD_CHILD_TO_COLLECTION(SoundFXVolume, Volume);
 		}
-		// test 
+	}
+	// Sound 
+	{
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Sound);
+		ADD_CHILD_TO_COLLECTION(Sound, Audio);
+		// Allow Background Music
 		{
-			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(TestSetting);
-			ADD_CHILD_SETTING_NAME(TestSetting, On);
-			ADD_CHILD_SETTING_NAME(TestSetting, Off);
-			TestSetting->SetDescriptionRichText(FText::FromString(
-				TEXT("The image to display can be specified in the project settings."
-			   " It can be anything the developer assigned in there")));
-			ADD_CHILD_TO_COLLECTION(TestSetting, Volume);
+			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(AllowBackgroundMusic);
+			AllowBackgroundMusic->SetTrueAsDefaultValue();
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AllowBackgroundMusic);
+			ADD_CHILD_TO_COLLECTION(AllowBackgroundMusic, Sound);
 		}
 	}
 }

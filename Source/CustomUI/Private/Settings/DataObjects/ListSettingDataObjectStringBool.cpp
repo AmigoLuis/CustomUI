@@ -3,7 +3,7 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectStringBool.h"
 
-const FString UListSettingDataObjectStringBool::TrueString = TEXT("false");
+const FString UListSettingDataObjectStringBool::TrueString = TEXT("true");
 const FString UListSettingDataObjectStringBool::FalseString = TEXT("false");
 void UListSettingDataObjectStringBool::TryInitBoolValue()
 {
