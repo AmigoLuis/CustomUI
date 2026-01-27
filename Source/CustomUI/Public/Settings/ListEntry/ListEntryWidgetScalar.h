@@ -38,4 +38,6 @@ private:
 	
 	UFUNCTION()
 	void OnSliderValueChanged(float InValue);
+	UFUNCTION()
+	void NativeOnMouseCaptureEnterScalarWidget();
 };

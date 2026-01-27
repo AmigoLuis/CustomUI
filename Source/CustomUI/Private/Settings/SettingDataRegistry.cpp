@@ -130,7 +130,8 @@ void USettingDataRegistry::InitAudioCollectionTab()
 		// Overall Volume
 		{
 			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(OverallVolume);
-			OverallVolume->SetDescriptionRichText(FText::FromString(TEXT("This is description of Overall Volume")));
+			OverallVolume->SetDescriptionRichText(FText::FromString(
+				TEXT("Overall Volume Currently is not affecting real game sound volume")));
 			OverallVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
 			OverallVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
 			OverallVolume->SetSliderStepSize(1.0f);
@@ -140,6 +141,16 @@ void USettingDataRegistry::InitAudioCollectionTab()
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallVolume);
 			//TODO:add dynamic getter and setter
 			ADD_CHILD_TO_COLLECTION(OverallVolume, Volume);
+		}
+		// test 
+		{
+			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(TestSetting);
+			ADD_CHILD_SETTING_NAME(TestSetting, On);
+			ADD_CHILD_SETTING_NAME(TestSetting, Off);
+			TestSetting->SetDescriptionRichText(FText::FromString(
+				TEXT("The image to display can be specified in the project settings."
+			   " It can be anything the developer assigned in there")));
+			ADD_CHILD_TO_COLLECTION(TestSetting, Volume);
 		}
 	}
 }
