@@ -18,8 +18,6 @@ void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	IUserObjectListEntry::NativeOnListItemObjectSet(ListItemObject);
 	
-	SetVisibility(ESlateVisibility::Visible);
-	
 	OnListItemObjectSet(Cast<UListSettingDataObjectBase>(ListItemObject));
 }
 

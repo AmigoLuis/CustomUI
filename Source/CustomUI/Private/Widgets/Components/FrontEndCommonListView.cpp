@@ -7,6 +7,7 @@
 #include "Editor/WidgetCompilerLog.h"
 #include "Settings/DataObjects/DA_DataListEntryMapping.h"
 #include "Settings/DataObjects/ListSettingDataObjectBase.h"
+#include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 
 #if WITH_EDITOR
@@ -28,4 +29,10 @@ UUserWidget& UFrontEndCommonListView::OnGenerateEntryWidgetInternal(UObject* Ite
 	
 	return GenerateTypedEntry<UListEntryWidgetBase>(FoundWidgetClass, OwnerTable);
 #undef DEFAULT_RESULT
+}
+
+bool UFrontEndCommonListView::OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem)
+{
+	// 只有当数据有效且不是集合时才能聚焦、选中
+	return FirstSelectedItem != nullptr && !FirstSelectedItem->IsA<UListSettingDataObjectCollection>();
 }
