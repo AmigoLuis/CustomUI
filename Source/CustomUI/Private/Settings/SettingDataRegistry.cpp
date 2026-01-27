@@ -9,6 +9,7 @@
 #include "Settings/FrontendGameUserSettings.h"
 #include "Settings/FSettingDataInteractionHelper.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
+#include "Settings/DataObjects/ListSettingDataObjectScalar.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 
 
@@ -39,7 +40,12 @@ ChileName->SetbShouldApplySettingChangeImmediately(true);
 UListSettingDataObjectCollection* ChileName = NewObject<UListSettingDataObjectCollection>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
-// ChileName->SetbShouldApplySettingChangeImmediately(true);
+
+#undef INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME
+#define INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChileName) \
+UListSettingDataObjectScalar* ChileName = NewObject<UListSettingDataObjectScalar>();\
+ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
 
 #undef ADD_CHILD_TO_COLLECTION
 #define ADD_CHILD_TO_COLLECTION(ChileName, CollectionName) CollectionName->AddChildData(ChileName);
@@ -120,10 +126,18 @@ void USettingDataRegistry::InitAudioCollectionTab()
 	{
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Volume);
 		ADD_CHILD_TO_COLLECTION(Volume, Audio);
-		// Test Item
+		// Overall Volume
 		{
-			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(TestItem);
-			ADD_CHILD_TO_COLLECTION(TestItem, Volume);
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(OverallVolume);
+			OverallVolume->SetDescriptionRichText(FText::FromString(TEXT("This is description of Overall Volume")));
+			OverallVolume->SetDisplayValueRange(TRange<float>(0.0f, 100.0f));
+			OverallVolume->SetOutputValueRange(TRange<float>(0.0f, 200.0f));
+			OverallVolume->SetSliderStepSize(1.0f);
+			OverallVolume->SetDefaultValueFromString(LexToString(100.0f));
+			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			OverallVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
+			//TODO:add dynamic getter and setter
+			ADD_CHILD_TO_COLLECTION(OverallVolume, Volume);
 		}
 	}
 }

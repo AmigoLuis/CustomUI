@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Settings/DataObjects/ListSettingDataObjectValue.h"
-#include "ListSettingDataObjectScalar.generated.h"
 #include "CommonNumericTextBlock.h"
+#include "ListSettingDataObjectScalar.generated.h"
 /**
  * 
  */
@@ -19,6 +19,9 @@ public:
 	GETTER_AND_SETTER_REFERENCE(FCommonNumberFormattingOptions, DisplayFormattingOptions);
 	GETTER_AND_SETTER_VALUE(float, SliderStepSize);
 	GETTER_AND_SETTER_VALUE(ECommonNumericType, DisplayNumericType);
+	
+	static FCommonNumberFormattingOptions NoDecimal();
+	static FCommonNumberFormattingOptions WithDecimal(int32 NumFracDigit);
 private:
 	TRange<float> DisplayValueRange = TRange<float>(0.0f, 1.0f);
 	TRange<float> OutputValueRange = TRange<float>(0.0f, 1.0f);
