@@ -23,7 +23,7 @@ public:
 	static FCommonNumberFormattingOptions NoDecimal();
 	static FCommonNumberFormattingOptions WithDecimal(int32 NumFracDigit);
 	
-	float GetCurrentValue() const;
+	float GetCurrentDisplayValue() const;
 	void SetCurrentValue(float InNewValue);
 private:
 	TRange<float> DisplayValueRange = TRange<float>(0.0f, 1.0f);
@@ -31,6 +31,11 @@ private:
 	float SliderStepSize = 0.1f;
 	ECommonNumericType DisplayNumericType = ECommonNumericType::Number;
 	FCommonNumberFormattingOptions DisplayFormattingOptions;
-	
+
+public:
+	virtual bool CanResetToDefaultValue() const override;
+	virtual bool TryResetToDefaultValue() override;
+
+private:
 	float StringToFloat(const FString& InValueString) const;
 };

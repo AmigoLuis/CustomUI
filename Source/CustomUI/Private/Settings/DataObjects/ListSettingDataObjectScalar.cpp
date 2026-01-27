@@ -21,7 +21,7 @@ FCommonNumberFormattingOptions UListSettingDataObjectScalar::WithDecimal(int32 N
 	return Options;
 }
 
-float UListSettingDataObjectScalar::GetCurrentValue() const
+float UListSettingDataObjectScalar::GetCurrentDisplayValue() const
 {
 	if (DataDynamicGetter)
 	{
@@ -44,6 +44,28 @@ void UListSettingDataObjectScalar::SetCurrentValue(float InNewValue)
 		DataDynamicSetter->SetValueFromString(LexToString(ClampedNewValue));
 		NotifyListDataModified(this);
 	}
+}
+
+bool UListSettingDataObjectScalar::CanResetToDefaultValue() const
+{
+	if (HasDefaultValue() && DataDynamicGetter)
+	{
+		const float DefaultFloatValue = StringToFloat(GetDefaultValueAsString());
+		const float CurrentFloatValue = StringToFloat(DataDynamicGetter->GetValueAsString());
+		return !FMath::IsNearlyEqual(DefaultFloatValue, CurrentFloatValue, 0.01f);
+	}
+	return false;
+}
+
+bool UListSettingDataObjectScalar::TryResetToDefaultValue()
+{
+	if (CanResetToDefaultValue() && DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(GetDefaultValueAsString());
+		NotifyListDataModified(this, ESettingsListDataModifyReason::ResetToDefault);
+		return true;
+	}
+	return false;
 }
 
 float UListSettingDataObjectScalar::StringToFloat(const FString& InValueString) const

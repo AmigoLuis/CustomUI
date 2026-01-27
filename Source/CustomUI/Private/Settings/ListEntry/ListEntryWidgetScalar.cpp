@@ -34,12 +34,12 @@ void UListEntryWidgetScalar::OnListItemObjectSet(UListSettingDataObjectBase* InO
 	
 	SettingEntryNumericTextBlock->SetNumericType(CachedDataObjectScalar->GetDisplayNumericType());
 	SettingEntryNumericTextBlock->FormattingSpecification = CachedDataObjectScalar->GetDisplayFormattingOptions();
-	SettingEntryNumericTextBlock->SetCurrentValue(CachedDataObjectScalar->GetCurrentValue());
+	SettingEntryNumericTextBlock->SetCurrentValue(CachedDataObjectScalar->GetCurrentDisplayValue());
 	
 	SettingEntryAnalogSlider->SetMinValue(CachedDataObjectScalar->GetDisplayValueRange().GetLowerBoundValue());
 	SettingEntryAnalogSlider->SetMaxValue(CachedDataObjectScalar->GetDisplayValueRange().GetUpperBoundValue());
 	SettingEntryAnalogSlider->SetStepSize(CachedDataObjectScalar->GetSliderStepSize());
-	SettingEntryAnalogSlider->SetValue(CachedDataObjectScalar->GetCurrentValue());
+	SettingEntryAnalogSlider->SetValue(CachedDataObjectScalar->GetCurrentDisplayValue());
 }
 
 void UListEntryWidgetScalar::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
@@ -48,6 +48,6 @@ void UListEntryWidgetScalar::OnOwningListItemObjectModified(UListSettingDataObje
 	Super::OnOwningListItemObjectModified(ModifiedData, ModifyReason);
 	CHECK_NULL_RETURN(CachedDataObjectScalar);
 	
-	SettingEntryNumericTextBlock->SetCurrentValue(CachedDataObjectScalar->GetCurrentValue());
-	SettingEntryAnalogSlider->SetValue(CachedDataObjectScalar->GetCurrentValue());
+	SettingEntryNumericTextBlock->SetCurrentValue(CachedDataObjectScalar->GetCurrentDisplayValue());
+	SettingEntryAnalogSlider->SetValue(CachedDataObjectScalar->GetCurrentDisplayValue());
 }
