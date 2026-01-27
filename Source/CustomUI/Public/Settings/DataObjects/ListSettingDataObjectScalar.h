@@ -28,7 +28,7 @@ public:
 private:
 	TRange<float> DisplayValueRange = TRange<float>(0.0f, 1.0f);
 	TRange<float> OutputValueRange = TRange<float>(0.0f, 1.0f);
-	float SliderStepSize = 0.1f;
+	float SliderStepSize = 0.01f;
 	ECommonNumericType DisplayNumericType = ECommonNumericType::Number;
 	FCommonNumberFormattingOptions DisplayFormattingOptions;
 

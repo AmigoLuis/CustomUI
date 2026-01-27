@@ -6,7 +6,7 @@
 #include "UILogger.h"
 
 UFrontendGameUserSettings::UFrontendGameUserSettings() : CurrentGameOverallVolume(1.0f), CurrentGameMusicVolume(1.0f), 
-	CurrentGameSoundFXVolume(1.0f), CurrentGameAllowBackgroundMusic(true)
+	CurrentGameSoundFXVolume(1.0f), CurrentGameAllowBackgroundMusic(true), CurrentGameUseHDRAudio(false)
 {
 }
 

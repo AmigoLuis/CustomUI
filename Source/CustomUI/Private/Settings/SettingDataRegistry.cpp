@@ -143,7 +143,7 @@ void USettingDataRegistry::InitAudioCollectionTab()
 				TEXT("Overall Volume Currently is not affecting real game sound volume")));
 			OverallVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
 			OverallVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
-			OverallVolume->SetSliderStepSize(1.0f);
+			OverallVolume->SetSliderStepSize(0.01f);
 			OverallVolume->SetDefaultValueFromString(LexToString(1.0f));
 			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			OverallVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
@@ -157,7 +157,7 @@ void USettingDataRegistry::InitAudioCollectionTab()
 				TEXT("Music Volume Currently is not affecting real game sound volume")));
 			MusicVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
 			MusicVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
-			MusicVolume->SetSliderStepSize(1.0f);
+			MusicVolume->SetSliderStepSize(0.01f);
 			MusicVolume->SetDefaultValueFromString(LexToString(1.0f));
 			MusicVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			MusicVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
@@ -171,7 +171,7 @@ void USettingDataRegistry::InitAudioCollectionTab()
 				TEXT("SoundFX Volume Currently is not affecting real game sound volume")));
 			SoundFXVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
 			SoundFXVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
-			SoundFXVolume->SetSliderStepSize(1.0f);
+			SoundFXVolume->SetSliderStepSize(0.01f);
 			SoundFXVolume->SetDefaultValueFromString(LexToString(1.0f));
 			SoundFXVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			SoundFXVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
@@ -186,9 +186,20 @@ void USettingDataRegistry::InitAudioCollectionTab()
 		// Allow Background Music
 		{
 			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(AllowBackgroundMusic);
+			AllowBackgroundMusic->OverrideTrueDisplayText(FText::FromString(TEXT("Enabled")));
+			AllowBackgroundMusic->OverrideFalseDisplayText(FText::FromString(TEXT("Disabled")));
 			AllowBackgroundMusic->SetTrueAsDefaultValue();
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AllowBackgroundMusic);
 			ADD_CHILD_TO_COLLECTION(AllowBackgroundMusic, Sound);
+		}
+		// Use HDR Audio
+		{
+			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(UseHDRAudio);
+			UseHDRAudio->OverrideTrueDisplayText(FText::FromString(TEXT("Enabled")));
+			UseHDRAudio->OverrideFalseDisplayText(FText::FromString(TEXT("Disabled")));
+			UseHDRAudio->SetFalseAsDefaultValue();
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(UseHDRAudio);
+			ADD_CHILD_TO_COLLECTION(UseHDRAudio, Sound);
 		}
 	}
 }

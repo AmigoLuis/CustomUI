@@ -60,6 +60,13 @@ public:
 	UFUNCTION()
 	FORCEINLINE void SetCurrentGameAllowBackgroundMusic(const bool InAllowBackgroundMusic)
 	{CurrentGameAllowBackgroundMusic = InAllowBackgroundMusic;}
+	
+	UFUNCTION()
+	[[nodiscard]] FORCEINLINE bool GetCurrentGameUseHDRAudio() const
+	{return CurrentGameUseHDRAudio;}
+	UFUNCTION()
+	FORCEINLINE void SetCurrentGameUseHDRAudio(const bool InUseHDRAudio)
+	{CurrentGameUseHDRAudio = InUseHDRAudio;}
 	//*** Audio Collection Tab
 private:
 	// Gameplay Tab
@@ -76,5 +83,7 @@ private:
 	float CurrentGameSoundFXVolume;
 	UPROPERTY(Config)
 	bool CurrentGameAllowBackgroundMusic;
+	UPROPERTY(Config)
+	bool CurrentGameUseHDRAudio;
 	// Audio Tab
 };
