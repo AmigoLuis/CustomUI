@@ -15,4 +15,7 @@ class CUSTOMUI_API UListSettingDataObjectResolution : public UListSettingDataObj
 	GENERATED_BODY()
 public:
 	void InitResolutionValue();
+
+protected:
+	virtual void OnInitializeDataObject() override;
 };
