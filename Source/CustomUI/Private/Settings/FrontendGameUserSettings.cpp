@@ -39,3 +39,20 @@ void UFrontendGameUserSettings::SetSoundFXVolume(const float& InVolume)
 	SoundFXVolume = InVolume;
 }
 
+float UFrontendGameUserSettings::GetBrightness() const
+{
+	if (GEngine)
+	{
+		return GEngine->GetDisplayGamma();
+	}
+	return 0.0f;
+}
+
+void UFrontendGameUserSettings::SetBrightness(const float InBrightness)
+{
+	if (GEngine)
+	{
+		GEngine->DisplayGamma = InBrightness;
+	}
+}
+

@@ -68,6 +68,12 @@ public:
 	FORCEINLINE void SetUseHDRAudio(const bool InUseHDRAudio)
 	{UseHDRAudio = InUseHDRAudio;}
 	//*** Audio Collection Tab
+	//*** Video Collection Tab
+	UFUNCTION()
+	[[nodiscard]] FORCEINLINE float GetBrightness() const;
+	UFUNCTION()
+	FORCEINLINE void SetBrightness(const float InBrightness);
+	//*** Video Collection Tab
 private:
 	// Gameplay Tab
 	UPROPERTY(Config)

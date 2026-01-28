@@ -275,6 +275,26 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ADD_CHILD_TO_COLLECTION(ScreenResolution, Display);
 		}
 	}
+	// Graphics
+	{
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Graphics);
+		ADD_CHILD_TO_COLLECTION(Graphics, Video);
+		// Brightness
+		{
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(Brightness);
+			Brightness->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Brightness of the screen.")));
+			Brightness->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
+			// default unreal brightness is 2.2, should be in the middle
+			Brightness->SetOutputValueRange(TRange<float>(1.7f, 2.7f));
+			// Brightness->SetSliderStepSize(0.01f);
+			Brightness->SetDefaultValueFromString(LexToString(2.2f));
+			Brightness->SetDisplayNumericType(ECommonNumericType::Percentage);
+			Brightness->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Brightness);
+			ADD_CHILD_TO_COLLECTION(Brightness, Video);
+		}
+	}
 }
 
 void USettingDataRegistry::InitControlCollectionTab()
