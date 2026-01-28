@@ -38,6 +38,9 @@ protected:
 	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData, 
 		ESettingsListDataModifyReason ModifyReason);
 	
+	virtual void OnDependencyDataObjectModified(UListSettingDataObjectBase* ModifiedData, 
+		ESettingsListDataModifyReason ModifyReason);
+	
 	// child should override this function to handle editable state change, super call is needed
 	virtual void OnToggleEditableState(const bool bIsEditable);
 	
@@ -45,4 +48,6 @@ protected:
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))
 	UCommonTextBlock* SettingEntryNameTextBlock;
+	UPROPERTY(Transient)
+	UListSettingDataObjectBase* CachedOwningListItemObject;
 };

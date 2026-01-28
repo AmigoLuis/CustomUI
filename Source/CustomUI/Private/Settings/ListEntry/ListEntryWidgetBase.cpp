@@ -63,12 +63,27 @@ void UListEntryWidgetBase::OnListItemObjectSet(UListSettingDataObjectBase* InOwn
 			&UListEntryWidgetBase::OnOwningListItemObjectModified);	
 	}
 	
+	if (!InOwningListItemObject->OnDependencyDataModifiedDelegate.IsBoundToObject(this))
+	{
+		InOwningListItemObject->OnDependencyDataModifiedDelegate.AddUObject(this, 
+			&UListEntryWidgetBase::OnDependencyDataObjectModified);	
+	}
 	OnToggleEditableState(InOwningListItemObject->IsSettingDataEditable());
+	CachedOwningListItemObject = InOwningListItemObject;
 }
 
 void UListEntryWidgetBase::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
 	ESettingsListDataModifyReason ModifyReason)
 {
+}
+
+void UListEntryWidgetBase::OnDependencyDataObjectModified(UListSettingDataObjectBase* ModifiedData,
+	ESettingsListDataModifyReason ModifyReason)
+{
+	if (CachedOwningListItemObject)
+	{
+		OnToggleEditableState(CachedOwningListItemObject->IsSettingDataEditable());
+	}
 }
 
 void UListEntryWidgetBase::OnToggleEditableState(const bool bIsEditable)
