@@ -25,5 +25,8 @@ protected:
 	virtual bool OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem) override;
 
 public:
+#if WITH_EDITOR
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
+#endif
+	
 };
