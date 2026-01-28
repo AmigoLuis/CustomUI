@@ -14,6 +14,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 #include "Settings/DataObjects/ListSettingDataObjectStringBool.h"
 #include "Settings/DataObjects/ListSettingDataObjectStringEnum.h"
+#include "Settings/DataObjects/SettingDataEditConditionDetail.h"
 
 
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
@@ -220,6 +221,17 @@ void USettingDataRegistry::InitVideoCollectionTab()
 	{
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Display);
 		ADD_CHILD_TO_COLLECTION(Display, Video);
+		
+		FSettingDataEditConditionDetail PackageBuildOnly;
+		PackageBuildOnly.SetEditCondition([]()
+		{
+			return !GIsEditor && !GIsPlayInEditorWorld;
+		});
+#define DISABLED_RICH_TEXT_STYLE TEXT("Disabled")
+		PackageBuildOnly.SetDisabledRichReason(
+			FString::Format(TEXT("<{0}>This setting can only be adjusted in a packaged build.</>"), 
+				{DISABLED_RICH_TEXT_STYLE}));
+		
 		// Fullscreen Mode
 		{
 			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode);
@@ -229,6 +241,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			FullscreenMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Borderless Fullscreen")));
 			FullscreenMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed")));
 			FullscreenMode->SetDefaultValueFromEnumOption(EWindowMode::WindowedFullscreen);
+			FullscreenMode->AddEditCondition(PackageBuildOnly);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FullscreenMode);
 			ADD_CHILD_TO_COLLECTION(FullscreenMode, Display);
 		}
@@ -241,6 +254,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 				TEXT("Screen Resolution decides game's window scale.")));
 			ScreenResolution->InitResolutionValue();
 			ScreenResolution->SetbShouldApplySettingChangeImmediately(true);
+			ScreenResolution->AddEditCondition(PackageBuildOnly);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ScreenResolution);
 			ADD_CHILD_TO_COLLECTION(ScreenResolution, Display);
 		}
