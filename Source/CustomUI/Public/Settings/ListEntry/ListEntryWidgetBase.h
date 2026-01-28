@@ -38,6 +38,9 @@ protected:
 	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData, 
 		ESettingsListDataModifyReason ModifyReason);
 	
+	// child should override this function to handle editable state change, super call is needed
+	virtual void OnToggleEditableState(const bool bIsEditable);
+	
 	void SelectThisEntryWidget();
 private:
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidgetOptional, AllowPrivateAccess="true"))

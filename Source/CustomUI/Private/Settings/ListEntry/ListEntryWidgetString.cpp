@@ -28,6 +28,14 @@ void UListEntryWidgetString::OnOwningListItemObjectModified(UListSettingDataObje
 	SettingEntryValueRotator->SetSelectedItemByText(OwningListItemObject->GetCurrentSettingNameText());
 }
 
+void UListEntryWidgetString::OnToggleEditableState(const bool bIsEditable)
+{
+	Super::OnToggleEditableState(bIsEditable);
+	IncreaseValueButton->SetIsEnabled(bIsEditable);
+	SettingEntryValueRotator->SetIsEnabled(bIsEditable);
+	DecreaseValueButton->SetIsEnabled(bIsEditable);
+}
+
 void UListEntryWidgetString::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();

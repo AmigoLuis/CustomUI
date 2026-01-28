@@ -22,6 +22,7 @@ protected:
 	virtual void OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject) override;
 	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData, 
 		ESettingsListDataModifyReason ModifyReason) override;
+	virtual void OnToggleEditableState(const bool bIsEditable) override;
 	// UListEntryWidgetBase
 	// UUserWidget
 	virtual void NativeOnInitialized() override;

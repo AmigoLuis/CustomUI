@@ -62,11 +62,21 @@ void UListEntryWidgetBase::OnListItemObjectSet(UListSettingDataObjectBase* InOwn
 		InOwningListItemObject->OnListDataModifiedDelegate.AddUObject(this, 
 			&UListEntryWidgetBase::OnOwningListItemObjectModified);	
 	}
+	
+	OnToggleEditableState(InOwningListItemObject->IsSettingDataEditable());
 }
 
 void UListEntryWidgetBase::OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
 	ESettingsListDataModifyReason ModifyReason)
 {
+}
+
+void UListEntryWidgetBase::OnToggleEditableState(const bool bIsEditable)
+{
+	if (SettingEntryNameTextBlock)
+	{
+		SettingEntryNameTextBlock->SetIsEnabled(bIsEditable);
+	}
 }
 
 void UListEntryWidgetBase::SelectThisEntryWidget()

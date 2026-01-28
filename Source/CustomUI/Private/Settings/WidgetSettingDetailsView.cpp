@@ -35,7 +35,8 @@ void UWidgetSettingDetailsView::UpdateDetailViewInfo(UListSettingDataObjectBase*
 			InWidgetClass});
 	RichTextBlockDynamicDetails->SetText(FText::FromString(DynamicDetails));
 #undef DYNAMIC_DETAILS_TEXT_STYLE
-	RichTextBlockDisableReason->SetText(InDataObject->GetDisabledRichText());
+	RichTextBlockDisableReason->SetText(
+		InDataObject->IsSettingDataEditable() ? FText::GetEmpty() : InDataObject->GetDisabledRichText());
 }
 
 void UWidgetSettingDetailsView::ClearDetailViewInfo()
