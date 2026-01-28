@@ -18,4 +18,8 @@ public:
 
 protected:
 	virtual void OnInitializeDataObject() override;
+private:
+	FString ResolutionToStringValue(const FIntPoint& Resolution) const;
+	FText ResolutionToDisplayText(const FIntPoint& Resolution) const;
+	FString MaxSupportedResolutions;
 };
