@@ -270,6 +270,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 					{DISABLED_RICH_TEXT_STYLE}));
 			BasedOnWindowMode.SetDisabledForcedStringValue(ScreenResolution->GetMaxSupportedResolutions());
 			ScreenResolution->AddEditCondition(BasedOnWindowMode);
+			ScreenResolution->AddEditDependencyData(CachedFullscreenMode);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ScreenResolution);
 			ADD_CHILD_TO_COLLECTION(ScreenResolution, Display);
 		}

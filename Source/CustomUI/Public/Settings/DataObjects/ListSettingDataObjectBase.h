@@ -19,6 +19,7 @@ public:
 	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnListDataModifiedDelegate, 
 		UListSettingDataObjectBase*, ESettingsListDataModifyReason);
 	FOnListDataModifiedDelegate OnListDataModifiedDelegate;
+	FOnListDataModifiedDelegate OnDependencyDataModifiedDelegate;
 	
 	GETTER_AND_SETTER_REFERENCE(FName, DataID);
 	GETTER_AND_SETTER_REFERENCE(FText, DataDisplayName);
@@ -39,6 +40,7 @@ public:
 	// call in setting resigtry to add setting data edit condition
 	void AddEditCondition(const FSettingDataEditConditionDetail& SettingDataEditConditionDetail);
 	bool IsSettingDataEditable();
+	void AddEditDependencyData(UListSettingDataObjectBase* InDependencyData);
 	
 	// child class should override it if it supports default value
 	virtual bool HasDefaultValue() const {return false;}
@@ -54,6 +56,9 @@ protected:
 	
 	virtual void NotifyListDataModified(UListSettingDataObjectBase* ModifiedData, 
 		ESettingsListDataModifyReason ModifyReason = ESettingsListDataModifyReason::DirectlyModified);
+	
+	virtual void OnEditDependencyDataModified(UListSettingDataObjectBase* ModifiedData, 
+		ESettingsListDataModifyReason ModifyReason);
 private:
 	FName DataID;
 	FText DataDisplayName;

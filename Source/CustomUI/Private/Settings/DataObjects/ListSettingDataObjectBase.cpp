@@ -41,6 +41,15 @@ bool UListSettingDataObjectBase::IsSettingDataEditable()
 	return bIsEditable;
 }
 
+void UListSettingDataObjectBase::AddEditDependencyData(UListSettingDataObjectBase* InDependencyData)
+{
+	if (InDependencyData && !InDependencyData->OnListDataModifiedDelegate.IsBoundToObject(this))
+	{
+		InDependencyData->OnListDataModifiedDelegate.AddUObject(
+			this, &UListSettingDataObjectBase::OnEditDependencyDataModified);
+	}
+}
+
 void UListSettingDataObjectBase::OnInitializeDataObject()
 {
 }
@@ -53,4 +62,10 @@ void UListSettingDataObjectBase::NotifyListDataModified(UListSettingDataObjectBa
 	{
 		UFrontendGameUserSettings::Get()->ApplySettings(true);
 	}
+}
+
+void UListSettingDataObjectBase::OnEditDependencyDataModified(UListSettingDataObjectBase* ModifiedData,
+	ESettingsListDataModifyReason ModifyReason)
+{
+	OnDependencyDataModifiedDelegate.Broadcast(ModifiedData, ModifyReason);
 }
