@@ -9,6 +9,7 @@
 #include "Settings/FrontendGameUserSettings.h"
 #include "Settings/FSettingDataInteractionHelper.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
+#include "Settings/DataObjects/ListSettingDataObjectResolution.h"
 #include "Settings/DataObjects/ListSettingDataObjectScalar.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 #include "Settings/DataObjects/ListSettingDataObjectStringBool.h"
@@ -219,7 +220,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 	{
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Display);
 		ADD_CHILD_TO_COLLECTION(Display, Video);
-		// Overall Volume
+		// Fullscreen Mode
 		{
 			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode);
 			FullscreenMode->SetDescriptionRichText(FText::FromString(
@@ -230,6 +231,18 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			FullscreenMode->SetDefaultValueFromEnumOption(EWindowMode::WindowedFullscreen);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FullscreenMode);
 			ADD_CHILD_TO_COLLECTION(FullscreenMode, Display);
+		}
+		// ScreenResolution
+		{
+			UListSettingDataObjectResolution* ScreenResolution = NewObject<UListSettingDataObjectResolution>();
+			ScreenResolution->SetDataID(FName(SYMBOL_NAME_TEXT(ScreenResolution)));
+			ScreenResolution->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ScreenResolution)));
+			ScreenResolution->SetDescriptionRichText(FText::FromString(
+				TEXT("Screen Resolution decides game's window scale.")));
+			ScreenResolution->InitResolutionValue();
+			ScreenResolution->SetbShouldApplySettingChangeImmediately(true);
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ScreenResolution);
+			ADD_CHILD_TO_COLLECTION(ScreenResolution, Display);
 		}
 	}
 }
