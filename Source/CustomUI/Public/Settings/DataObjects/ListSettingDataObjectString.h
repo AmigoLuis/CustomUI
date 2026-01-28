@@ -36,6 +36,8 @@ protected:
 	TArray<FText> AllSettingNameText;
 	// UListSettingDataObjectBase
 	virtual void OnInitializeDataObject() override;
+	virtual bool CanSetToForcedStringValue(const FString& InForcedValue) const override;
+	virtual void OnSetToForcedStringValue(const FString& InForcedValue) override;
 	// UListSettingDataObjectBase
 	bool TrySetTextAccordingToString(const FString& InSettingNameString);
 

@@ -29,7 +29,7 @@ public:
 	{
 		const UEnum* EnumPtr = StaticEnum<EnumType>();
 		CHECK_NULL_RETURN_VALUE(EnumPtr, EnumType());
-		return EnumPtr->GetValueByNameString(CurrentSettingNameString);
+		return EnumType(EnumPtr->GetValueByNameString(CurrentSettingNameString));
 	}
 	
 	template<typename EnumType>

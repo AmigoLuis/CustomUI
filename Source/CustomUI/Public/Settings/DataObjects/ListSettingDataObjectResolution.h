@@ -15,7 +15,7 @@ class CUSTOMUI_API UListSettingDataObjectResolution : public UListSettingDataObj
 	GENERATED_BODY()
 public:
 	void InitResolutionValue();
-
+	FORCEINLINE FString GetMaxSupportedResolutions() {return MaxSupportedResolutions;}
 protected:
 	virtual void OnInitializeDataObject() override;
 private:

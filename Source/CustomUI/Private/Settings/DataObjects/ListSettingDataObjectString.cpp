@@ -116,6 +116,22 @@ void UListSettingDataObjectString::OnInitializeDataObject()
 	}
 }
 
+bool UListSettingDataObjectString::CanSetToForcedStringValue(const FString& InForcedValue) const
+{
+	return CurrentSettingNameString != InForcedValue;
+}
+
+void UListSettingDataObjectString::OnSetToForcedStringValue(const FString& InForcedValue)
+{
+	CurrentSettingNameString = InForcedValue;
+	TrySetTextAccordingToString(CurrentSettingNameString);
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(CurrentSettingNameString);
+		NotifyListDataModified(this, ESettingsListDataModifyReason::DependencyModified);
+	}
+}
+
 bool UListSettingDataObjectString::CanResetToDefaultValue() const
 {
 	return HasDefaultValue() && (CurrentSettingNameString != GetDefaultValueAsString());

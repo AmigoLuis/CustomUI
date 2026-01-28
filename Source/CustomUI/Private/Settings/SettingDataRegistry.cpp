@@ -214,6 +214,7 @@ void USettingDataRegistry::InitAudioCollectionTab()
 	}
 }
 
+#define DISABLED_RICH_TEXT_STYLE TEXT("Disabled")
 void USettingDataRegistry::InitVideoCollectionTab()
 {
 	INIT_COLLECTION_TAB(Video);
@@ -227,11 +228,10 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{
 			return !GIsEditor && !GIsPlayInEditorWorld;
 		});
-#define DISABLED_RICH_TEXT_STYLE TEXT("Disabled")
 		PackageBuildOnly.SetDisabledRichReason(
 			FString::Format(TEXT("<{0}>This setting can only be adjusted in a packaged build.</>"), 
 				{DISABLED_RICH_TEXT_STYLE}));
-		
+		UListSettingDataObjectStringEnum* CachedFullscreenMode;
 		// Fullscreen Mode
 		{
 			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode);
@@ -244,6 +244,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			FullscreenMode->AddEditCondition(PackageBuildOnly);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FullscreenMode);
 			ADD_CHILD_TO_COLLECTION(FullscreenMode, Display);
+			CachedFullscreenMode = FullscreenMode;
 		}
 		// ScreenResolution
 		{
@@ -255,6 +256,20 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ScreenResolution->InitResolutionValue();
 			ScreenResolution->SetbShouldApplySettingChangeImmediately(true);
 			ScreenResolution->AddEditCondition(PackageBuildOnly);
+			
+			FSettingDataEditConditionDetail BasedOnWindowMode;
+			BasedOnWindowMode.SetEditCondition([CachedFullscreenMode]()
+			{
+				return CachedFullscreenMode->GetCurrentValueAsEnum<EWindowMode::Type>() 
+					!= EWindowMode::WindowedFullscreen;
+			});
+			BasedOnWindowMode.SetDisabledRichReason(
+				FString::Format(TEXT("\n\n<{0}>The screen resolution is not editable "
+						 "when fullscreen mode is borderless full screen, "
+						 "the screen resolution must match maximum supported resolution.</>"), 
+					{DISABLED_RICH_TEXT_STYLE}));
+			BasedOnWindowMode.SetDisabledForcedStringValue(ScreenResolution->GetMaxSupportedResolutions());
+			ScreenResolution->AddEditCondition(BasedOnWindowMode);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ScreenResolution);
 			ADD_CHILD_TO_COLLECTION(ScreenResolution, Display);
 		}
