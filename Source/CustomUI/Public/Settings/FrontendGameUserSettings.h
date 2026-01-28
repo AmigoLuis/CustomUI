@@ -18,72 +18,72 @@ public:
 	static UFrontendGameUserSettings* Get();
 	//*** Gameplay Collection Tab
 	UFUNCTION()
-	[[nodiscard]] FORCEINLINE FString GetCurrentGameDifficulty() const
+	[[nodiscard]] FORCEINLINE FString GetDifficulty() const
 	{
-		return CurrentGameDifficulty;
+		return Difficulty;
 	}
 	UFUNCTION()
-	FORCEINLINE void SetCurrentGameDifficulty(const FString& InCurrentGameDifficulty)
+	FORCEINLINE void SetDifficulty(const FString& InDifficulty)
 	{
-		this->CurrentGameDifficulty = InCurrentGameDifficulty;
+		this->Difficulty = InDifficulty;
 	}
 	//*** Gameplay Collection Tab
 	//*** Audio Collection Tab
 	UFUNCTION()
-	[[nodiscard]] FORCEINLINE float GetCurrentGameOverallVolume() const
+	[[nodiscard]] FORCEINLINE float GetOverallVolume() const
 	{
-		return CurrentGameOverallVolume;
+		return OverallVolume;
 	}
-	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置CurrentGameOverallVolume的值
+	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置OverallVolume的值
 	UFUNCTION()
-	FORCEINLINE void SetCurrentGameOverallVolume(const float& InVolume);
+	FORCEINLINE void SetOverallVolume(const float& InVolume);
 	UFUNCTION()
-	[[nodiscard]] FORCEINLINE float GetCurrentGameMusicVolume() const
+	[[nodiscard]] FORCEINLINE float GetMusicVolume() const
 	{
-		return CurrentGameMusicVolume;
+		return MusicVolume;
 	}
-	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置CurrentGameMusicVolume的值
+	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置MusicVolume的值
 	UFUNCTION()
-	FORCEINLINE void SetCurrentGameMusicVolume(const float& InVolume);
+	FORCEINLINE void SetMusicVolume(const float& InVolume);
 	UFUNCTION()
-	[[nodiscard]] FORCEINLINE float GetCurrentGameSoundFXVolume() const
+	[[nodiscard]] FORCEINLINE float GetSoundFXVolume() const
 	{
-		return CurrentGameSoundFXVolume;
+		return SoundFXVolume;
 	}
-	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置CurrentGameSoundFXVolume的值
+	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置SoundFXVolume的值
 	UFUNCTION()
-	FORCEINLINE void SetCurrentGameSoundFXVolume(const float& InVolume);
+	FORCEINLINE void SetSoundFXVolume(const float& InVolume);
 	
 	UFUNCTION()
-	[[nodiscard]] FORCEINLINE bool GetCurrentGameAllowBackgroundMusic() const
-	{return CurrentGameAllowBackgroundMusic;}
+	[[nodiscard]] FORCEINLINE bool GetAllowBackgroundMusic() const
+	{return AllowBackgroundMusic;}
 	UFUNCTION()
-	FORCEINLINE void SetCurrentGameAllowBackgroundMusic(const bool InAllowBackgroundMusic)
-	{CurrentGameAllowBackgroundMusic = InAllowBackgroundMusic;}
+	FORCEINLINE void SetAllowBackgroundMusic(const bool InAllowBackgroundMusic)
+	{AllowBackgroundMusic = InAllowBackgroundMusic;}
 	
 	UFUNCTION()
-	[[nodiscard]] FORCEINLINE bool GetCurrentGameUseHDRAudio() const
-	{return CurrentGameUseHDRAudio;}
+	[[nodiscard]] FORCEINLINE bool GetUseHDRAudio() const
+	{return UseHDRAudio;}
 	UFUNCTION()
-	FORCEINLINE void SetCurrentGameUseHDRAudio(const bool InUseHDRAudio)
-	{CurrentGameUseHDRAudio = InUseHDRAudio;}
+	FORCEINLINE void SetUseHDRAudio(const bool InUseHDRAudio)
+	{UseHDRAudio = InUseHDRAudio;}
 	//*** Audio Collection Tab
 private:
 	// Gameplay Tab
 	UPROPERTY(Config)
-	FString CurrentGameDifficulty;
+	FString Difficulty;
 	// Gameplay Tab
 	
 	// Audio Tab
 	UPROPERTY(Config)
-	float CurrentGameOverallVolume;
+	float OverallVolume;
 	UPROPERTY(Config)
-	float CurrentGameMusicVolume;
+	float MusicVolume;
 	UPROPERTY(Config)
-	float CurrentGameSoundFXVolume;
+	float SoundFXVolume;
 	UPROPERTY(Config)
-	bool CurrentGameAllowBackgroundMusic;
+	bool AllowBackgroundMusic;
 	UPROPERTY(Config)
-	bool CurrentGameUseHDRAudio;
+	bool UseHDRAudio;
 	// Audio Tab
 };

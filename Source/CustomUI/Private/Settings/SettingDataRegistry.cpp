@@ -12,6 +12,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectScalar.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 #include "Settings/DataObjects/ListSettingDataObjectStringBool.h"
+#include "Settings/DataObjects/ListSettingDataObjectStringEnum.h"
 
 
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
@@ -49,6 +50,13 @@ ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
+#undef INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME
+#define INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(ChileName) \
+UListSettingDataObjectStringEnum* ChileName = NewObject<UListSettingDataObjectStringEnum>();\
+ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetbShouldApplySettingChangeImmediately(true);
+
 #undef INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME
 #define INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(ChileName) \
 UListSettingDataObjectStringBool* ChileName = NewObject<UListSettingDataObjectStringBool>();\
@@ -70,9 +78,9 @@ ChileName->SetDefaultValueFromString(SYMBOL_NAME_TEXT(DefaultValueString));
 #undef ADD_CHILD_DYNAMIC_GETTER_AND_SETTER
 #define ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ChileName) \
 ChileName->SetDataDynamicGetter(MakeShared<FSettingDataInteractionHelper>(\
-GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,GetCurrentGame##ChileName)));\
+GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,Get##ChileName)));\
 ChileName->SetDataDynamicSetter(MakeShared<FSettingDataInteractionHelper>(\
-GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,SetCurrentGame##ChileName)));
+GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,Set##ChileName)));
 
 // 递归遍历，获取所有FoundCollectionPtr下面的子孙节点, 
 // 注意这里需要按照树的顺序去添加，所以不好改成迭代写法
@@ -207,6 +215,23 @@ void USettingDataRegistry::InitAudioCollectionTab()
 void USettingDataRegistry::InitVideoCollectionTab()
 {
 	INIT_COLLECTION_TAB(Video);
+	// Display
+	{
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Display);
+		ADD_CHILD_TO_COLLECTION(Display, Video);
+		// Overall Volume
+		{
+			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode);
+			FullscreenMode->SetDescriptionRichText(FText::FromString(
+				TEXT("Fullscreen Mode decides game's window is fullscreen or not.")));
+			FullscreenMode->AddEnumOption(EWindowMode::Fullscreen, FText::FromString(TEXT("Fullscreen")));
+			FullscreenMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Borderless Fullscreen")));
+			FullscreenMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed")));
+			FullscreenMode->SetDefaultValueFromEnumOption(EWindowMode::WindowedFullscreen);
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FullscreenMode);
+			ADD_CHILD_TO_COLLECTION(FullscreenMode, Display);
+		}
+	}
 }
 
 void USettingDataRegistry::InitControlCollectionTab()

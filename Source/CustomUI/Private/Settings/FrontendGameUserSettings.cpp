@@ -5,8 +5,8 @@
 
 #include "UILogger.h"
 
-UFrontendGameUserSettings::UFrontendGameUserSettings() : CurrentGameOverallVolume(1.0f), CurrentGameMusicVolume(1.0f), 
-	CurrentGameSoundFXVolume(1.0f), CurrentGameAllowBackgroundMusic(true), CurrentGameUseHDRAudio(false)
+UFrontendGameUserSettings::UFrontendGameUserSettings() : OverallVolume(1.0f), MusicVolume(1.0f), 
+	SoundFXVolume(1.0f), AllowBackgroundMusic(true), UseHDRAudio(false)
 {
 }
 
@@ -24,18 +24,18 @@ UFrontendGameUserSettings* UFrontendGameUserSettings::Get()
 	return Settings;
 }
 
-void UFrontendGameUserSettings::SetCurrentGameOverallVolume(const float& InVolume)
+void UFrontendGameUserSettings::SetOverallVolume(const float& InVolume)
 {
-	CurrentGameOverallVolume = InVolume;
+	OverallVolume = InVolume;
 }
 
-void UFrontendGameUserSettings::SetCurrentGameMusicVolume(const float& InVolume)
+void UFrontendGameUserSettings::SetMusicVolume(const float& InVolume)
 {
-	CurrentGameMusicVolume = InVolume;
+	MusicVolume = InVolume;
 }
 
-void UFrontendGameUserSettings::SetCurrentGameSoundFXVolume(const float& InVolume)
+void UFrontendGameUserSettings::SetSoundFXVolume(const float& InVolume)
 {
-	CurrentGameSoundFXVolume = InVolume;
+	SoundFXVolume = InVolume;
 }
 

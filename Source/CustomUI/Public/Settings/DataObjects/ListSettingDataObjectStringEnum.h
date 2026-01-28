@@ -33,7 +33,7 @@ public:
 	}
 	
 	template<typename EnumType>
-	void SetDefaultValueFromEnumOption(EnumType InEnumOption, const FText& InDisplayText)
+	void SetDefaultValueFromEnumOption(EnumType InEnumOption)
 	{
 		const UEnum* EnumPtr = StaticEnum<EnumType>();
 		CHECK_NULL_RETURN(EnumPtr);
