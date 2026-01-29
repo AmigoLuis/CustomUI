@@ -331,7 +331,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ResolutionScaleNormalized->AddEditDependencyData(CachedOverallScalabilityLevel);
 			ADD_CHILD_TO_COLLECTION(ResolutionScaleNormalized, Graphics);
 		}
-		// OverallScalabilityLevel
+		// GlobalIlluminationQuality
 		{	
 			UListSettingDataObjectInteger* GlobalIlluminationQuality = NewObject<UListSettingDataObjectInteger>();
 			GlobalIlluminationQuality->SetDataID(FName(TEXT("GlobalIlluminationQuality")));
@@ -348,6 +348,42 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			GlobalIlluminationQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(GlobalIlluminationQuality);
 			ADD_CHILD_TO_COLLECTION(GlobalIlluminationQuality, Graphics);
+		}
+		// ShadowQuality
+		{	
+			UListSettingDataObjectInteger* ShadowQuality = NewObject<UListSettingDataObjectInteger>();
+			ShadowQuality->SetDataID(FName(TEXT("ShadowQuality")));
+			ShadowQuality->SetDataDisplayName(FText::FromString(TEXT("Shadow Quality")));
+			ShadowQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Shadow Quality.")));
+			ShadowQuality->SetbShouldApplySettingChangeImmediately(true);
+			ShadowQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			ShadowQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			ShadowQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			ShadowQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			ShadowQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ShadowQuality);
+			ShadowQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(ShadowQuality);
+			ADD_CHILD_TO_COLLECTION(ShadowQuality, Graphics);
+		}
+		// AntiAliasingQuality
+		{	
+			UListSettingDataObjectInteger* AntiAliasingQuality = NewObject<UListSettingDataObjectInteger>();
+			AntiAliasingQuality->SetDataID(FName(TEXT("AntiAliasingQuality")));
+			AntiAliasingQuality->SetDataDisplayName(FText::FromString(TEXT("AntiAliasing Quality")));
+			AntiAliasingQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects AntiAliasing Quality.")));
+			AntiAliasingQuality->SetbShouldApplySettingChangeImmediately(true);
+			AntiAliasingQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			AntiAliasingQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			AntiAliasingQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			AntiAliasingQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			AntiAliasingQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AntiAliasingQuality);
+			AntiAliasingQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(AntiAliasingQuality);
+			ADD_CHILD_TO_COLLECTION(AntiAliasingQuality, Graphics);
 		}
 	}
 }
