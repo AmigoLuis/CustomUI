@@ -385,6 +385,96 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			CachedOverallScalabilityLevel->AddEditDependencyData(AntiAliasingQuality);
 			ADD_CHILD_TO_COLLECTION(AntiAliasingQuality, Graphics);
 		}
+		// ViewDistanceQuality
+		{	
+			UListSettingDataObjectInteger* ViewDistanceQuality = NewObject<UListSettingDataObjectInteger>();
+			ViewDistanceQuality->SetDataID(FName(TEXT("ViewDistanceQuality")));
+			ViewDistanceQuality->SetDataDisplayName(FText::FromString(TEXT("View Distance")));
+			ViewDistanceQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects View Distance.")));
+			ViewDistanceQuality->SetbShouldApplySettingChangeImmediately(true);
+			ViewDistanceQuality->AddIntegerSetting(0, FText::FromString(TEXT("Near")));
+			ViewDistanceQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			ViewDistanceQuality->AddIntegerSetting(2, FText::FromString(TEXT("Far")));
+			ViewDistanceQuality->AddIntegerSetting(3, FText::FromString(TEXT("Very Far")));
+			ViewDistanceQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ViewDistanceQuality);
+			ViewDistanceQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(ViewDistanceQuality);
+			ADD_CHILD_TO_COLLECTION(ViewDistanceQuality, Graphics);
+		}
+		// TextureQuality
+		{	
+			UListSettingDataObjectInteger* TextureQuality = NewObject<UListSettingDataObjectInteger>();
+			TextureQuality->SetDataID(FName(TEXT("TextureQuality")));
+			TextureQuality->SetDataDisplayName(FText::FromString(TEXT("Texture Quality")));
+			TextureQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Texture Quality.")));
+			TextureQuality->SetbShouldApplySettingChangeImmediately(true);
+			TextureQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			TextureQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			TextureQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			TextureQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			TextureQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(TextureQuality);
+			TextureQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(TextureQuality);
+			ADD_CHILD_TO_COLLECTION(TextureQuality, Graphics);
+		}
+		// VisualEffectQuality
+		{	
+			UListSettingDataObjectInteger* VisualEffectQuality = NewObject<UListSettingDataObjectInteger>();
+			VisualEffectQuality->SetDataID(FName(TEXT("VisualEffectQuality")));
+			VisualEffectQuality->SetDataDisplayName(FText::FromString(TEXT("Visual Effect Quality")));
+			VisualEffectQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Visual Effect Quality.")));
+			VisualEffectQuality->SetbShouldApplySettingChangeImmediately(true);
+			VisualEffectQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			VisualEffectQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			VisualEffectQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			VisualEffectQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			VisualEffectQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(VisualEffectQuality);
+			VisualEffectQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(VisualEffectQuality);
+			ADD_CHILD_TO_COLLECTION(VisualEffectQuality, Graphics);
+		}
+		// ReflectionQuality
+		{	
+			UListSettingDataObjectInteger* ReflectionQuality = NewObject<UListSettingDataObjectInteger>();
+			ReflectionQuality->SetDataID(FName(TEXT("ReflectionQuality")));
+			ReflectionQuality->SetDataDisplayName(FText::FromString(TEXT("Reflection Quality")));
+			ReflectionQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Reflection Quality.")));
+			ReflectionQuality->SetbShouldApplySettingChangeImmediately(true);
+			ReflectionQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			ReflectionQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			ReflectionQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			ReflectionQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			ReflectionQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ReflectionQuality);
+			ReflectionQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(ReflectionQuality);
+			ADD_CHILD_TO_COLLECTION(ReflectionQuality, Graphics);
+		}
+		// PostProcessingQuality
+		{	
+			UListSettingDataObjectInteger* PostProcessingQuality = NewObject<UListSettingDataObjectInteger>();
+			PostProcessingQuality->SetDataID(FName(TEXT("PostProcessingQuality")));
+			PostProcessingQuality->SetDataDisplayName(FText::FromString(TEXT("Post Processing Quality")));
+			PostProcessingQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Post Processing Quality.")));
+			PostProcessingQuality->SetbShouldApplySettingChangeImmediately(true);
+			PostProcessingQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			PostProcessingQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			PostProcessingQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			PostProcessingQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			PostProcessingQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(PostProcessingQuality);
+			PostProcessingQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(PostProcessingQuality);
+			ADD_CHILD_TO_COLLECTION(PostProcessingQuality, Graphics);
+		}
 	}
 }
 
