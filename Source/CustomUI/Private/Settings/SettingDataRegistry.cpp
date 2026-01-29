@@ -278,6 +278,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 	}
 	// Graphics
 	{
+		UListSettingDataObjectInteger* CachedOverallScalabilityLevel;
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Graphics);
 		ADD_CHILD_TO_COLLECTION(Graphics, Video);
 		// Brightness
@@ -293,7 +294,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			Brightness->SetDisplayNumericType(ECommonNumericType::Percentage);
 			Brightness->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Brightness);
-			ADD_CHILD_TO_COLLECTION(Brightness, Video);
+			ADD_CHILD_TO_COLLECTION(Brightness, Graphics);
 		}
 		// OverallScalabilityLevel
 		{	
@@ -308,9 +309,28 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			OverallScalabilityLevel->AddIntegerSetting(2, FText::FromString(TEXT("High")));
 			OverallScalabilityLevel->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
 			OverallScalabilityLevel->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
-			OverallScalabilityLevel->SetDefaultValueFromString(LexToString(1));
+			OverallScalabilityLevel->SetbShouldApplySettingChangeImmediately(true);
+			// OverallScalabilityLevel->SetDefaultValueFromString(LexToString(1));
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallScalabilityLevel);
-			ADD_CHILD_TO_COLLECTION(OverallScalabilityLevel, Video);
+			ADD_CHILD_TO_COLLECTION(OverallScalabilityLevel, Graphics);
+			CachedOverallScalabilityLevel = OverallScalabilityLevel;
+		}
+		// ResolutionScaleNormalized
+		{
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ResolutionScaleNormalized);
+			ResolutionScaleNormalized->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects ResolutionScaleNormalized of the screen.")));
+			ResolutionScaleNormalized->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
+			ResolutionScaleNormalized->SetOutputValueRange(TRange<float>(0.0f, 1.0f));
+			ResolutionScaleNormalized->SetDisplayNumericType(ECommonNumericType::Percentage);
+			// NoDecimal:50% // One Decimal:50.5%
+			ResolutionScaleNormalized->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());
+			// ResolutionScaleNormalized->SetSliderStepSize(0.01f);
+			// ResolutionScaleNormalized->SetDefaultValueFromString(LexToString(1.0f));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ResolutionScaleNormalized);
+			ResolutionScaleNormalized->SetbShouldApplySettingChangeImmediately(true);
+			ResolutionScaleNormalized->AddEditDependencyData(CachedOverallScalabilityLevel);
+			ADD_CHILD_TO_COLLECTION(ResolutionScaleNormalized, Graphics);
 		}
 	}
 }

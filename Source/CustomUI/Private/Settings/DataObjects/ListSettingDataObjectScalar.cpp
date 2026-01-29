@@ -68,6 +68,13 @@ bool UListSettingDataObjectScalar::TryResetToDefaultValue()
 	return false;
 }
 
+void UListSettingDataObjectScalar::OnEditDependencyDataModified(UListSettingDataObjectBase* ModifiedData,
+	ESettingsListDataModifyReason ModifyReason)
+{
+	NotifyListDataModified(this, ESettingsListDataModifyReason::DependencyModified);
+	Super::OnEditDependencyDataModified(ModifiedData, ModifyReason);
+}
+
 float UListSettingDataObjectScalar::StringToFloat(const FString& InValueString) const
 {
 	float ConvertedValue = 0.0f;

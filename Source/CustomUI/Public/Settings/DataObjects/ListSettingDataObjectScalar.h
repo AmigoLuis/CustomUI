@@ -36,6 +36,10 @@ public:
 	virtual bool CanResetToDefaultValue() const override;
 	virtual bool TryResetToDefaultValue() override;
 
+protected:
+	virtual void OnEditDependencyDataModified(UListSettingDataObjectBase* ModifiedData,
+		ESettingsListDataModifyReason ModifyReason) override;
+
 private:
 	float StringToFloat(const FString& InValueString) const;
 };
