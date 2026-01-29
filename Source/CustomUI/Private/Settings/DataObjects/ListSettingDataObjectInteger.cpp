@@ -24,6 +24,9 @@ void UListSettingDataObjectInteger::OnEditDependencyDataModified(UListSettingDat
 {
 	if (DataDynamicGetter)
 	{
+		// 防止无限调用
+		if (DataDynamicGetter->GetValueAsString() == CurrentSettingNameString) return;
+		
 		CurrentSettingNameString = DataDynamicGetter->GetValueAsString();
 	
 		if (!TrySetTextAccordingToString(CurrentSettingNameString))

@@ -303,7 +303,6 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			OverallScalabilityLevel->SetDataDisplayName(FText::FromString(TEXT("Overall Video Quality")));
 			OverallScalabilityLevel->SetDescriptionRichText(FText::FromString(
 				TEXT("This affects Overall Video Quality.")));
-			OverallScalabilityLevel->SetbShouldApplySettingChangeImmediately(true);
 			OverallScalabilityLevel->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
 			OverallScalabilityLevel->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
 			OverallScalabilityLevel->AddIntegerSetting(2, FText::FromString(TEXT("High")));
@@ -331,6 +330,24 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ResolutionScaleNormalized->SetbShouldApplySettingChangeImmediately(true);
 			ResolutionScaleNormalized->AddEditDependencyData(CachedOverallScalabilityLevel);
 			ADD_CHILD_TO_COLLECTION(ResolutionScaleNormalized, Graphics);
+		}
+		// OverallScalabilityLevel
+		{	
+			UListSettingDataObjectInteger* GlobalIlluminationQuality = NewObject<UListSettingDataObjectInteger>();
+			GlobalIlluminationQuality->SetDataID(FName(TEXT("GlobalIlluminationQuality")));
+			GlobalIlluminationQuality->SetDataDisplayName(FText::FromString(TEXT("Global Illumination Quality")));
+			GlobalIlluminationQuality->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Global Illumination Quality.")));
+			GlobalIlluminationQuality->SetbShouldApplySettingChangeImmediately(true);
+			GlobalIlluminationQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			GlobalIlluminationQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			GlobalIlluminationQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			GlobalIlluminationQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			GlobalIlluminationQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(GlobalIlluminationQuality);
+			GlobalIlluminationQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
+			CachedOverallScalabilityLevel->AddEditDependencyData(GlobalIlluminationQuality);
+			ADD_CHILD_TO_COLLECTION(GlobalIlluminationQuality, Graphics);
 		}
 	}
 }
