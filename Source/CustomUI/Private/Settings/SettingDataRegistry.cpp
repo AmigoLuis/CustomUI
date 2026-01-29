@@ -505,6 +505,21 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			VerticalSync->AddEditCondition(IsWindowModeFullScreen);
 			ADD_CHILD_TO_COLLECTION(VerticalSync, AdvancedGraphics);
 		}
+		// FrameRateLimit
+		{
+			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(FrameRateLimit);
+			FrameRateLimit->AddSettingEntry(LexToString(30.0f), FText::FromString(TEXT("30 FPS")));
+			FrameRateLimit->AddSettingEntry(LexToString(60.0f), FText::FromString(TEXT("60 FPS")));
+			FrameRateLimit->AddSettingEntry(LexToString(90.0f), FText::FromString(TEXT("90 FPS")));
+			FrameRateLimit->AddSettingEntry(LexToString(120.0f), FText::FromString(TEXT("120 FPS")));
+			FrameRateLimit->AddSettingEntry(LexToString(0.0f), FText::FromString(TEXT("No Limit")));
+			FrameRateLimit->SetDefaultValueFromString(LexToString(0.0f));
+
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FrameRateLimit);
+			FrameRateLimit->SetDescriptionRichText(FText::FromString(TEXT("The FrameRateLimit defines "
+																 "the maximum frame rate the game will run at.")));
+			ADD_CHILD_TO_COLLECTION(FrameRateLimit, AdvancedGraphics);
+		}
 	}
 }
 
