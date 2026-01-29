@@ -9,6 +9,7 @@
 #include "Settings/FrontendGameUserSettings.h"
 #include "Settings/FSettingDataInteractionHelper.h"
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
+#include "Settings/DataObjects/ListSettingDataObjectInteger.h"
 #include "Settings/DataObjects/ListSettingDataObjectResolution.h"
 #include "Settings/DataObjects/ListSettingDataObjectScalar.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
@@ -293,6 +294,23 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			Brightness->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Brightness);
 			ADD_CHILD_TO_COLLECTION(Brightness, Video);
+		}
+		// OverallScalabilityLevel
+		{	
+			UListSettingDataObjectInteger* OverallScalabilityLevel = NewObject<UListSettingDataObjectInteger>();
+			OverallScalabilityLevel->SetDataID(FName(TEXT("OverallScalabilityLevel")));
+			OverallScalabilityLevel->SetDataDisplayName(FText::FromString(TEXT("Overall Video Quality")));
+			OverallScalabilityLevel->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects Overall Video Quality.")));
+			OverallScalabilityLevel->SetbShouldApplySettingChangeImmediately(true);
+			OverallScalabilityLevel->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
+			OverallScalabilityLevel->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
+			OverallScalabilityLevel->AddIntegerSetting(2, FText::FromString(TEXT("High")));
+			OverallScalabilityLevel->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
+			OverallScalabilityLevel->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			OverallScalabilityLevel->SetDefaultValueFromString(LexToString(1));
+			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallScalabilityLevel);
+			ADD_CHILD_TO_COLLECTION(OverallScalabilityLevel, Video);
 		}
 	}
 }
