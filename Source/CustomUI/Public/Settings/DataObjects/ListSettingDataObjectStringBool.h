@@ -18,6 +18,8 @@ public:
 	void OverrideFalseDisplayText(const FText& InNewFalseDisplayText);
 	void SetFalseAsDefaultValue();
 	void SetTrueAsDefaultValue();
+	static FORCEINLINE const FString& GetTrueString() { return TrueString; }
+	static FORCEINLINE const FString& GetFalseString() { return FalseString; }
 protected:
 	// UListSettingDataObjectString
 	virtual void OnInitializeDataObject() override;

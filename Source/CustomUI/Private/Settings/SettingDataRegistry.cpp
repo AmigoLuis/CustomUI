@@ -218,8 +218,9 @@ void USettingDataRegistry::InitAudioCollectionTab()
 #define DISABLED_RICH_TEXT_STYLE TEXT("Disabled")
 void USettingDataRegistry::InitVideoCollectionTab()
 {
+	UListSettingDataObjectStringEnum* CachedFullscreenMode;
 	INIT_COLLECTION_TAB(Video);
-	// Display
+	// Display Category
 	{
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Display);
 		ADD_CHILD_TO_COLLECTION(Display, Video);
@@ -232,7 +233,6 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		PackageBuildOnly.SetDisabledRichReason(
 			FString::Format(TEXT("<{0}>This setting can only be adjusted in a packaged build.</>"), 
 				{DISABLED_RICH_TEXT_STYLE}));
-		UListSettingDataObjectStringEnum* CachedFullscreenMode;
 		// Fullscreen Mode
 		{
 			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode);
@@ -276,7 +276,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ADD_CHILD_TO_COLLECTION(ScreenResolution, Display);
 		}
 	}
-	// Graphics
+	// Graphics Category
 	{
 		UListSettingDataObjectInteger* CachedOverallScalabilityLevel;
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Graphics);
@@ -368,6 +368,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ADD_CHILD_TO_COLLECTION(ShadowQuality, Graphics);
 		}
 		// AntiAliasingQuality
+		// TODO:发现这里所有的Graphics修改都不会触发重置按键出现，是bug吗
 		{	
 			UListSettingDataObjectInteger* AntiAliasingQuality = NewObject<UListSettingDataObjectInteger>();
 			AntiAliasingQuality->SetDataID(FName(TEXT("AntiAliasingQuality")));
@@ -474,6 +475,35 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			PostProcessingQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(PostProcessingQuality);
 			ADD_CHILD_TO_COLLECTION(PostProcessingQuality, Graphics);
+		}
+	}
+	// Advanced Graphics Category
+	{
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(AdvancedGraphics);
+		ADD_CHILD_TO_COLLECTION(AdvancedGraphics, Video);
+		// VerticalSync
+		{
+			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(VerticalSync);
+			VerticalSync->SetDescriptionRichText(FText::FromString(
+				TEXT("This affects if VerticalSync is enabled.")));
+			VerticalSync->SetDataDynamicGetter(MakeShared<FSettingDataInteractionHelper>(
+			GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,IsVSyncEnabled)));
+			VerticalSync->SetDataDynamicSetter(MakeShared<FSettingDataInteractionHelper>(
+			GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,SetVSyncEnabled)));
+			VerticalSync->SetFalseAsDefaultValue();
+			FSettingDataEditConditionDetail IsWindowModeFullScreen;
+			IsWindowModeFullScreen.SetEditCondition([CachedFullscreenMode]()
+			{
+				return CachedFullscreenMode->GetCurrentValueAsEnum<EWindowMode::Type>() 
+					== EWindowMode::Fullscreen;
+			});
+			IsWindowModeFullScreen.SetDisabledRichReason(
+				FString::Format(TEXT("\n\n<{0}>The VerticalSync is only editable "
+						 "when fullscreen mode is full screen.</>"), 
+					{DISABLED_RICH_TEXT_STYLE}));
+			IsWindowModeFullScreen.SetDisabledForcedStringValue(UListSettingDataObjectStringBool::GetFalseString());
+			VerticalSync->AddEditCondition(IsWindowModeFullScreen);
+			ADD_CHILD_TO_COLLECTION(VerticalSync, AdvancedGraphics);
 		}
 	}
 }
