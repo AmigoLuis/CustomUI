@@ -11,7 +11,7 @@
 
 void UListEntryWidgetBase::NativeOnListEntryWidgetHovered(const bool bIsHovered)
 {
-	BP_OnListEntryWidgetHovered(bIsHovered, IsListItemSelected());
+	BP_OnListEntryWidgetHovered(bIsHovered, GetListItem() == nullptr ? false : IsListItemSelected());
 }
 
 void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
