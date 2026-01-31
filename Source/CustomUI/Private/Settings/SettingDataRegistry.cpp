@@ -3,6 +3,7 @@
 
 #include "Settings/SettingDataRegistry.h"
 
+#include "CommonInputTypeEnum.h"
 #include "FrontEndGameplayTags.h"
 #include "UILogger.h"
 #include "FunctionLibraries/UIFunctionLibrary.h"
@@ -19,6 +20,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 #include "Internationalization/StringTableRegistry.h"
+#include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 
 # define GET_DESCRIPTION_FOR_KEY(KeyString) \
 LOCTABLE("/Game/StringTables/ST_SettingMenuDescription.ST_SettingMenuDescription", KeyString)
@@ -528,8 +530,8 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 	
 	// Keyboard Mouse Category
 	{
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Keyboard_Mouse);
-		ADD_CHILD_TO_COLLECTION(Keyboard_Mouse, Control);
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Keyboard_And_Mouse);
+		ADD_CHILD_TO_COLLECTION(Keyboard_And_Mouse, Control);
 		// Keyboard_Mouse Input
 		{
 			FPlayerMappableKeyQueryOptions KeyboardQueryOptions;
@@ -554,6 +556,13 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 						if (Profile->DoesMappingPassQueryOptions(RowKeyMapping, KeyboardQueryOptions))
 						{
 							MappingTypePtr = &KeyboardMappingType;
+							UListSettingDataObjectKeyRemap* KeyRemapData = NewObject<UListSettingDataObjectKeyRemap>();
+							KeyRemapData->SetDataID(RowKeyMapping.GetMappingName());
+							KeyRemapData->SetDataDisplayName(RowKeyMapping.GetDisplayName());
+							KeyRemapData->InitKeyRemap(UserSettings, Profile, 
+								ECommonInputType::MouseAndKeyboard, RowKeyMapping);
+							
+							Keyboard_And_Mouse->AddChildData(KeyRemapData);
 						}
 						else if (Profile->DoesMappingPassQueryOptions(RowKeyMapping, GamepadQueryOptions))
 						{
