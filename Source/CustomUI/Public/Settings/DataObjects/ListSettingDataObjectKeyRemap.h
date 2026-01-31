@@ -24,6 +24,8 @@ public:
 	
 	FSlateBrush GetSlateBrushForCurrentKey() const;
 private:
+	FPlayerKeyMapping* GetOwningKeyMapping() const;
+	
 	UPROPERTY(Transient)
 	UEnhancedInputUserSettings* CachedInputSettings;
 	

@@ -3,6 +3,9 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 
+#include "CommonInputBaseTypes.h"
+#include "CommonInputSubsystem.h"
+#include "UILogger.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 
 void UListSettingDataObjectKeyRemap::InitKeyRemap(UEnhancedInputUserSettings* InputSettings,
@@ -18,5 +21,31 @@ void UListSettingDataObjectKeyRemap::InitKeyRemap(UEnhancedInputUserSettings* In
 
 FSlateBrush UListSettingDataObjectKeyRemap::GetSlateBrushForCurrentKey() const
 {
-	return FSlateBrush();
+	FSlateBrush OutSlateBrush;
+	FPlayerKeyMapping* PlayerKeyMapping = GetOwningKeyMapping();
+	CHECK_NULL_RETURN_VALUE(PlayerKeyMapping, OutSlateBrush);
+	
+	CHECK_NULL_RETURN_VALUE(CachedInputSettings, OutSlateBrush);
+	UCommonInputSubsystem* InputSubsystem = UCommonInputSubsystem::Get(CachedInputSettings->GetLocalPlayer());
+	CHECK_NULL_RETURN_VALUE(InputSubsystem, OutSlateBrush);
+
+	const bool bHasFoundBrush = UCommonInputPlatformSettings::Get()->TryGetInputBrush(
+		OutSlateBrush, PlayerKeyMapping->GetCurrentKey(),
+		CachedDesiredInputType, InputSubsystem->GetCurrentGamepadName());
+	if (!bHasFoundBrush)
+	{
+		PrintInLog(TEXT("Can't find icon for key: ") + 
+			PlayerKeyMapping->GetCurrentKey().GetDisplayName().ToString());
+	}
+	return OutSlateBrush;
+}
+
+FPlayerKeyMapping* UListSettingDataObjectKeyRemap::GetOwningKeyMapping() const
+{
+	CHECK_NULL_RETURN_VALUE(CachedKeyProfile, nullptr);
+	
+	FMapPlayerKeyArgs KeyArgs;
+	KeyArgs.MappingName = CachedMappingName;
+	KeyArgs.Slot = CachedKeySlot;
+	return CachedKeyProfile->FindKeyMapping(KeyArgs);
 }
