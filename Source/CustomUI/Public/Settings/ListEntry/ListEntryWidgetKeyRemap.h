@@ -22,7 +22,9 @@ protected:
 	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
 		ESettingsListDataModifyReason ModifyReason) override;
 	// UListEntryWidgetBase
-
+	// UUserWidget
+	virtual void NativeOnInitialized() override;
+	// UUserWidget
 private:
 	// BindWidget
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget, AllowPrivateAccess="true"))
@@ -32,4 +34,6 @@ private:
 	// BindWidget
 	UPROPERTY(Transient)
 	UListSettingDataObjectKeyRemap* OwningKeyRemapObject;
+	void OnRemapKeyButtonClicked();
+	void OnResetKeyBindingButtonClicked();
 };

@@ -22,3 +22,20 @@ void UListEntryWidgetKeyRemap::OnOwningListItemObjectModified(UListSettingDataOb
 	CHECK_NULL_RETURN(OwningKeyRemapObject);
 	RemapKeyButton->SetButtonDisplayImageBrush(OwningKeyRemapObject->GetSlateBrushForCurrentKey());
 }
+
+void UListEntryWidgetKeyRemap::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+	RemapKeyButton->OnClicked().AddUObject(this, &UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked);
+	ResetKeyBindingButton->OnClicked().AddUObject(this, &UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked);
+}
+
+void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
+{
+	LOG_ENTER_FUNCTION();
+}
+
+void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
+{
+	LOG_ENTER_FUNCTION();
+}
