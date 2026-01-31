@@ -2,6 +2,8 @@
 
 
 #include "Widgets/Components/FrontEndButtonBase.h"
+
+#include "CommonLazyImage.h"
 #include "CommonTextBlock.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
@@ -21,6 +23,11 @@ FText UFrontEndButtonBase::GetButtonText() const
 {
 	if (ButtonTextBlock) return ButtonTextBlock->GetText();
 	return FText();
+}
+
+void UFrontEndButtonBase::SetButtonDisplayImageBrush(const FSlateBrush& InBrush)
+{
+	if (ButtonLazyImage) ButtonLazyImage->SetBrush(InBrush);
 }
 
 void UFrontEndButtonBase::NativePreConstruct()
