@@ -15,3 +15,8 @@ void UListSettingDataObjectKeyRemap::InitKeyRemap(UEnhancedInputUserSettings* In
 	CachedMappingName = InPlayerKeyMapping.GetMappingName();
 	CachedKeySlot = InPlayerKeyMapping.GetSlot();
 }
+
+FSlateBrush UListSettingDataObjectKeyRemap::GetSlateBrushForCurrentKey() const
+{
+	return FSlateBrush();
+}

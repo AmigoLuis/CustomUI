@@ -21,6 +21,8 @@ class CUSTOMUI_API UListSettingDataObjectKeyRemap : public UListSettingDataObjec
 public:
 	void InitKeyRemap(UEnhancedInputUserSettings* InputSettings, UEnhancedPlayerMappableKeyProfile* KeyProfile, 
 		ECommonInputType DesiredInputType, const FPlayerKeyMapping& InPlayerKeyMapping);
+	
+	FSlateBrush GetSlateBrushForCurrentKey() const;
 private:
 	UPROPERTY(Transient)
 	UEnhancedInputUserSettings* CachedInputSettings;

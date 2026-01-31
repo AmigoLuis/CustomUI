@@ -6,6 +6,7 @@
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "ListEntryWidgetKeyRemap.generated.h"
 
+class UListSettingDataObjectKeyRemap;
 class UFrontEndButtonBase;
 /**
  * 
@@ -14,10 +15,21 @@ UCLASS()
 class CUSTOMUI_API UListEntryWidgetKeyRemap : public UListEntryWidgetBase
 {
 	GENERATED_BODY()
-public:
+
+protected:
+	// UListEntryWidgetBase
+	virtual void OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject) override;
+	virtual void OnOwningListItemObjectModified(UListSettingDataObjectBase* ModifiedData,
+		ESettingsListDataModifyReason ModifyReason) override;
+	// UListEntryWidgetBase
+
 private:
+	// BindWidget
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget, AllowPrivateAccess="true"))
 	UFrontEndButtonBase* RemapKeyButton;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget, AllowPrivateAccess="true"))
 	UFrontEndButtonBase* ResetKeyBindingButton;
+	// BindWidget
+	UPROPERTY(Transient)
+	UListSettingDataObjectKeyRemap* OwningKeyRemapObject;
 };
