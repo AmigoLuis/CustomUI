@@ -529,8 +529,10 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 	CHECK_NULL_RETURN(UserSettings);
 	
 	// Keyboard Mouse Category
-	{
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Keyboard_And_Mouse);
+	{	
+		UListSettingDataObjectCollection* Keyboard_And_Mouse = NewObject<UListSettingDataObjectCollection>();
+		Keyboard_And_Mouse->SetDataID(FName(TEXT("Keyboard & Mouse")));
+		Keyboard_And_Mouse->SetDataDisplayName(FText::FromString(TEXT("Keyboard & Mouse")));
 		ADD_CHILD_TO_COLLECTION(Keyboard_And_Mouse, Control);
 		// Keyboard_Mouse Input
 		{
