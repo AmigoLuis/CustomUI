@@ -26,7 +26,7 @@ private:
 	void InitGamePlayCollectionTab();
 	void InitAudioCollectionTab();
 	void InitVideoCollectionTab();
-	void InitControlCollectionTab();
+	void InitControlCollectionTab(ULocalPlayer* InOwningLocalPlayer);
 	UPROPERTY(Transient)
 	TArray<UListSettingDataObjectCollection*> RegisteredSettingsCollectionTabs;
 };

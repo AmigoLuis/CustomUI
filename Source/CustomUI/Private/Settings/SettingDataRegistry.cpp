@@ -16,6 +16,8 @@
 #include "Settings/DataObjects/ListSettingDataObjectStringBool.h"
 #include "Settings/DataObjects/ListSettingDataObjectStringEnum.h"
 #include "Settings/DataObjects/SettingDataEditConditionDetail.h"
+#include "EnhancedInputSubsystems.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 #include "Internationalization/StringTableRegistry.h"
 
 # define GET_DESCRIPTION_FOR_KEY(KeyString) \
@@ -26,7 +28,7 @@ void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPl
 	InitGamePlayCollectionTab();
 	InitAudioCollectionTab();
 	InitVideoCollectionTab();
-	InitControlCollectionTab();
+	InitControlCollectionTab(InOwningLocalPlayer);
 }
 
 #undef INIT_COLLECTION_TAB
@@ -511,8 +513,43 @@ void USettingDataRegistry::InitVideoCollectionTab()
 	}
 }
 
-void USettingDataRegistry::InitControlCollectionTab()
+void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalPlayer)
 {
 	INIT_COLLECTION_TAB(Control);
+	
+	CHECK_NULL_RETURN(InOwningLocalPlayer);
+	
+	using UInputSys = UEnhancedInputLocalPlayerSubsystem;
+	UInputSys* InputSys = InOwningLocalPlayer->GetSubsystem<UInputSys>();
+	CHECK_NULL_RETURN(InputSys);
+	
+	UEnhancedInputUserSettings* UserSettings = InputSys->GetUserSettings();
+	CHECK_NULL_RETURN(UserSettings);
+	
+	// Keyboard Mouse Category
+	{
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Keyboard_Mouse);
+		ADD_CHILD_TO_COLLECTION(Keyboard_Mouse, Control);
+		// Keyboard_Mouse Input
+		{
+			for (const auto& KeyMapping : UserSettings->GetAllAvailableKeyProfiles())
+			{
+				const auto Profile = KeyMapping.Value;
+				if (Profile == nullptr) continue;
+				for (const auto& MappingRow : Profile->GetPlayerMappingRows())
+				{
+					for (const auto& RowKeyMapping : MappingRow.Value.Mappings)
+					{
+						PrintInLog(FString::Format(
+							TEXT("Mapping ID: {0}, DisplayName: {1}, BoundKey: {2}"), {
+							                           RowKeyMapping.GetMappingName().ToString(),
+							                           RowKeyMapping.GetDisplayName().ToString(),
+							                           RowKeyMapping.GetCurrentKey().GetDisplayName().ToString()
+						                           }), Display);
+					}
+				}
+			}
+		}
+	}
 }
 #undef INIT_COLLECTION_TAB
