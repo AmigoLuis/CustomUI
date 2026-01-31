@@ -39,7 +39,14 @@ void UFrontEndButtonBase::NativePreConstruct()
 void UFrontEndButtonBase::NativeOnCurrentTextStyleChanged()
 {
 	Super::NativeOnCurrentTextStyleChanged();
-	CHECK_NULL_RETURN_WARN(ButtonTextBlock);
+	
+	if (ButtonTextBlock == nullptr)
+	{
+		PrintInLog(SYMBOL_NAME_TEXT(ButtonTextBlock) 
+			TEXT(" is nullptr ") IN_FUNC_AND_LINE, Display);
+		return;
+	}	
+
 	CHECK_NULL_RETURN_WARN(GetCurrentTextStyleClass());
 	ButtonTextBlock->SetStyle(GetCurrentTextStyleClass());
 }

@@ -12,6 +12,14 @@
 void UListEntryWidgetBase::NativeOnListEntryWidgetHovered(const bool bIsHovered)
 {
 	BP_OnListEntryWidgetHovered(bIsHovered, GetListItem() == nullptr ? false : IsListItemSelected());
+	if (bIsHovered)
+	{
+		BP_OnToggleEntryWidgetHighlightState(true);
+	}
+	else
+	{
+		BP_OnToggleEntryWidgetHighlightState(GetListItem() != nullptr && IsListItemSelected() ? true : false);
+	}
 }
 
 void UListEntryWidgetBase::NativeOnListItemObjectSet(UObject* ListItemObject)
@@ -25,6 +33,12 @@ void UListEntryWidgetBase::NativeOnEntryReleased()
 {
 	IUserObjectListEntry::NativeOnEntryReleased();
 	NativeOnListEntryWidgetHovered(false);
+}
+
+void UListEntryWidgetBase::NativeOnItemSelectionChanged(bool bIsSelected)
+{
+	IUserObjectListEntry::NativeOnItemSelectionChanged(bIsSelected);
+	BP_OnToggleEntryWidgetHighlightState(bIsSelected);
 }
 
 FReply UListEntryWidgetBase::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)
