@@ -532,6 +532,16 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 		ADD_CHILD_TO_COLLECTION(Keyboard_Mouse, Control);
 		// Keyboard_Mouse Input
 		{
+			FPlayerMappableKeyQueryOptions KeyboardQueryOptions;
+			KeyboardQueryOptions.KeyToMatch = EKeys::S;
+			KeyboardQueryOptions.bMatchBasicKeyTypes = true;
+			FPlayerMappableKeyQueryOptions GamepadQueryOptions;
+			GamepadQueryOptions.KeyToMatch = EKeys::Gamepad_FaceButton_Bottom;
+			GamepadQueryOptions.bMatchBasicKeyTypes = true;
+			const FString& KeyboardMappingType = TEXT("Keyboard/Mouse");
+			const FString& GamepadMappingType = TEXT("Gamepad");
+			const FString& UnknownMappingType = TEXT("Unknown");
+			
 			for (const auto& KeyMapping : UserSettings->GetAllAvailableKeyProfiles())
 			{
 				const auto Profile = KeyMapping.Value;
@@ -540,12 +550,22 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 				{
 					for (const auto& RowKeyMapping : MappingRow.Value.Mappings)
 					{
+						const FString* MappingTypePtr = &UnknownMappingType;
+						if (Profile->DoesMappingPassQueryOptions(RowKeyMapping, KeyboardQueryOptions))
+						{
+							MappingTypePtr = &KeyboardMappingType;
+						}
+						else if (Profile->DoesMappingPassQueryOptions(RowKeyMapping, GamepadQueryOptions))
+						{
+							MappingTypePtr = &GamepadMappingType;
+						}
 						PrintInLog(FString::Format(
-							TEXT("Mapping ID: {0}, DisplayName: {1}, BoundKey: {2}"), {
-							                           RowKeyMapping.GetMappingName().ToString(),
-							                           RowKeyMapping.GetDisplayName().ToString(),
-							                           RowKeyMapping.GetCurrentKey().GetDisplayName().ToString()
-						                           }), Display);
+							           TEXT("{3} Mapping ID: {0}, DisplayName: {1}, BoundKey: {2}"), {
+							           	RowKeyMapping.GetMappingName().ToString(),
+							           	RowKeyMapping.GetDisplayName().ToString(),
+							           	RowKeyMapping.GetCurrentKey().GetDisplayName().ToString(),
+							           	*MappingTypePtr
+							           }), Display);
 					}
 				}
 			}
