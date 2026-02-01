@@ -27,6 +27,11 @@ public:
 	FORCEINLINE ECommonInputType GetDesiredInputType() const {return CachedDesiredInputType;}
 	
 	void BindNewInputKey(const FKey& InNewKey);
+	// UListSettingDataObjectBase
+	virtual bool HasDefaultValue() const override;
+	virtual bool CanResetToDefaultValue() const override;
+	virtual bool TryResetToDefaultValue() override;
+	// UListSettingDataObjectBase
 private:
 	FPlayerKeyMapping* GetOwningKeyMapping() const;
 	

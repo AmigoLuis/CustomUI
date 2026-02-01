@@ -37,6 +37,7 @@ void UListEntryWidgetKeyRemap::NativeOnInitialized()
 void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
 {
 	LOG_ENTER_FUNCTION();
+	SelectThisEntryWidget();
 	UUIGameInstanceSubsystem::Get(this)->
 		PushWidgetSoftPtrToStackAsync(
 			UUIFunctionLibrary::GetWidgetSoftFromSettings(FrontEndGameplayTags::FrontEnd_Widget_KeyRemapConfirm),
@@ -62,6 +63,10 @@ void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
 void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
 {
 	LOG_ENTER_FUNCTION();
+	SelectThisEntryWidget();
+	CHECK_NULL_RETURN(OwningKeyRemapObject);
+	
+	//if (!OwningKeyRemapObject->CanResetToDefaultValue())
 }
 
 void UListEntryWidgetKeyRemap::OnKeyRemapSucceeded(const FKey& PressedKey)

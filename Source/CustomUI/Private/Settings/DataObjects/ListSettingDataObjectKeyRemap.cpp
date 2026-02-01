@@ -57,6 +57,31 @@ void UListSettingDataObjectKeyRemap::BindNewInputKey(const FKey& InNewKey)
 	NotifyListDataModified(this);
 }
 
+bool UListSettingDataObjectKeyRemap::HasDefaultValue() const
+{
+	return GetOwningKeyMapping()->GetDefaultKey().IsValid();
+}
+
+bool UListSettingDataObjectKeyRemap::CanResetToDefaultValue() const
+{
+	return HasDefaultValue() && GetOwningKeyMapping()->IsCustomized();
+}
+
+bool UListSettingDataObjectKeyRemap::TryResetToDefaultValue()
+{
+	if (CanResetToDefaultValue())
+	{
+		GetOwningKeyMapping()->ResetToDefault();
+		if (CachedInputSettings)
+		{
+			CachedInputSettings->SaveSettings();
+			NotifyListDataModified(this, ESettingsListDataModifyReason::ResetToDefault);
+			return true;
+		}
+	}
+	return false;
+}
+
 FPlayerKeyMapping* UListSettingDataObjectKeyRemap::GetOwningKeyMapping() const
 {
 	CHECK_NULL_RETURN_VALUE(CachedKeyProfile, nullptr);
@@ -64,5 +89,7 @@ FPlayerKeyMapping* UListSettingDataObjectKeyRemap::GetOwningKeyMapping() const
 	FMapPlayerKeyArgs KeyArgs;
 	KeyArgs.MappingName = CachedMappingName;
 	KeyArgs.Slot = CachedKeySlot;
-	return CachedKeyProfile->FindKeyMapping(KeyArgs);
+	FPlayerKeyMapping* FoundMapping = CachedKeyProfile->FindKeyMapping(KeyArgs);
+	CHECK_NULL_RETURN_VALUE(FoundMapping, nullptr);
+	return FoundMapping;
 }
