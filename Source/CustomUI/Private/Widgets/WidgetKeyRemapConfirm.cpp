@@ -6,19 +6,20 @@
 #include "UILogger.h"
 #include "FunctionLibraries/KeyRemapInputProcessor.h"
 
-void UWidgetKeyRemapConfirm::NativeOnDeactivated()
+void UWidgetKeyRemapConfirm::NativeOnActivated()
 {
-	Super::NativeOnDeactivated();
+	Super::NativeOnActivated();
 	
 	CachedKeyRemapInputProcessor = MakeShared<FKeyRemapInputProcessor>();
 	CHECK_NULL_RETURN(CachedKeyRemapInputProcessor);
 	FSlateApplication::Get().RegisterInputPreProcessor(CachedKeyRemapInputProcessor, -1);
 }
 
-void UWidgetKeyRemapConfirm::NativeOnActivated()
+void UWidgetKeyRemapConfirm::NativeOnDeactivated()
 {
-	Super::NativeOnActivated();
+	Super::NativeOnDeactivated();
 	CHECK_NULL_RETURN(CachedKeyRemapInputProcessor);
 	FSlateApplication::Get().UnregisterInputPreProcessor(CachedKeyRemapInputProcessor);
 	CachedKeyRemapInputProcessor.Reset();
 }
+
