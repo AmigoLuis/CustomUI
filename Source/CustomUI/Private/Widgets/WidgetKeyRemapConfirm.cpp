@@ -39,10 +39,34 @@ void UWidgetKeyRemapConfirm::NativeOnActivated()
 
 void UWidgetKeyRemapConfirm::OnValidKeyDown(const FKey& PressedKey)
 {
+	RequestDeactivateWidget([PressedKey, this]()
+	{
+		PrintInLog(TEXT("Key remapped to: " + PressedKey.GetDisplayName().ToString()));
+		OnKeyDownInKeyRemapWidgetDelegate.ExecuteIfBound(PressedKey);
+	});
 }
 
 void UWidgetKeyRemapConfirm::OnKeySelectCanceled(const FString& CanceledReason)
 {
+	RequestDeactivateWidget([CanceledReason, this]()
+	{
+		PrintInLog(CanceledReason);
+		OnKeySelectCanceledInKeyRemapWidgetDelegate.ExecuteIfBound(CanceledReason);
+	});
+}
+
+void UWidgetKeyRemapConfirm::RequestDeactivateWidget(TFunction<void()> PreDeactivateCallback)
+{
+	// Delay a tick to make sure input key down is captured properly
+	FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateLambda([this, PreDeactivateCallback](float)
+	{
+		if (PreDeactivateCallback)
+		{
+			PreDeactivateCallback();
+		}
+		DeactivateWidget();
+		return false;
+	}), 0.0f);
 }
 
 void UWidgetKeyRemapConfirm::SetInputTypeToListen(const ECommonInputType InInputType)
