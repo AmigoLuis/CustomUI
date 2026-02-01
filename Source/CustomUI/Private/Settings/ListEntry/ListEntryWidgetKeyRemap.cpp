@@ -3,8 +3,11 @@
 
 #include "Settings/ListEntry/ListEntryWidgetKeyRemap.h"
 
+#include "FrontEndGameplayTags.h"
 #include "UILogger.h"
+#include "FunctionLibraries/UIFunctionLibrary.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
+#include "Subsystems/UIGameInstanceSubsystem.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
 
 void UListEntryWidgetKeyRemap::OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject)
@@ -33,6 +36,14 @@ void UListEntryWidgetKeyRemap::NativeOnInitialized()
 void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
 {
 	LOG_ENTER_FUNCTION();
+	UUIGameInstanceSubsystem::Get(this)->
+		PushWidgetSoftPtrToStackAsync(
+			UUIFunctionLibrary::GetWidgetSoftFromSettings(FrontEndGameplayTags::FrontEnd_Widget_KeyRemapConfirm),
+			FrontEndGameplayTags::FrontEnd_WidgetStack_Modal,
+[](EAsyncPushWidgetState PushWidgetState, 
+						UWidgetActivatableBase* WidgetToPush){
+	
+	});
 }
 
 void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
