@@ -40,6 +40,23 @@ FSlateBrush UListSettingDataObjectKeyRemap::GetSlateBrushForCurrentKey() const
 	return OutSlateBrush;
 }
 
+void UListSettingDataObjectKeyRemap::BindNewInputKey(const FKey& InNewKey)
+{
+	CHECK_NULL_RETURN(CachedInputSettings);
+	
+	FMapPlayerKeyArgs KeyArgs;
+	KeyArgs.MappingName = CachedMappingName;
+	KeyArgs.Slot = CachedKeySlot;
+	KeyArgs.NewKey = InNewKey;
+	
+	FGameplayTagContainer Container;
+	CachedInputSettings->MapPlayerKey(KeyArgs, Container);
+	// TODO:Container 是否需要打印日志？
+	CachedInputSettings->SaveSettings();
+	
+	NotifyListDataModified(this);
+}
+
 FPlayerKeyMapping* UListSettingDataObjectKeyRemap::GetOwningKeyMapping() const
 {
 	CHECK_NULL_RETURN_VALUE(CachedKeyProfile, nullptr);

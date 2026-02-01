@@ -25,6 +25,8 @@ public:
 	FSlateBrush GetSlateBrushForCurrentKey() const;
 	
 	FORCEINLINE ECommonInputType GetDesiredInputType() const {return CachedDesiredInputType;}
+	
+	void BindNewInputKey(const FKey& InNewKey);
 private:
 	FPlayerKeyMapping* GetOwningKeyMapping() const;
 	

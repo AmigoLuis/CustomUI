@@ -66,6 +66,10 @@ void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
 
 void UListEntryWidgetKeyRemap::OnKeyRemapSucceeded(const FKey& PressedKey)
 {
+	CHECK_NULL_RETURN(OwningKeyRemapObject);
+	
+	OwningKeyRemapObject->BindNewInputKey(PressedKey);
+	
 	PrintInLog(TEXT("Key remapped to: " + PressedKey.GetDisplayName().ToString()));
 }
 
