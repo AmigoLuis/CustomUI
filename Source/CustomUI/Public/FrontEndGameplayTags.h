@@ -16,6 +16,7 @@ namespace FrontEndGameplayTags
 	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_Confirmation);
 	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_StoryMenu);
 	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_SettingsMenu);
+	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Widget_KeyRemapConfirm);
 	// Images
 	CUSTOMUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(FrontEnd_Image_SettingsMenuDetailTest);
 }
