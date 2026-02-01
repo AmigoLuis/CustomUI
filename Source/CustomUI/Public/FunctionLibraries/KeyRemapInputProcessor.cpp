@@ -41,7 +41,7 @@ void FKeyRemapInputProcessor::ProcessPressedKey(const FKey& PressedKey)
 	switch (CurrentInputTypeToListen)
 	{
 	case ECommonInputType::MouseAndKeyboard:
-		if (!PressedKey.IsMouseButton())
+		if (PressedKey.IsGamepadKey())
 		{
 			OnKeySelectCanceledDelegate.ExecuteIfBound(
 				TEXT("Expecting MouseAndKeyboard key pressed but pressedKey type is not MouseAndKeyboard, key remap canceled."));
@@ -60,7 +60,6 @@ void FKeyRemapInputProcessor::ProcessPressedKey(const FKey& PressedKey)
 		OnKeySelectCanceledDelegate.ExecuteIfBound(
 			TEXT("Unsupported key pressed, key remap canceled."));
 		return;
-		break;
 	}
 	OnKeyDownDelegate.ExecuteIfBound(PressedKey);
 }

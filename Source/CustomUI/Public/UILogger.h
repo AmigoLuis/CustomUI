@@ -45,7 +45,7 @@ DECLARE_LOG_CATEGORY_EXTERN(A_LogOfFrontEndUI, Log, All);
 
 // 留下这个注释以做警示，后续搞一个功能之前，一定一定要查一下有没有已经存在的功能！！
 #define M_LOCAL_LOG_PARAMS TEXT("%s"), *Message
-inline void PrintInLog(const FString& Message, 
+FORCEINLINE void PrintInLog(const FString& Message, 
 	const ELogLevelUI LogLevelUI = ELogLevelUI::Warning)
 {
 	switch (LogLevelUI)

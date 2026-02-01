@@ -29,4 +29,8 @@ private:
 	
 	TSharedPtr<FKeyRemapInputProcessor> CachedKeyRemapInputProcessor;
 	ECommonInputType CurrentInputTypeToListen;
+	
+	
+	void OnValidKeyDown(const FKey& PressedKey);
+	void OnKeySelectCanceled(const FString& CanceledReason);
 };
