@@ -6,11 +6,20 @@ enum class ECommonInputType : uint8;
 class FKeyRemapInputProcessor : public IInputProcessor
 {
 public:
-	FKeyRemapInputProcessor(ECommonInputType InputType);
+	explicit FKeyRemapInputProcessor(ECommonInputType InputType);
+	
+	DECLARE_DELEGATE_OneParam(FOnKeyDownDelegateInKeyRemapInputProcessor, const FKey& /*PressedKey*/)
+	DECLARE_DELEGATE_OneParam(FOnKeySelectCanceledDelegateInKeyRemapInputProcessor, const FString& /*Canceled Reason*/)
+	
+	FOnKeyDownDelegateInKeyRemapInputProcessor OnKeyDownDelegate;
+	FOnKeySelectCanceledDelegateInKeyRemapInputProcessor OnKeySelectCanceledDelegate;
 protected:
+	// IInputProcessor
 	virtual void Tick(const float DeltaTime, FSlateApplication& SlateApp, TSharedRef<ICursor> Cursor) override;
 	virtual bool HandleKeyDownEvent(FSlateApplication& SlateApp, const FKeyEvent& InKeyEvent) override;
 	virtual bool HandleMouseButtonDownEvent(FSlateApplication& SlateApp, const FPointerEvent& MouseEvent) override;
+	// IInputProcessor
+	void ProcessPressedKey(const FKey& PressedKey);
 private:
 	ECommonInputType CurrentInputTypeToListen;
 };

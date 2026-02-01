@@ -1,5 +1,6 @@
 #include "KeyRemapInputProcessor.h"
 
+#include "CommonInputTypeEnum.h"
 #include "UILogger.h"
 
 FKeyRemapInputProcessor::FKeyRemapInputProcessor(ECommonInputType InputType) : 
@@ -11,11 +12,13 @@ void FKeyRemapInputProcessor::Tick(const float DeltaTime, FSlateApplication& Sla
 
 bool FKeyRemapInputProcessor::HandleKeyDownEvent(FSlateApplication& SlateApp, const FKeyEvent& InKeyEvent)
 {
-	PrintInLog(TEXT("Pressed key: " + InKeyEvent.GetKey().GetDisplayName().ToString()), Display);
+	ProcessPressedKey(InKeyEvent.GetKey());
+	
+	PrintInLog(TEXT("Pressed key: " + InKeyEvent.GetKey().GetDisplayName().ToString()), Log);
 	if (const UEnum* StaticCommonInputType = StaticEnum<ECommonInputType>())
 	{
 		PrintInLog(TEXT("Desired Input key Type: " + 
-			StaticCommonInputType->GetValueAsString(CurrentInputTypeToListen)), Display);
+			StaticCommonInputType->GetValueAsString(CurrentInputTypeToListen)), Log);
 	}
 	
 	return true;
@@ -23,6 +26,41 @@ bool FKeyRemapInputProcessor::HandleKeyDownEvent(FSlateApplication& SlateApp, co
 
 bool FKeyRemapInputProcessor::HandleMouseButtonDownEvent(FSlateApplication& SlateApp, const FPointerEvent& MouseEvent)
 {
-	PrintInLog(TEXT("Pressed MouseButton: " + MouseEvent.GetEffectingButton().GetDisplayName().ToString()), Display);
+	ProcessPressedKey(MouseEvent.GetEffectingButton());
+	PrintInLog(TEXT("Pressed MouseButton: " + MouseEvent.GetEffectingButton().GetDisplayName().ToString()), Log);
 	return true;
+}
+
+void FKeyRemapInputProcessor::ProcessPressedKey(const FKey& PressedKey)
+{
+	if (PressedKey == EKeys::Escape)
+	{
+		OnKeySelectCanceledDelegate.ExecuteIfBound(TEXT("Key map has been canceled by pressing Escape."));
+		return;
+	}
+	switch (CurrentInputTypeToListen)
+	{
+	case ECommonInputType::MouseAndKeyboard:
+		if (!PressedKey.IsMouseButton())
+		{
+			OnKeySelectCanceledDelegate.ExecuteIfBound(
+				TEXT("Expecting MouseAndKeyboard key pressed but pressedKey type is not MouseAndKeyboard, key remap canceled."));
+			return;
+		}
+		break;
+	case ECommonInputType::Gamepad:
+		if (!PressedKey.IsGamepadKey())
+		{
+			OnKeySelectCanceledDelegate.ExecuteIfBound(
+				TEXT("Expecting Gamepad key pressed but pressedKey type is not Gamepad, key remap canceled."));
+			return;
+		}
+		break;
+	default:
+		OnKeySelectCanceledDelegate.ExecuteIfBound(
+			TEXT("Unsupported key pressed, key remap canceled."));
+		return;
+		break;
+	}
+	OnKeyDownDelegate.ExecuteIfBound(PressedKey);
 }
