@@ -6,6 +6,7 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetKeyRemapConfirm.generated.h"
 
+class FKeyRemapInputProcessor;
 class UCommonRichTextBlock;
 /**
  * 
@@ -23,4 +24,6 @@ protected:
 private:
 	UPROPERTY(meta=(BindWidget))
 	UCommonRichTextBlock* RemapKeyDescriptionRichText;
+	
+	TSharedPtr<FKeyRemapInputProcessor> CachedKeyRemapInputProcessor;
 };
