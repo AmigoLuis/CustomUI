@@ -36,4 +36,7 @@ private:
 	UListSettingDataObjectKeyRemap* OwningKeyRemapObject;
 	void OnRemapKeyButtonClicked();
 	void OnResetKeyBindingButtonClicked();
+	
+	void OnKeyRemapSucceeded(const FKey& PressedKey);
+	void OnKeyRemapCanceled(const FString& CanceledReason);
 };

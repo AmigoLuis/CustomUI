@@ -41,7 +41,6 @@ void UWidgetKeyRemapConfirm::OnValidKeyDown(const FKey& PressedKey)
 {
 	RequestDeactivateWidget([PressedKey, this]()
 	{
-		PrintInLog(TEXT("Key remapped to: " + PressedKey.GetDisplayName().ToString()));
 		OnKeyDownInKeyRemapWidgetDelegate.ExecuteIfBound(PressedKey);
 	});
 }
@@ -50,7 +49,6 @@ void UWidgetKeyRemapConfirm::OnKeySelectCanceled(const FString& CanceledReason)
 {
 	RequestDeactivateWidget([CanceledReason, this]()
 	{
-		PrintInLog(CanceledReason);
 		OnKeySelectCanceledInKeyRemapWidgetDelegate.ExecuteIfBound(CanceledReason);
 	});
 }

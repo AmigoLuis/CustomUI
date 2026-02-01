@@ -47,6 +47,12 @@ void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
 	{
 		UWidgetKeyRemapConfirm* WidgetKeyRemapConfirm = Cast<UWidgetKeyRemapConfirm>(WidgetToPush);
 		CHECK_NULL_RETURN(WidgetKeyRemapConfirm);
+		
+		WidgetKeyRemapConfirm->OnKeyDownInKeyRemapWidgetDelegate.BindUObject(this, 
+			&UListEntryWidgetKeyRemap::OnKeyRemapSucceeded);
+		WidgetKeyRemapConfirm->OnKeySelectCanceledInKeyRemapWidgetDelegate.BindUObject(this, 
+			&UListEntryWidgetKeyRemap::OnKeyRemapCanceled);
+		
 		CHECK_NULL_RETURN(OwningKeyRemapObject);
 		WidgetKeyRemapConfirm->SetInputTypeToListen(OwningKeyRemapObject->GetDesiredInputType());
 	}
@@ -56,4 +62,18 @@ void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
 void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
 {
 	LOG_ENTER_FUNCTION();
+}
+
+void UListEntryWidgetKeyRemap::OnKeyRemapSucceeded(const FKey& PressedKey)
+{
+	PrintInLog(TEXT("Key remapped to: " + PressedKey.GetDisplayName().ToString()));
+}
+
+void UListEntryWidgetKeyRemap::OnKeyRemapCanceled(const FString& CanceledReason)
+{
+	UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
+		EConfirmScreenType::OK, 
+		FText::FromString(TEXT("key remap canceled")),
+FText::FromString(CanceledReason), 
+[](EConfirmScreenButtonType ConfirmType){});
 }
