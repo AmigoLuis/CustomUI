@@ -10,9 +10,14 @@ void UWidgetKeyRemapConfirm::NativeOnActivated()
 {
 	Super::NativeOnActivated();
 	
-	CachedKeyRemapInputProcessor = MakeShared<FKeyRemapInputProcessor>();
+	CachedKeyRemapInputProcessor = MakeShared<FKeyRemapInputProcessor>(CurrentInputTypeToListen);
 	CHECK_NULL_RETURN(CachedKeyRemapInputProcessor);
 	FSlateApplication::Get().RegisterInputPreProcessor(CachedKeyRemapInputProcessor, -1);
+}
+
+void UWidgetKeyRemapConfirm::SetInputTypeToListen(const ECommonInputType InInputType)
+{
+	CurrentInputTypeToListen = InInputType;
 }
 
 void UWidgetKeyRemapConfirm::NativeOnDeactivated()

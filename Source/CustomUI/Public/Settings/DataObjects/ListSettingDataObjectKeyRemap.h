@@ -23,6 +23,8 @@ public:
 		ECommonInputType DesiredInputType, const FPlayerKeyMapping& InPlayerKeyMapping);
 	
 	FSlateBrush GetSlateBrushForCurrentKey() const;
+	
+	FORCEINLINE ECommonInputType GetDesiredInputType() const {return CachedDesiredInputType;}
 private:
 	FPlayerKeyMapping* GetOwningKeyMapping() const;
 	

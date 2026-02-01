@@ -6,6 +6,7 @@
 #include "Widgets/WidgetActivatableBase.h"
 #include "WidgetKeyRemapConfirm.generated.h"
 
+enum class ECommonInputType : uint8;
 class FKeyRemapInputProcessor;
 class UCommonRichTextBlock;
 /**
@@ -16,6 +17,7 @@ class CUSTOMUI_API UWidgetKeyRemapConfirm : public UWidgetActivatableBase
 {
 	GENERATED_BODY()
 public:
+	void SetInputTypeToListen(const ECommonInputType InInputType);
 protected:
 	// UCommonActivatableWidget
 	virtual void NativeOnDeactivated() override;
@@ -26,4 +28,5 @@ private:
 	UCommonRichTextBlock* RemapKeyDescriptionRichText;
 	
 	TSharedPtr<FKeyRemapInputProcessor> CachedKeyRemapInputProcessor;
+	ECommonInputType CurrentInputTypeToListen;
 };

@@ -8,6 +8,7 @@
 #include "FunctionLibraries/UIFunctionLibrary.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
+#include "Widgets/WidgetKeyRemapConfirm.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
 
 void UListEntryWidgetKeyRemap::OnListItemObjectSet(UListSettingDataObjectBase* InOwningListItemObject)
@@ -40,9 +41,15 @@ void UListEntryWidgetKeyRemap::OnRemapKeyButtonClicked()
 		PushWidgetSoftPtrToStackAsync(
 			UUIFunctionLibrary::GetWidgetSoftFromSettings(FrontEndGameplayTags::FrontEnd_Widget_KeyRemapConfirm),
 			FrontEndGameplayTags::FrontEnd_WidgetStack_Modal,
-[](EAsyncPushWidgetState PushWidgetState, 
-						UWidgetActivatableBase* WidgetToPush){
-	
+[this](EAsyncPushWidgetState PushWidgetState, 
+       UWidgetActivatableBase* WidgetToPush){
+	if (PushWidgetState == EAsyncPushWidgetState::CreatedAndBeforePush)
+	{
+		UWidgetKeyRemapConfirm* WidgetKeyRemapConfirm = Cast<UWidgetKeyRemapConfirm>(WidgetToPush);
+		CHECK_NULL_RETURN(WidgetKeyRemapConfirm);
+		CHECK_NULL_RETURN(OwningKeyRemapObject);
+		WidgetKeyRemapConfirm->SetInputTypeToListen(OwningKeyRemapObject->GetDesiredInputType());
+	}
 	});
 }
 
