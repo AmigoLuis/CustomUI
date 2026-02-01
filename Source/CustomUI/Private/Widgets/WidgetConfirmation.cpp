@@ -98,31 +98,11 @@ void UWidgetConfirmation::InitializeConfirmWidget(UConfirmWidgetInfoObject* InCo
 	
 	CHECK_BOOL_TRUE_RETURN_WARN(InConfirmationInfo->AvailableButtonsInfo.IsEmpty());
 	
-	auto GetDataTableRowHandle = [](const EConfirmScreenButtonType ButtonType)
-	{
-		switch (ButtonType) {
-		case EConfirmScreenButtonType::Confirmed:
-			// 这行会导致按钮聚焦到no按钮上面，点击确认键还是触发点击事件
-			// return ICommonInputModule::GetSettings().GetDefaultClickAction(); 
-			return  FDataTableRowHandle();
-		case EConfirmScreenButtonType::Canceled:
-			return ICommonInputModule::GetSettings().GetDefaultBackAction();
-		case EConfirmScreenButtonType::Closed:
-			return ICommonInputModule::GetSettings().GetDefaultBackAction();
-		default:
-			PrintInLog(TEXT("can not DataTableRowHandle for ButtonType: ") +
-				UEnum::GetValueAsString(ButtonType) + TEXT(". returned ") 
-				SYMBOL_NAME_TEXT(ICommonInputModule::GetSettings().GetDefaultBackAction()), Error);
-			return ICommonInputModule::GetSettings().GetDefaultBackAction();
-		}	
-	};
-	
 	for (const FConfirmWidgetButtonInfo& ButtonInfo : InConfirmationInfo->AvailableButtonsInfo)
 	{
 		UFrontEndButtonBase* NewButton = ConfirmationButtons->CreateEntry<UFrontEndButtonBase>();
 		CHECK_NULL_RETURN_WARN(NewButton);
 		NewButton->SetButtonText(ButtonInfo.ButtonText);
-		NewButton->SetTriggeringInputAction(GetDataTableRowHandle(ButtonInfo.ConfirmationChoiceType));
 		NewButton->OnClicked().AddLambda(
 			[ClickedButtonCallback, ButtonInfo, this](){
 				ClickedButtonCallback(ButtonInfo.ConfirmationChoiceType);

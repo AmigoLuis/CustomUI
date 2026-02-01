@@ -66,7 +66,18 @@ void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
 	SelectThisEntryWidget();
 	CHECK_NULL_RETURN(OwningKeyRemapObject);
 	
-	//if (!OwningKeyRemapObject->CanResetToDefaultValue())
+	if (!OwningKeyRemapObject->CanResetToDefaultValue())
+	{
+		UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
+			EConfirmScreenType::OK, 
+			FText::FromString(TEXT("Reset key binding")), 
+FText::FromString(FString::Format(
+				TEXT("This key binding {0} is already set to default or has no default value."), 
+				{OwningKeyRemapObject->GetDataDisplayName().ToString()}) ), 
+[](EConfirmScreenButtonType ConfirmType){});
+		return;
+	}
+	OwningKeyRemapObject->TryResetToDefaultValue();
 }
 
 void UListEntryWidgetKeyRemap::OnKeyRemapSucceeded(const FKey& PressedKey)
