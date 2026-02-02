@@ -258,6 +258,9 @@ Backup/*
 *.webm
 *.mp4
 *.wmv
+# 添加以下例外规则，允许特定的启动影片
+!Content/Movies/LoadingScreenSequence5s.mp4
+!Content/Movies/LoadingScreenSequence10s.mp4
 
 # Useless open order logs
 CookerOpenOrder.log
