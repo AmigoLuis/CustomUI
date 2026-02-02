@@ -43,7 +43,7 @@ void UFrontEndButtonBase::NativeOnCurrentTextStyleChanged()
 	if (ButtonTextBlock == nullptr)
 	{
 		PrintInLog(SYMBOL_NAME_TEXT(ButtonTextBlock) 
-			TEXT(" is nullptr ") IN_FUNC_AND_LINE, Display);
+			TEXT(" is nullptr ") IN_FUNC_AND_LINE, VeryVerbose);
 		return;
 	}	
 

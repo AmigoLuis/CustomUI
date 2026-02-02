@@ -130,7 +130,7 @@ void UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu()
 FString UWidgetSettingsMenu::TryGetEntryWidgetClassName(UObject* InOwningListItem) const
 {
 	const UUserWidget* FoundWidget = SettingsListView->GetEntryWidgetFromItem(InOwningListItem);
-	CHECK_NULL_RETURN_VALUE(FoundWidget, FString(TEXT("InvalidEntryWidget")));
+	CHECK_NULL_RETURN_VALUE_WARN(FoundWidget, FString(TEXT("InvalidEntryWidget")));
 	return FoundWidget->GetClass()->GetName();
 }
 
@@ -219,7 +219,7 @@ void UWidgetSettingsMenu::OnListViewItemHovered(UObject* InHoveredItem, bool bIs
 	
 	const FString& DisplayName = HoveredDataObject->GetDataDisplayName().ToString();
 	PrintInLog(DisplayName + TEXT("'s hover state is : ") + 
-		(bIsHovered ? TEXT("hovered") : TEXT("unhovered")), Display);
+		(bIsHovered ? TEXT("hovered") : TEXT("unhovered")), VeryVerbose);
 	UListEntryWidgetBase* HoveredEntryWidget = SettingsListView->GetEntryWidgetFromItem<
 		UListEntryWidgetBase>(HoveredDataObject);
 	CHECK_NULL_RETURN(HoveredEntryWidget)
@@ -247,7 +247,7 @@ void UWidgetSettingsMenu::OnListViewItemSelectionChanged(UObject* InSelectedItem
 	CHECK_NULL_RETURN_WARN(SelectedDataObject);
 	
 	const FString& DisplayName = SelectedDataObject->GetDataDisplayName().ToString();
-	PrintInLog(DisplayName + TEXT("'s hover state is selected"), Display);
+	PrintInLog(DisplayName + TEXT("'s hover state is selected"), VeryVerbose);
 	
 	SettingDetailsView->UpdateDetailViewInfo(Cast<UListSettingDataObjectBase>(InSelectedItem), 
 		TryGetEntryWidgetClassName(InSelectedItem));

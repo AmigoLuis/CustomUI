@@ -539,11 +539,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 			FPlayerMappableKeyQueryOptions KeyboardQueryOptions;
 			KeyboardQueryOptions.KeyToMatch = EKeys::S;
 			KeyboardQueryOptions.bMatchBasicKeyTypes = true;
-			FPlayerMappableKeyQueryOptions GamepadQueryOptions;
-			GamepadQueryOptions.KeyToMatch = EKeys::Gamepad_FaceButton_Bottom;
-			GamepadQueryOptions.bMatchBasicKeyTypes = true;
 			const FString& KeyboardMappingType = TEXT("Keyboard/Mouse");
-			const FString& GamepadMappingType = TEXT("Gamepad");
 			const FString& UnknownMappingType = TEXT("Unknown");
 			
 			for (const auto& KeyMapping : UserSettings->GetAllAvailableKeyProfiles())
@@ -566,9 +562,52 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 							
 							Keyboard_And_Mouse->AddChildData(KeyRemapData);
 						}
-						else if (Profile->DoesMappingPassQueryOptions(RowKeyMapping, GamepadQueryOptions))
+						PrintInLog(FString::Format(
+							           TEXT("{3} Mapping ID: {0}, DisplayName: {1}, BoundKey: {2}"), {
+							           	RowKeyMapping.GetMappingName().ToString(),
+							           	RowKeyMapping.GetDisplayName().ToString(),
+							           	RowKeyMapping.GetCurrentKey().GetDisplayName().ToString(),
+							           	*MappingTypePtr
+							           }), Log);
+					}
+				}
+			}
+		}
+	}
+	
+	// Gamepad Category
+	{	
+		UListSettingDataObjectCollection* GamepadCategory = NewObject<UListSettingDataObjectCollection>();
+		GamepadCategory->SetDataID(FName(TEXT("Gamepad")));
+		GamepadCategory->SetDataDisplayName(FText::FromString(TEXT("Gamepad")));
+		ADD_CHILD_TO_COLLECTION(GamepadCategory, Control);
+		// Gamepad Input //TODO:后续看能否区分xbox和ps4手柄
+		{
+			FPlayerMappableKeyQueryOptions GamepadQueryOptions;
+			GamepadQueryOptions.KeyToMatch = EKeys::Gamepad_FaceButton_Bottom;
+			GamepadQueryOptions.bMatchBasicKeyTypes = true;
+			const FString& GamepadMappingType = TEXT("Gamepad");
+			const FString& UnknownMappingType = TEXT("Unknown");
+			
+			for (const auto& KeyMapping : UserSettings->GetAllAvailableKeyProfiles())
+			{
+				const auto Profile = KeyMapping.Value;
+				if (Profile == nullptr) continue;
+				for (const auto& MappingRow : Profile->GetPlayerMappingRows())
+				{
+					for (const auto& RowKeyMapping : MappingRow.Value.Mappings)
+					{
+						const FString* MappingTypePtr = &UnknownMappingType;
+						if (Profile->DoesMappingPassQueryOptions(RowKeyMapping, GamepadQueryOptions))
 						{
 							MappingTypePtr = &GamepadMappingType;
+							UListSettingDataObjectKeyRemap* KeyRemapData = NewObject<UListSettingDataObjectKeyRemap>();
+							KeyRemapData->SetDataID(RowKeyMapping.GetMappingName());
+							KeyRemapData->SetDataDisplayName(RowKeyMapping.GetDisplayName());
+							KeyRemapData->InitKeyRemap(UserSettings, Profile, 
+								ECommonInputType::Gamepad, RowKeyMapping);
+							
+							GamepadCategory->AddChildData(KeyRemapData);
 						}
 						PrintInLog(FString::Format(
 							           TEXT("{3} Mapping ID: {0}, DisplayName: {1}, BoundKey: {2}"), {
@@ -576,7 +615,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 							           	RowKeyMapping.GetDisplayName().ToString(),
 							           	RowKeyMapping.GetCurrentKey().GetDisplayName().ToString(),
 							           	*MappingTypePtr
-							           }), Display);
+							           }), Log);
 					}
 				}
 			}
