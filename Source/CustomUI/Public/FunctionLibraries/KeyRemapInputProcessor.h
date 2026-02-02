@@ -6,7 +6,7 @@ enum class ECommonInputType : uint8;
 class FKeyRemapInputProcessor : public IInputProcessor
 {
 public:
-	explicit FKeyRemapInputProcessor(ECommonInputType InputType);
+	explicit FKeyRemapInputProcessor(const ECommonInputType InputType, ULocalPlayer* InWeakOwningLocalPlayer);
 	
 	DECLARE_DELEGATE_OneParam(FOnKeyDownDelegateInKeyRemapInputProcessor, const FKey& /*PressedKey*/)
 	DECLARE_DELEGATE_OneParam(FOnKeySelectCanceledDelegateInKeyRemapInputProcessor, const FString& /*Canceled Reason*/)
@@ -22,4 +22,5 @@ protected:
 	void ProcessPressedKey(const FKey& PressedKey);
 private:
 	ECommonInputType CurrentInputTypeToListen;
+	TWeakObjectPtr<ULocalPlayer> CachedWeakOwningLocalPlayer;
 };

@@ -12,7 +12,8 @@ void UWidgetKeyRemapConfirm::NativeOnActivated()
 {
 	Super::NativeOnActivated();
 	
-	CachedKeyRemapInputProcessor = MakeShared<FKeyRemapInputProcessor>(CurrentInputTypeToListen);
+	CachedKeyRemapInputProcessor = MakeShared<FKeyRemapInputProcessor>(CurrentInputTypeToListen, 
+		GetOwningLocalPlayer());
 	CHECK_NULL_RETURN(CachedKeyRemapInputProcessor);
 	CachedKeyRemapInputProcessor->OnKeyDownDelegate.BindUObject(this,&UWidgetKeyRemapConfirm::OnValidKeyDown);
 	CachedKeyRemapInputProcessor->OnKeySelectCanceledDelegate.BindUObject(

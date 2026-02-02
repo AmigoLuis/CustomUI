@@ -10,7 +10,11 @@
 
 void UFrontEndButtonBase::SetButtonText(FText NewButtonText)
 {
-	CHECK_NULL_RETURN_DISPLAY(ButtonTextBlock);
+	if (ButtonTextBlock == nullptr)
+	{
+		PrintInLog(SYMBOL_NAME_TEXT(ButtonTextBlock) TEXT(" is nullptr ") IN_FUNC_AND_LINE, VeryVerbose);
+		return;
+	}
 	if (NewButtonText.IsEmpty())
 	{
 		PrintInLog(TEXT("Can't set empty text to button."), Warning);

@@ -1,10 +1,13 @@
 #include "KeyRemapInputProcessor.h"
 
+#include "CommonInputSubsystem.h"
 #include "CommonInputTypeEnum.h"
+#include "ICommonInputModule.h"
 #include "UILogger.h"
+#include "CommonUITypes.h"
 
-FKeyRemapInputProcessor::FKeyRemapInputProcessor(ECommonInputType InputType) : 
-CurrentInputTypeToListen(InputType)
+FKeyRemapInputProcessor::FKeyRemapInputProcessor(const ECommonInputType InputType, ULocalPlayer* InWeakOwningLocalPlayer) : 
+	CurrentInputTypeToListen(InputType), CachedWeakOwningLocalPlayer(InWeakOwningLocalPlayer)
 {
 }
 
@@ -38,10 +41,15 @@ void FKeyRemapInputProcessor::ProcessPressedKey(const FKey& PressedKey)
 		OnKeySelectCanceledDelegate.ExecuteIfBound(TEXT("Key map has been canceled by pressing Escape."));
 		return;
 	}
+
+	const UCommonInputSubsystem* CommonInputSubsystem = UCommonInputSubsystem::Get(CachedWeakOwningLocalPlayer.Get());
+	CHECK_NULL_RETURN(CommonInputSubsystem);
+	ECommonInputType CurrentCommonInput = CommonInputSubsystem->GetCurrentInputType();
+	
 	switch (CurrentInputTypeToListen)
 	{
 	case ECommonInputType::MouseAndKeyboard:
-		if (PressedKey.IsGamepadKey())
+		if (PressedKey.IsGamepadKey() || CurrentCommonInput == ECommonInputType::Gamepad)
 		{
 			OnKeySelectCanceledDelegate.ExecuteIfBound(
 				TEXT("Expecting MouseAndKeyboard key pressed but pressedKey type is not MouseAndKeyboard, key remap canceled."));
@@ -49,6 +57,19 @@ void FKeyRemapInputProcessor::ProcessPressedKey(const FKey& PressedKey)
 		}
 		break;
 	case ECommonInputType::Gamepad:
+		// common ui 将确认事件替换为鼠标左键，当使用 手柄按键 完成确认事件时，会变成鼠标左键，这里判断是否是这种情况
+		if (CurrentCommonInput == ECommonInputType::Gamepad && PressedKey == EKeys::LeftMouseButton)
+		{
+			// 获取手柄的 确认事件（或者说点击事件） 绑定的key
+			const FCommonInputActionDataBase* CommonInputActionData = 
+				ICommonInputModule::GetSettings().GetDefaultClickAction()
+			.GetRow<FCommonInputActionDataBase>(TEXT(""));
+			CHECK_NULL_RETURN(CommonInputActionData);
+			
+			// 广播修正后的key
+			OnKeyDownDelegate.ExecuteIfBound(CommonInputActionData->GetDefaultGamepadInputTypeInfo().GetKey());
+			return;
+		}
 		if (!PressedKey.IsGamepadKey())
 		{
 			OnKeySelectCanceledDelegate.ExecuteIfBound(
