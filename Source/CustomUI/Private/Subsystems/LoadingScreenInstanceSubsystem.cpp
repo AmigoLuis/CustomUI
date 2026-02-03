@@ -6,6 +6,7 @@
 #include "PreLoadScreenManager.h"
 #include "UILogger.h"
 #include "Blueprint/UserWidget.h"
+#include "Interfaces/LoadingScreenInterface.h"
 #include "Settings/FrontEndLoadScreenSettings.h"
 
 bool ULoadingScreenInstanceSubsystem::ShouldCreateSubsystem(UObject* Outer) const
@@ -172,14 +173,37 @@ void ULoadingScreenInstanceSubsystem::NotifyLoadingScreenVisibilityChange(bool b
 {
 	const UGameInstance* const GameInstance = GetGameInstance();
 	CHECK_NULL_RETURN(GameInstance);
+	
+	auto ExecuteIfImplementedLoadingScreenInterface = [bIsVisible](UObject* Object)
+	{
+		if (Object->Implements<ULoadingScreenInterface>())
+		{
+			if (bIsVisible)
+			{
+				ILoadingScreenInterface::Execute_OnLoadingScreenActivated(Object);
+			}
+			else
+			{
+				ILoadingScreenInterface::Execute_OnLoadingScreenDeactivated(Object);
+			}
+		}
+	};
+	
 	for (const ULocalPlayer* ExistingLocalPlayer : GameInstance->GetLocalPlayers())
 	{
 		if (ExistingLocalPlayer == nullptr) continue;
-		if (APlayerController* PlayerController = ExistingLocalPlayer->GetPlayerController(GameInstance->GetWorld()))
-		{
-			// if PlayerController implemented interface, notify LoadingScreenVisibility to it
-		}
+		
+		APlayerController* PlayerController = ExistingLocalPlayer->GetPlayerController(GameInstance->GetWorld());
+		if (PlayerController == nullptr) continue;
+		// if PlayerController implemented interface, notify LoadingScreenVisibility to it
+		ExecuteIfImplementedLoadingScreenInterface(PlayerController);
+		
+		APawn* Pawn = PlayerController->GetPawn();
+		if (Pawn == nullptr) continue;
+		// if Pawn implemented interface, notify LoadingScreenVisibility to it
+		ExecuteIfImplementedLoadingScreenInterface(Pawn);
 	}
+	// notify LoadingScreenVisibility to other actors in the world
 }
 
 void ULoadingScreenInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collection)
