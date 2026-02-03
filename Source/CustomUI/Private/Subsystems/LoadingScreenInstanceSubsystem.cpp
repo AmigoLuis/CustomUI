@@ -46,6 +46,7 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 	if (ShouldShowLoadingScreen())
 	{
 		// 展示 游戏关卡加载界面
+		OnLoadingReasonUpdated.Broadcast(CurrentLoadingReason);
 	}
 	else
 	{
@@ -83,26 +84,48 @@ bool ULoadingScreenInstanceSubsystem::ShouldShowLoadingScreen()
 		GameViewportClient->bDisableWorldRendering = true;
 		return true;
 	}
-	else
+	CurrentLoadingReason = TEXT("Waiting For Texture Streaming");
+	GameViewportClient->bDisableWorldRendering = false;
+	const float CurrentTime = FPlatformTime::Seconds();
+	if (HoldLoadingScreenStartUpTime < 0.0f)
 	{
-		GameViewportClient->bDisableWorldRendering = false;
-		const float CurrentTime = FPlatformTime::Seconds();
-		if (HoldLoadingScreenStartUpTime < 0.0f)
-		{
-			HoldLoadingScreenStartUpTime = CurrentTime;
-		}
-		if (const float ElapsedTime = CurrentTime - HoldLoadingScreenStartUpTime; 
-			ElapsedTime < LoadScreenSettings->HoldLoadingScreenExtraSeconds)
-		{
-			// 经过的时间在计划的展示加载界面时间内，需要展示加载界面
-			return true;
-		}
-		return false;
+		HoldLoadingScreenStartUpTime = CurrentTime;
 	}
+	if (const float ElapsedTime = CurrentTime - HoldLoadingScreenStartUpTime;
+		ElapsedTime < LoadScreenSettings->HoldLoadingScreenExtraSeconds)
+	{
+		// 经过的时间在计划的展示加载界面时间内，需要展示加载界面
+		return true;
+	}
+	return false;
 }
 
-bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded() const
+bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded()
 {
+	if (bIsLoadingMap)
+	{
+		CurrentLoadingReason = TEXT("Loading Level");
+		return true;
+	}
+	const UGameInstance* OwningGameInstance = GetGameInstance();
+	if (OwningGameInstance == nullptr) return false;
+	const UWorld* OwningWorld = OwningGameInstance->GetWorld();
+	if (OwningWorld == nullptr)
+	{
+		CurrentLoadingReason = TEXT("Initializing World");
+		return true;
+	}
+	if (!OwningWorld->HasBegunPlay())
+	{
+		CurrentLoadingReason = TEXT("World hasn't begun play yet");
+		return true;
+	}
+	if (!OwningWorld->GetFirstPlayerController())
+	{
+		CurrentLoadingReason = TEXT("Player Controller isn't valid yet");
+		return true;
+	}
+	// we can also check if game states, player states or actors are ready
 	return false;
 }
 

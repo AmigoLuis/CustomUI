@@ -15,6 +15,9 @@ class CUSTOMUI_API ULoadingScreenInstanceSubsystem : public UGameInstanceSubsyst
 	GENERATED_BODY()
 
 public:
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLoadingReasonUpdatedDelegate, const FString&, CurrentLoadingReason);
+	UPROPERTY(BlueprintAssignable)
+	FOnLoadingReasonUpdatedDelegate OnLoadingReasonUpdated;
 	// USubsystem
 	virtual void Deinitialize() override;
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -33,8 +36,9 @@ private:
 	void TryUpdateLoadingScreen();
 	bool IsPreloadScreenActive() const;
 	bool ShouldShowLoadingScreen();
-	bool IsLoadingScreenNeeded() const;
+	bool IsLoadingScreenNeeded();
 	
 	bool bIsLoadingMap = false;
 	float HoldLoadingScreenStartUpTime = -1.0f;
+	FString CurrentLoadingReason;
 };
