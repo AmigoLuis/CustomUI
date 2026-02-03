@@ -32,6 +32,9 @@ private:
 	void PostLoadMap(UWorld* LoadedWorld);
 	void TryUpdateLoadingScreen();
 	bool IsPreloadScreenActive() const;
+	bool ShouldShowLoadingScreen();
+	bool IsLoadingScreenNeeded() const;
 	
 	bool bIsLoadingMap = false;
+	float HoldLoadingScreenStartUpTime = -1.0f;
 };

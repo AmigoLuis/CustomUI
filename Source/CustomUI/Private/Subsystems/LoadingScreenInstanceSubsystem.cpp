@@ -5,6 +5,7 @@
 
 #include "PreLoadScreenManager.h"
 #include "UILogger.h"
+#include "Settings/FrontEndLoadScreenSettings.h"
 
 bool ULoadingScreenInstanceSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
@@ -42,7 +43,7 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 	// 检查 进入游戏的过场动画 是否 还在运行，如果还在运行，需要等待其结束
 	if (IsPreloadScreenActive()) return;
 	// 检查是否应该展示 游戏关卡加载界面
-	if (true)
+	if (ShouldShowLoadingScreen())
 	{
 		// 展示 游戏关卡加载界面
 	}
@@ -62,6 +63,46 @@ bool ULoadingScreenInstanceSubsystem::IsPreloadScreenActive() const
 	{
 		return PreLoadScreenManager->HasValidActivePreLoadScreen();
 	}
+	return false;
+}
+
+bool ULoadingScreenInstanceSubsystem::ShouldShowLoadingScreen()
+{
+	const UFrontEndLoadScreenSettings* LoadScreenSettings = GetDefault<UFrontEndLoadScreenSettings>();
+	if (LoadScreenSettings == nullptr) return false;
+	if (GIsEditor || !LoadScreenSettings->bShouldShowLoadingScreenInEditor) return false;
+	
+	const auto GameInstance = GetGameInstance();
+	if (GameInstance == nullptr) return false;
+
+	const auto GameViewportClient = GameInstance->GetGameViewportClient();
+	if (GameViewportClient == nullptr) return false;
+	if (IsLoadingScreenNeeded())
+	{
+		// TODO:搞清楚为什么需要加载界面时，要禁用 世界渲染 
+		GameViewportClient->bDisableWorldRendering = true;
+		return true;
+	}
+	else
+	{
+		GameViewportClient->bDisableWorldRendering = false;
+		const float CurrentTime = FPlatformTime::Seconds();
+		if (HoldLoadingScreenStartUpTime < 0.0f)
+		{
+			HoldLoadingScreenStartUpTime = CurrentTime;
+		}
+		if (const float ElapsedTime = CurrentTime - HoldLoadingScreenStartUpTime; 
+			ElapsedTime < LoadScreenSettings->HoldLoadingScreenExtraSeconds)
+		{
+			// 经过的时间在计划的展示加载界面时间内，需要展示加载界面
+			return true;
+		}
+		return false;
+	}
+}
+
+bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded() const
+{
 	return false;
 }
 
