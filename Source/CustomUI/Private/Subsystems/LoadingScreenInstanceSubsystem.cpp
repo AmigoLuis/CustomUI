@@ -151,19 +151,35 @@ void ULoadingScreenInstanceSubsystem::TryShowLoadingScreen()
 	CHECK_NULL_RETURN(CreatedWidget);
 	CachedCreatedLoadingScreen = CreatedWidget->TakeWidget();
 	GameViewportClient->AddViewportWidgetContent(CachedCreatedLoadingScreen.ToSharedRef(), INT32_MAX);
+	NotifyLoadingScreenVisibilityChange(true);
 }
 
 void ULoadingScreenInstanceSubsystem::TryRemoveLoadingScreen()
 {
 	if (!CachedCreatedLoadingScreen.IsValid()) return;
-	
-	UGameInstance* const GameInstance = GetGameInstance();
+
+	const UGameInstance* const GameInstance = GetGameInstance();
 	CHECK_NULL_RETURN(GameInstance);
 	UGameViewportClient* GameViewportClient = GameInstance->GetGameViewportClient();
 	CHECK_NULL_RETURN(GameViewportClient);
 	GameViewportClient->RemoveViewportWidgetContent(CachedCreatedLoadingScreen.ToSharedRef());
 	
 	CachedCreatedLoadingScreen.Reset();
+	NotifyLoadingScreenVisibilityChange(false);
+}
+
+void ULoadingScreenInstanceSubsystem::NotifyLoadingScreenVisibilityChange(bool bIsVisible)
+{
+	const UGameInstance* const GameInstance = GetGameInstance();
+	CHECK_NULL_RETURN(GameInstance);
+	for (const ULocalPlayer* ExistingLocalPlayer : GameInstance->GetLocalPlayers())
+	{
+		if (ExistingLocalPlayer == nullptr) continue;
+		if (APlayerController* PlayerController = ExistingLocalPlayer->GetPlayerController(GameInstance->GetWorld()))
+		{
+			// if PlayerController implemented interface, notify LoadingScreenVisibility to it
+		}
+	}
 }
 
 void ULoadingScreenInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collection)

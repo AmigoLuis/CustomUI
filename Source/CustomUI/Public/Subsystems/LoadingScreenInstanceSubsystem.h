@@ -40,6 +40,7 @@ private:
 	// show a loading screen, if no loading screen is showing
 	void TryShowLoadingScreen();
 	void TryRemoveLoadingScreen();
+	void NotifyLoadingScreenVisibilityChange(bool bIsVisible);
 	
 	bool bIsLoadingMap = false;
 	float HoldLoadingScreenStartUpTime = -1.0f;
