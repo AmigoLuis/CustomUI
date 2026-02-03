@@ -5,6 +5,7 @@
 
 #include "PreLoadScreenManager.h"
 #include "UILogger.h"
+#include "Blueprint/UserWidget.h"
 #include "Settings/FrontEndLoadScreenSettings.h"
 
 bool ULoadingScreenInstanceSubsystem::ShouldCreateSubsystem(UObject* Outer) const
@@ -46,6 +47,7 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 	if (ShouldShowLoadingScreen())
 	{
 		// 展示 游戏关卡加载界面
+		TryShowLoadingScreen();
 		OnLoadingReasonUpdated.Broadcast(CurrentLoadingReason);
 	}
 	else
@@ -127,6 +129,26 @@ bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded()
 	}
 	// we can also check if game states, player states or actors are ready
 	return false;
+}
+
+void ULoadingScreenInstanceSubsystem::TryShowLoadingScreen()
+{
+	if (CachedCreatedLoadingScreen.IsValid()) return; // widget already created
+	
+	const UFrontEndLoadScreenSettings* LoadScreenSettings = GetDefault<UFrontEndLoadScreenSettings>();
+	if (LoadScreenSettings == nullptr) return;
+	const TSubclassOf<UUserWidget> LoadingScreenWidget = LoadScreenSettings->GetLoadingScreenWidgetClass();
+	CHECK_NULL_RETURN(LoadingScreenWidget);
+	UGameInstance* const GameInstance = GetGameInstance();
+	CHECK_NULL_RETURN(GameInstance);
+	UGameViewportClient* GameViewportClient = GameInstance->GetGameViewportClient();
+	CHECK_NULL_RETURN(GameViewportClient);
+
+	UUserWidget* const CreatedWidget = 
+		UUserWidget::CreateWidgetInstance(*GameInstance, LoadingScreenWidget, NAME_None);
+	CHECK_NULL_RETURN(CreatedWidget);
+	CachedCreatedLoadingScreen = CreatedWidget->TakeWidget();
+	GameViewportClient->AddViewportWidgetContent(CachedCreatedLoadingScreen.ToSharedRef(), INT32_MAX);
 }
 
 void ULoadingScreenInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collection)

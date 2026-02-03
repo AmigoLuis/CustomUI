@@ -37,8 +37,11 @@ private:
 	bool IsPreloadScreenActive() const;
 	bool ShouldShowLoadingScreen();
 	bool IsLoadingScreenNeeded();
+	// show a loading screen, if no loading screen is showing
+	void TryShowLoadingScreen();
 	
 	bool bIsLoadingMap = false;
 	float HoldLoadingScreenStartUpTime = -1.0f;
 	FString CurrentLoadingReason;
+	TSharedPtr<SWidget> CachedCreatedLoadingScreen;
 };
