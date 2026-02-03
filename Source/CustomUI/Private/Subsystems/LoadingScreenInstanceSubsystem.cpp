@@ -53,6 +53,9 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 	else
 	{
 		// 移除当前的加载界面
+		TryRemoveLoadingScreen();
+		
+		HoldLoadingScreenStartUpTime = -1.0f;
 		// 通知加载结束
 		// 禁用ticking
 		SetTickableTickType(ETickableTickType::Never);
@@ -134,7 +137,6 @@ bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded()
 void ULoadingScreenInstanceSubsystem::TryShowLoadingScreen()
 {
 	if (CachedCreatedLoadingScreen.IsValid()) return; // widget already created
-	
 	const UFrontEndLoadScreenSettings* LoadScreenSettings = GetDefault<UFrontEndLoadScreenSettings>();
 	if (LoadScreenSettings == nullptr) return;
 	const TSubclassOf<UUserWidget> LoadingScreenWidget = LoadScreenSettings->GetLoadingScreenWidgetClass();
@@ -149,6 +151,19 @@ void ULoadingScreenInstanceSubsystem::TryShowLoadingScreen()
 	CHECK_NULL_RETURN(CreatedWidget);
 	CachedCreatedLoadingScreen = CreatedWidget->TakeWidget();
 	GameViewportClient->AddViewportWidgetContent(CachedCreatedLoadingScreen.ToSharedRef(), INT32_MAX);
+}
+
+void ULoadingScreenInstanceSubsystem::TryRemoveLoadingScreen()
+{
+	if (!CachedCreatedLoadingScreen.IsValid()) return;
+	
+	UGameInstance* const GameInstance = GetGameInstance();
+	CHECK_NULL_RETURN(GameInstance);
+	UGameViewportClient* GameViewportClient = GameInstance->GetGameViewportClient();
+	CHECK_NULL_RETURN(GameViewportClient);
+	GameViewportClient->RemoveViewportWidgetContent(CachedCreatedLoadingScreen.ToSharedRef());
+	
+	CachedCreatedLoadingScreen.Reset();
 }
 
 void ULoadingScreenInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collection)
