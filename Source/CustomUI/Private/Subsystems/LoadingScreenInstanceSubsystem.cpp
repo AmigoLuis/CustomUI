@@ -3,6 +3,7 @@
 
 #include "Subsystems/LoadingScreenInstanceSubsystem.h"
 
+#include "PreLoadScreenManager.h"
 #include "UILogger.h"
 
 bool ULoadingScreenInstanceSubsystem::ShouldCreateSubsystem(UObject* Outer) const
@@ -39,7 +40,7 @@ void ULoadingScreenInstanceSubsystem::PostLoadMap(UWorld* LoadedWorld)
 void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 {
 	// 检查 进入游戏的过场动画 是否 还在运行，如果还在运行，需要等待其结束
-	
+	if (IsPreloadScreenActive()) return;
 	// 检查是否应该展示 游戏关卡加载界面
 	if (true)
 	{
@@ -53,6 +54,15 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 		SetTickableTickType(ETickableTickType::Never);
 	}
 	
+}
+
+bool ULoadingScreenInstanceSubsystem::IsPreloadScreenActive() const
+{
+	if (const FPreLoadScreenManager* PreLoadScreenManager = FPreLoadScreenManager::Get())
+	{
+		return PreLoadScreenManager->HasValidActivePreLoadScreen();
+	}
+	return false;
 }
 
 void ULoadingScreenInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collection)

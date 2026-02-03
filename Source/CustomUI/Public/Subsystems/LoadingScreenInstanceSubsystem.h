@@ -31,6 +31,7 @@ private:
 	void PreLoadMapWithContext(const FWorldContext& WorldContext, const FString& MapName);
 	void PostLoadMap(UWorld* LoadedWorld);
 	void TryUpdateLoadingScreen();
+	bool IsPreloadScreenActive() const;
 	
 	bool bIsLoadingMap = false;
 };

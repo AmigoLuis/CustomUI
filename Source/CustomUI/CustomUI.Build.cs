@@ -14,7 +14,7 @@ public class CustomUI : ModuleRules
 			"CommonInput", "PropertyPath"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] { "PreLoadScreen" });
 
 		// Uncomment if you are using Slate UI
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
