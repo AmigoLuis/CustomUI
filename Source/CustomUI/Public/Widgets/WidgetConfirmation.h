@@ -56,7 +56,17 @@ class CUSTOMUI_API UWidgetConfirmation : public UWidgetActivatableBase
 	UPROPERTY(meta = (BindWidget))
 	UDynamicEntryBox* ConfirmationButtons;
 
+	TFunction<void(EConfirmScreenButtonType)> ClickedButtonCallback;
+	UPROPERTY()
+	bool ClickedConfirmationButtons;
 public:
 	void InitializeConfirmWidget(UConfirmWidgetInfoObject* InConfirmationInfo,
-	                             TFunction<void(EConfirmScreenButtonType)> ClickedButtonCallback);
+	                             TFunction<void(EConfirmScreenButtonType)> InClickedButtonCallback);
+protected:
+	// UCommonActivatableWidget
+	// 子类重写OnDeactivated时一定要调用父类的OnDeactivated
+	virtual void NativeOnDeactivated() override;
+	// 子类重写OnActivated时一定要调用父类的OnActivated
+	virtual void NativeOnActivated() override;
+	// UCommonActivatableWidget
 };
