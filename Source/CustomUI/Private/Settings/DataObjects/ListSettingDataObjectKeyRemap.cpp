@@ -52,7 +52,6 @@ void UListSettingDataObjectKeyRemap::BindNewInputKey(const FKey& InNewKey)
 	
 	FGameplayTagContainer Container;
 	CachedInputSettings->MapPlayerKey(KeyArgs, Container);
-	// TODO:Container 是否需要打印日志？
 	CachedInputSettings->SaveSettings();
 	
 	NotifyListDataModified(this);

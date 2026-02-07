@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 #include "ListSettingDataObjectStringEnum.generated.h"
