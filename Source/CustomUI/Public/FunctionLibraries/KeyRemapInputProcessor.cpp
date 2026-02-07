@@ -1,10 +1,12 @@
 #include "KeyRemapInputProcessor.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonInputSubsystem.h"
 #include "CommonInputTypeEnum.h"
 #include "ICommonInputModule.h"
 #include "UILogger.h"
 #include "CommonUITypes.h"
+#include "PrintInLog.h"
 
 FKeyRemapInputProcessor::FKeyRemapInputProcessor(const ECommonInputType InputType, ULocalPlayer* InWeakOwningLocalPlayer) : 
 	CurrentInputTypeToListen(InputType), CachedWeakOwningLocalPlayer(InWeakOwningLocalPlayer)

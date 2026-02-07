@@ -3,6 +3,8 @@
 
 #include "AsyncActions/AsyncAction_PushWidgetSoft.h"
 
+#include "CheckAndLogAndReturn.h"
+#include "LogMacros.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
 #include "Widgets/WidgetActivatableBase.h"

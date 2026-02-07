@@ -3,6 +3,7 @@
 
 #include "FunctionLibraries/UIFunctionLibrary.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Settings/FrontEndDeveloperSettings.h"
 

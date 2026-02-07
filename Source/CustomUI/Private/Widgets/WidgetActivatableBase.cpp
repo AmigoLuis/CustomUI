@@ -2,6 +2,8 @@
 
 
 #include "Widgets/WidgetActivatableBase.h"
+
+#include "CheckAndLogAndReturn.h"
 #include "PlayerController/FrontEndPlayerController.h"
 #include "UILogger.h"
 

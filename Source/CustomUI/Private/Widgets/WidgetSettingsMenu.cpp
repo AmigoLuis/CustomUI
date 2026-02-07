@@ -3,6 +3,7 @@
 
 #include "Widgets/WidgetSettingsMenu.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "ICommonInputModule.h"
 #include "UILogger.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
@@ -26,7 +27,7 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 			this, 
 			&UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu)));
 
-	CHECK_BOOL_TRUE_RETURN_WARN(ResetAction.IsNull());
+	CHECK_BOOL_TRUE_RETURN_WARNING(ResetAction.IsNull());
 	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
 		ResetAction, true,
 		FSimpleDelegate::CreateUObject(
@@ -78,7 +79,7 @@ UWidget* UWidgetSettingsMenu::NativeGetDesiredFocusTarget() const
 void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 {
 	PrintInLog(TEXT("Reset Action Triggered from Settings Menu"), Display);
-	CHECK_BOOL_TRUE_RETURN_WARN(ResettableDataArray.IsEmpty());
+	CHECK_BOOL_TRUE_RETURN_WARNING(ResettableDataArray.IsEmpty());
 
 	const UFrontEndButtonBase* TabButtonBase = 
 		Cast<UFrontEndButtonBase>(SettingsTabList->GetTabButtonBaseByID(SettingsTabList->GetActiveTab()));

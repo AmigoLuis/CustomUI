@@ -3,6 +3,7 @@
 
 #include "Settings/DataObjects/DA_DataListEntryMapping.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectBase.h"
 

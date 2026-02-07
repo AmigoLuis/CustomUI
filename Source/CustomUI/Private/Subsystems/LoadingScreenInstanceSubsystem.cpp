@@ -3,6 +3,7 @@
 
 #include "Subsystems/LoadingScreenInstanceSubsystem.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "PreLoadScreenManager.h"
 #include "UILogger.h"
 #include "Blueprint/UserWidget.h"

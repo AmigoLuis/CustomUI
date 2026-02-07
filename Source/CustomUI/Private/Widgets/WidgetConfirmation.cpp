@@ -2,12 +2,14 @@
 
 #include "Widgets/WidgetConfirmation.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonTextBlock.h"
 #include "UILogger.h"
 #include "Components/DynamicEntryBox.h"
 #include "Enums/FrontEndEnumTypes.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
 #include "ICommonInputModule.h"
+#include "PrintInLog.h"
 //TODO:键盘目前还没有完全支持，很多地方不能导航，聚焦或点击
 UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateConfirmWidget(const FText& Title, const FText& Message, 
                                                                           const EConfirmScreenType ConfirmationWidgetType)
@@ -99,7 +101,7 @@ void UWidgetConfirmation::InitializeConfirmWidget(UConfirmWidgetInfoObject* InCo
 			});
 	}
 	
-	CHECK_BOOL_TRUE_RETURN_WARN(InConfirmationInfo->AvailableButtonsInfo.IsEmpty());
+	CHECK_BOOL_TRUE_RETURN_WARNING(InConfirmationInfo->AvailableButtonsInfo.IsEmpty());
 	
 	for (const FConfirmWidgetButtonInfo& ButtonInfo : InConfirmationInfo->AvailableButtonsInfo)
 	{

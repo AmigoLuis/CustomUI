@@ -3,6 +3,7 @@
 
 #include "Settings/ListEntry/ListEntryWidgetKeyRemap.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "FrontEndGameplayTags.h"
 #include "UILogger.h"
 #include "FunctionLibraries/UIFunctionLibrary.h"

@@ -3,7 +3,9 @@
 
 #include "Settings/ListEntry/ListEntryWidgetString.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonInputSubsystem.h"
+#include "LogMacros.h"
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
@@ -68,7 +70,7 @@ void UListEntryWidgetString::OnRotatorValueChanged(int32 InValue, bool bUserInit
 {
 	CHECK_NULL_RETURN(OwningListItemObject);
 	CHECK_NULL_RETURN(SettingEntryValueRotator);
-	CHECK_BOOL_FALSE_RETURN_WARN(bUserInitiated);
+	CHECK_BOOL_FALSE_RETURN_WARNING(bUserInitiated);
 	const UCommonInputSubsystem* InputSubsystem = GetInputSubsystem();
 	CHECK_NULL_RETURN(InputSubsystem);
 	

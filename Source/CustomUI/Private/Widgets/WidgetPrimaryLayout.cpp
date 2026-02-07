@@ -2,6 +2,8 @@
 
 
 #include "Widgets/WidgetPrimaryLayout.h"
+
+#include "PrintInLog.h"
 #include "UILogger.h"
 
 void UWidgetPrimaryLayout::RegisterWidget(UPARAM(meta = (Categories = "FrontEnd.WidgetStack")) FGameplayTag Tag, 

@@ -6,6 +6,7 @@
 #include "UILogger.h"
 #include "Settings/DataObjects/ListSettingDataObjectScalar.h"
 #include "AnalogSlider.h"
+#include "CheckAndLogAndReturn.h"
 
 void UListEntryWidgetScalar::NativeOnInitialized()
 {

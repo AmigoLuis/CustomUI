@@ -3,6 +3,7 @@
 
 #include "Settings/FSettingDataInteractionHelper.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Settings/FrontendGameUserSettings.h"
 
@@ -18,7 +19,7 @@ FString FSettingDataInteractionHelper::GetValueAsString() const
 	CHECK_NULL_RETURN_VALUE(CachedGameSettings, OutValue);
 	const bool bGetPropertyAsStringSucceeded = 
 		PropertyPathHelpers::GetPropertyValueAsString(CachedGameSettings, CachedDynamicFunctionPath, OutValue);
-	LOG_BOOL_FALSE_WARN(bGetPropertyAsStringSucceeded);
+	CHECK_BOOL_FALSE_RETURN_VALUE_WARNING(bGetPropertyAsStringSucceeded,OutValue)
 	return OutValue;
 }
 

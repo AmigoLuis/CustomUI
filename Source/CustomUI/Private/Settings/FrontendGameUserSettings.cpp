@@ -3,6 +3,8 @@
 
 #include "Settings/FrontendGameUserSettings.h"
 
+#include "CheckAndLogAndReturn.h"
+#include "LogMacros.h"
 #include "UILogger.h"
 
 UFrontendGameUserSettings::UFrontendGameUserSettings() : OverallVolume(1.0f), MusicVolume(1.0f), 

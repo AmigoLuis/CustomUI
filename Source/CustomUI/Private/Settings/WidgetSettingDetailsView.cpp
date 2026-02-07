@@ -3,6 +3,7 @@
 
 #include "Settings/WidgetSettingDetailsView.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonTextBlock.h"
 #include "CommonLazyImage.h"
 #include "CommonRichTextBlock.h"

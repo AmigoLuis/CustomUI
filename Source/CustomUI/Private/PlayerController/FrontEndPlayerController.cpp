@@ -3,6 +3,7 @@
 
 #include "PlayerController/FrontEndPlayerController.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Camera/CameraActor.h"
 #include "Kismet/GameplayStatics.h"

@@ -3,6 +3,7 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 
 TArray<UListSettingDataObjectBase*> UListSettingDataObjectCollection::GetAllChildrenDataObjects() const

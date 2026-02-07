@@ -3,8 +3,11 @@
 
 #include "Widgets/Components/FrontEndButtonBase.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonLazyImage.h"
 #include "CommonTextBlock.h"
+#include "LogMacros.h"
+#include "PrintInLog.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
 

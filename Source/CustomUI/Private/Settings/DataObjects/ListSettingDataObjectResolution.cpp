@@ -3,6 +3,7 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectResolution.h"
 
+#include "LogMacros.h"
 #include "UILogger.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Settings/FrontendGameUserSettings.h"

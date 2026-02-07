@@ -3,6 +3,7 @@
 
 #include "Subsystems/UIGameInstanceSubsystem.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "FrontEndGameplayTags.h"
 #include "UILogger.h"
 #include "Engine/AssetManager.h"

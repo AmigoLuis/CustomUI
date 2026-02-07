@@ -3,6 +3,7 @@
 
 #include "Widgets/WidgetKeyRemapConfirm.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonInputTypeEnum.h"
 #include "CommonRichTextBlock.h"
 #include "UILogger.h"

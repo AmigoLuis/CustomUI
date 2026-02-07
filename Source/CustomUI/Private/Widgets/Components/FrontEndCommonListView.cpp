@@ -3,6 +3,8 @@
 
 #include "Widgets/Components/FrontEndCommonListView.h"
 
+#include "CheckAndLogAndReturn.h"
+#include "ValidateCompiledDefaultsMacros.h"
 #include "UILogger.h"
 #include "Editor/WidgetCompilerLog.h"
 #include "Settings/DataObjects/DA_DataListEntryMapping.h"

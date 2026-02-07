@@ -3,6 +3,7 @@
 
 #include "Settings/SettingDataRegistry.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonInputTypeEnum.h"
 #include "FrontEndGameplayTags.h"
 #include "UILogger.h"
@@ -18,6 +19,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectStringEnum.h"
 #include "Settings/DataObjects/SettingDataEditConditionDetail.h"
 #include "EnhancedInputSubsystems.h"
+#include "LogMacros.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 #include "Internationalization/StringTableRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
@@ -113,7 +115,7 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 	{
 		return InCollectionID == Item->GetDataID();
 	});
-	LOG_STRING_PTR(InCollectionID.ToString());
+	LOG_STRING(InCollectionID.ToString());
 	CHECK_NULL_RETURN_VALUE(FoundCollectionPtr, TArray<UListSettingDataObjectBase*>());
 	TArray<UListSettingDataObjectBase*> AllChildItems;
 	GetAllChildRecursivelyInOrder(*FoundCollectionPtr, AllChildItems);

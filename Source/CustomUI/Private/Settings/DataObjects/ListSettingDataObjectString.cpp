@@ -3,6 +3,8 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectString.h"
 
+#include "LogMacros.h"
+#include "PrintInLog.h"
 #include "UILogger.h"
 #include "Settings/FSettingDataInteractionHelper.h"
 

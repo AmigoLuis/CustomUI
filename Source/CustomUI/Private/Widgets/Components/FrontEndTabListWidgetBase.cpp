@@ -3,6 +3,8 @@
 
 #include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
+#include "CheckAndLogAndReturn.h"
+#include "ValidateCompiledDefaultsMacros.h"
 #include "UILogger.h"
 #include "Editor/WidgetCompilerLog.h"
 #include "Widgets/Components/FrontEndButtonBase.h"

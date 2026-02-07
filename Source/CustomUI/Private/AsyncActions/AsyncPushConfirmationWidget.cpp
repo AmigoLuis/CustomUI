@@ -3,6 +3,7 @@
 
 #include "AsyncActions/AsyncPushConfirmationWidget.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
 

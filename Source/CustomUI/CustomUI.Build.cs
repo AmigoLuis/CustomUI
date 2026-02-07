@@ -11,10 +11,10 @@ public class CustomUI : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "CommonUI", "UMG", 
-			"CommonInput", "PropertyPath"
+			"CommonInput", "PropertyPath", "UE_DebugUtilities"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "PreLoadScreen" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "PreLoadScreen", "UE_DebugUtilities" });
 
 		// Uncomment if you are using Slate UI
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

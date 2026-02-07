@@ -3,6 +3,7 @@
 
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonInputSubsystem.h"
 #include "CommonTextBlock.h"
 #include "UILogger.h"
@@ -55,7 +56,7 @@ FReply UListEntryWidgetBase::NativeOnFocusReceived(const FGeometry& InGeometry, 
 		CHECK_NULL_RETURN_VALUE(WidgetToFocus, LOCAL_DEFAULT_VALUE);
 		
 		const TSharedPtr<SWidget> CachedWidgetToFocus = WidgetToFocus->GetCachedWidget();
-		CHECK_BOOL_FALSE_RETURN_VALUE_WARN(CachedWidgetToFocus.IsValid(), LOCAL_DEFAULT_VALUE);
+		CHECK_BOOL_FALSE_RETURN_VALUE_WARNING(CachedWidgetToFocus.IsValid(), LOCAL_DEFAULT_VALUE);
 		
 		return FReply::Handled().SetUserFocus(CachedWidgetToFocus.ToSharedRef());
 	}

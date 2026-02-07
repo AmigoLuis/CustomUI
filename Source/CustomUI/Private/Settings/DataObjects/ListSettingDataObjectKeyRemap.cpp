@@ -3,6 +3,7 @@
 
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "CommonInputBaseTypes.h"
 #include "CommonInputSubsystem.h"
 #include "UILogger.h"
