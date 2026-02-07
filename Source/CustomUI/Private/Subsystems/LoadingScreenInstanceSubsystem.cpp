@@ -58,7 +58,7 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 		TryRemoveLoadingScreen();
 		
 		HoldLoadingScreenStartUpTime = -1.0f;
-		// 通知加载结束 //TODO: 当以独立进程启动游戏时，如果 在编辑器中不显示加载界面 也 无法显示 press any key 界面
+		// 通知加载结束 //TODO: 当以独立进程启动游戏时，如果 LoadScreenSettings->bShouldShowLoadingScreenInEditor 为false 无法显示 press any key 界面，无论是不是编辑器中启动，如果为true则没有问题
 		NotifyLoadingScreenVisibilityChange(false);
 		// 禁用ticking
 		SetTickableTickType(ETickableTickType::Never);

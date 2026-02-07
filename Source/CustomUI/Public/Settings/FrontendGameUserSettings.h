@@ -42,6 +42,7 @@ public:
 	{
 		return MusicVolume;
 	}
+	// TODO: 目前拖动滑条会比较卡，推测是因为每次修改都会存储
 	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置MusicVolume的值
 	UFUNCTION()
 	FORCEINLINE void SetMusicVolume(const float& InVolume);

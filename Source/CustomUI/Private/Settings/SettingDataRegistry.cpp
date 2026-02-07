@@ -24,6 +24,7 @@
 #include "Internationalization/StringTableRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 
+// TODO： 这块好像是独立进程启动时没有正常显示
 # define GET_DESCRIPTION_FOR_KEY(KeyString) \
 LOCTABLE("/Game/StringTables/ST_SettingMenuDescription.ST_SettingMenuDescription", KeyString)
 
