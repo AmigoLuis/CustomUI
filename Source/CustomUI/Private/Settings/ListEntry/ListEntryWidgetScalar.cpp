@@ -15,7 +15,6 @@ void UListEntryWidgetScalar::NativeOnInitialized()
 	SettingEntryAnalogSlider->OnMouseCaptureBegin.AddUniqueDynamic(this, 
 		&UListEntryWidgetScalar::NativeOnMouseCaptureEnterScalarWidget);
 }
-
 void UListEntryWidgetScalar::OnSliderValueChanged(float InValue)
 {
 	CHECK_NULL_RETURN(CachedDataObjectScalar);
