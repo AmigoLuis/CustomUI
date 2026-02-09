@@ -37,8 +37,14 @@ private:
 	FText ButtonTooltipText;
 
 protected:
+	void BroadcastUpdatedButtonDescription(bool bBroadCastEmpty);
+	// 辅助函数：手动切换悬停状态
+	void ForceHoverState(bool bIsHovered);
+	
 	virtual void NativePreConstruct() override;
 	virtual void NativeOnCurrentTextStyleChanged() override;
 	virtual void NativeOnHovered() override;
 	virtual void NativeOnUnhovered() override;
+	virtual void NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent) override;
+	virtual void NativeOnRemovedFromFocusPath(const FFocusEvent& InFocusEvent) override;
 };

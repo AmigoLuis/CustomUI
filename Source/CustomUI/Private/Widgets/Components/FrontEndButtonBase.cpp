@@ -37,6 +37,43 @@ void UFrontEndButtonBase::SetButtonDisplayImageBrush(const FSlateBrush& InBrush)
 	if (ButtonLazyImage) ButtonLazyImage->SetBrush(InBrush);
 }
 
+void UFrontEndButtonBase::BroadcastUpdatedButtonDescription(bool bBroadCastEmpty)
+{
+	if (bBroadCastEmpty)
+	{
+		UUIGameInstanceSubsystem::Get(this)->
+			OnButtonDescriptionUpdatedDelegate.Broadcast(this, FText::GetEmpty());
+	}
+	else
+	{
+		if (!ButtonTooltipText.IsEmpty()) // 这里是空就不广播了，会不会导致文本未更新的问题？
+		{
+			UUIGameInstanceSubsystem::Get(this)->
+				OnButtonDescriptionUpdatedDelegate.Broadcast(this, ButtonTooltipText);
+		}
+	}
+}
+
+void UFrontEndButtonBase::ForceHoverState(bool bIsHovered)
+{
+	if (ButtonTextBlock == nullptr) return;
+	if (bIsHovered)
+	{
+		// 确保样式更新
+		if (const auto StylePtr = GetStyle())
+		{
+			ButtonTextBlock->SetStyle(StylePtr->NormalHoveredTextStyle);
+		}
+	}
+	else
+	{
+		if (const auto StylePtr = GetStyle())
+		{
+			ButtonTextBlock->SetStyle(StylePtr->NormalTextStyle);
+		}
+	}
+}
+
 void UFrontEndButtonBase::NativePreConstruct()
 {
 	Super::NativePreConstruct();
@@ -61,16 +98,26 @@ void UFrontEndButtonBase::NativeOnCurrentTextStyleChanged()
 void UFrontEndButtonBase::NativeOnHovered()
 {
 	Super::NativeOnHovered();
-	if (!ButtonTooltipText.IsEmpty()) // 这里是空就不广播了，会不会导致文本未更新的问题？
-	{
-		UUIGameInstanceSubsystem::Get(this)->
-			OnButtonDescriptionUpdatedDelegate.Broadcast(this, ButtonTooltipText);
-	}
+	BroadcastUpdatedButtonDescription(true);
 }
 
 void UFrontEndButtonBase::NativeOnUnhovered()
 {
 	Super::NativeOnUnhovered();
-	UUIGameInstanceSubsystem::Get(this)->
-		OnButtonDescriptionUpdatedDelegate.Broadcast(this, FText::GetEmpty());
+	BroadcastUpdatedButtonDescription(false);
+}
+
+
+void UFrontEndButtonBase::NativeOnAddedToFocusPath(const FFocusEvent& InFocusEvent)
+{
+	BroadcastUpdatedButtonDescription(true);
+	ForceHoverState(true);
+	Super::NativeOnAddedToFocusPath(InFocusEvent);
+}
+
+void UFrontEndButtonBase::NativeOnRemovedFromFocusPath(const FFocusEvent& InFocusEvent)
+{
+	Super::NativeOnRemovedFromFocusPath(InFocusEvent);
+	ForceHoverState(false);
+	BroadcastUpdatedButtonDescription(false);
 }
