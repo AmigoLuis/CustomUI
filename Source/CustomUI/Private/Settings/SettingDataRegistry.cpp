@@ -26,7 +26,7 @@
 
 // TODO:将所有显示的文本都通过StringTable管理，复用成功经验
 // TODO:实现多语言，国际化
-// TODO:ui导航时要实现滚动导航，即从第一行按上应该回到最后一行，从最后一行按下应该回到第一行
+// TODO:ui导航时要实现滚动导航，即从第一行按上应该回到最后一行，从最后一行按下应该回到第一行（目前已经实现在主界面、开始游戏界面的循环导航）
 # define GET_DESCRIPTION_FOR_KEY(KeyString) \
 LOCTABLE("/Game/StringTables/ST_SettingMenuDescription.ST_SettingMenuDescription", KeyString)
 

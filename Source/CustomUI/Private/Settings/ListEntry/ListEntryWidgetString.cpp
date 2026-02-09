@@ -74,6 +74,5 @@ void UListEntryWidgetString::OnRotatorValueChanged(int32 InValue, bool bUserInit
 	const UCommonInputSubsystem* InputSubsystem = GetInputSubsystem();
 	CHECK_NULL_RETURN(InputSubsystem);
 	
-	// TODO: 按键重映射的设置项中的按键映射不会高亮
 	OwningListItemObject->OnTextChanged(SettingEntryValueRotator->GetSelectedText());
 }
