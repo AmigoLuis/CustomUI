@@ -49,19 +49,15 @@ FReply UListEntryWidgetBase::NativeOnFocusReceived(const FGeometry& InGeometry, 
 	
 	const UCommonInputSubsystem* InputSubsystem = GetInputSubsystem();
 	CHECK_NULL_RETURN_VALUE(InputSubsystem, LOCAL_DEFAULT_VALUE);
-	
-	if (InputSubsystem->GetCurrentInputType() == ECommonInputType::Gamepad)
-	{
-		const UWidget* const WidgetToFocus = BP_GetWidgetToFocusForGamepad();
-		CHECK_NULL_RETURN_VALUE(WidgetToFocus, LOCAL_DEFAULT_VALUE);
-		
-		const TSharedPtr<SWidget> CachedWidgetToFocus = WidgetToFocus->GetCachedWidget();
-		CHECK_BOOL_FALSE_RETURN_VALUE_WARNING(CachedWidgetToFocus.IsValid(), LOCAL_DEFAULT_VALUE);
-		
-		return FReply::Handled().SetUserFocus(CachedWidgetToFocus.ToSharedRef());
-	}
-	return LOCAL_DEFAULT_VALUE;
-	
+
+	const UWidget* const WidgetToFocus = BP_GetWidgetToFocusForGamepad();
+	CHECK_NULL_RETURN_VALUE(WidgetToFocus, LOCAL_DEFAULT_VALUE);
+
+	const TSharedPtr<SWidget> CachedWidgetToFocus = WidgetToFocus->GetCachedWidget();
+	CHECK_BOOL_FALSE_RETURN_VALUE_WARNING(CachedWidgetToFocus.IsValid(), LOCAL_DEFAULT_VALUE);
+
+	return FReply::Handled().SetUserFocus(CachedWidgetToFocus.ToSharedRef());
+
 #undef LOCAL_DEFAULT_VALUE
 }
 
