@@ -40,6 +40,15 @@ void UListEntryWidgetBase::NativeOnItemSelectionChanged(bool bIsSelected)
 {
 	IUserObjectListEntry::NativeOnItemSelectionChanged(bIsSelected);
 	BP_OnToggleEntryWidgetHighlightState(bIsSelected);
+	if (bIsSelected)
+	{
+		// 核心逻辑：一旦我被选中了，我立刻检查自己是否有焦点
+		// 如果没有，强制抢过来。这解决了循环导航后“高亮在 A，输入还在 B”的问题
+		if (!HasUserFocus(GetOwningPlayer()))
+		{
+			SetFocus(); 
+		}
+	}
 }
 
 FReply UListEntryWidgetBase::NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent)

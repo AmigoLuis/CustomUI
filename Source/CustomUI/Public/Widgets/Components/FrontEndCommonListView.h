@@ -25,6 +25,9 @@ protected:
 	virtual bool OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem) override;
 
 public:
+	void TrySelectFirstFocusableEntry();
+	void TrySelectLastFocusableEntry();
+	virtual bool IsItemSelectableOrNavigable(const UObject* FirstSelectedItem);
 #if WITH_EDITOR
 	virtual void ValidateCompiledDefaults(IWidgetCompilerLog& CompileLog) const override;
 #endif

@@ -55,4 +55,8 @@ private:
 	void OnTabSelectedInSettingsMenu(FName TabID);
 	void OnListViewItemHovered(UObject* InHoveredItem, bool bIsHovered);
 	void OnListViewItemSelectionChanged(UObject* InSelectedItem);
+
+protected:
+	virtual FNavigationReply NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply) override;
+
 };

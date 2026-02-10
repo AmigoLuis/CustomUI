@@ -253,3 +253,25 @@ void UWidgetSettingsMenu::OnListViewItemSelectionChanged(UObject* InSelectedItem
 	SettingDetailsView->UpdateDetailViewInfo(Cast<UListSettingDataObjectBase>(InSelectedItem), 
 		TryGetEntryWidgetClassName(InSelectedItem));
 }
+
+FNavigationReply UWidgetSettingsMenu::NativeOnNavigation(const FGeometry& MyGeometry,
+	const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply)
+{
+	EUINavigation Direction = InNavigationEvent.GetNavigationType();
+	// 拦截向上循环
+	if (Direction == EUINavigation::Up)
+	{
+		SettingsListView->TrySelectLastFocusableEntry();
+		// 关键：返回 Explicit(nullptr)，告诉系统“我已经处理了，不要再去自动找下一个了”
+		return FNavigationReply::Explicit(nullptr); 
+	}
+
+	// 拦截向下循环
+	if (Direction == EUINavigation::Down)
+	{
+		SettingsListView->TrySelectFirstFocusableEntry();
+		return FNavigationReply::Explicit(nullptr);
+	}
+	return Super::NativeOnNavigation(MyGeometry, InNavigationEvent, InDefaultReply);
+}
+
