@@ -37,7 +37,7 @@ private:
 	FText ButtonTooltipText;
 
 protected:
-	void BroadcastUpdatedButtonDescription(bool bBroadCastEmpty);
+	void BroadcastUpdatedButtonDescription(bool bNotBroadCastEmpty);
 	// 辅助函数：手动切换悬停状态
 	void ForceHoverState(bool bIsHovered);
 	

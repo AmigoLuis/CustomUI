@@ -37,9 +37,9 @@ void UFrontEndButtonBase::SetButtonDisplayImageBrush(const FSlateBrush& InBrush)
 	if (ButtonLazyImage) ButtonLazyImage->SetBrush(InBrush);
 }
 
-void UFrontEndButtonBase::BroadcastUpdatedButtonDescription(bool bBroadCastEmpty)
+void UFrontEndButtonBase::BroadcastUpdatedButtonDescription(const bool bNotBroadCastEmpty)
 {
-	if (bBroadCastEmpty)
+	if (!bNotBroadCastEmpty)
 	{
 		UUIGameInstanceSubsystem::Get(this)->
 			OnButtonDescriptionUpdatedDelegate.Broadcast(this, FText::GetEmpty());
