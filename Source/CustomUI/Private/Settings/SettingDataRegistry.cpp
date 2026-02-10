@@ -24,7 +24,6 @@
 #include "Internationalization/StringTableRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 
-// TODO:按键重映射界面，当往右一直按时可以循环导航，但是往左按时发现不能导航了，怀疑可能是左边的那个文本框被选中后影响了
 // TODO:将所有显示的文本都通过StringTable管理，复用成功经验
 // TODO:实现多语言，国际化
 # define GET_DESCRIPTION_FOR_KEY(KeyString) \
