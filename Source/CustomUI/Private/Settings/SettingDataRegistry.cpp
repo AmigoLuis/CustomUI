@@ -37,6 +37,9 @@ LOCTABLE("/Game/StringTables/ST_SettingMenuDescription.ST_SettingMenuDescription
 
 #define DESCRIPTION_SUFFIX TEXT("SettingDescriptionKey")
 #define NAME_SUFFIX TEXT("SettingNameKey")
+#define SETTING_VALUE_KEY(SettingName, ValueIndex) \
+	SYMBOL_NAME_STR(SettingName) TEXT("SettingValue") INT_TO_STR(ValueIndex)
+#define SETTING_DISABLED_REASON(SettingName) SYMBOL_NAME_STR(SettingName) TEXT("SettingDisabledReason") 
 
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
 {
@@ -82,10 +85,11 @@ ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME
-#define INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(ChileName) \
+#define INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(ChileName, StringTableLocation) \
 UListSettingDataObjectStringBool* ChileName = NewObject<UListSettingDataObjectStringBool>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) NAME_SUFFIX));\
+ChileName->SetDescriptionRichText(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) DESCRIPTION_SUFFIX));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef ADD_CHILD_TO_COLLECTION
@@ -206,9 +210,11 @@ ADD_CHILD_TO_COLLECTION(ChildName, Volume);\
 		ADD_CHILD_TO_COLLECTION(Sound, Audio);
 		// Allow Background Music
 		{
-			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(AllowBackgroundMusic);
-			AllowBackgroundMusic->OverrideTrueDisplayText(FText::FromString(TEXT("Enabled")));
-			AllowBackgroundMusic->OverrideFalseDisplayText(FText::FromString(TEXT("Disabled")));
+			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(AllowBackgroundMusic, ST_SOUND_SETTINGS);
+			AllowBackgroundMusic->OverrideTrueDisplayText(
+				GET_SOUND_SETTING_FOR_KEY(SETTING_VALUE_KEY(AllowBackgroundMusic, 1)));
+			AllowBackgroundMusic->OverrideFalseDisplayText(
+				GET_SOUND_SETTING_FOR_KEY(SETTING_VALUE_KEY(AllowBackgroundMusic, 2)));
 			AllowBackgroundMusic->SetTrueAsDefaultValue();
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AllowBackgroundMusic);
 			ADD_CHILD_TO_COLLECTION(AllowBackgroundMusic, Sound);
@@ -469,8 +475,12 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		ADD_CHILD_TO_COLLECTION(AdvancedGraphics, Video);
 		// VerticalSync
 		{
-			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(VerticalSync);
-			VerticalSync->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("VerticalSyncDescKey"));
+			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(VerticalSync, ST_VIDEO_SETTINGS);
+			VerticalSync->OverrideTrueDisplayText(
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(VerticalSync, 1)));
+			VerticalSync->OverrideFalseDisplayText(
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(VerticalSync, 2)));
+			
 			VerticalSync->SetDataDynamicGetter(MakeShared<FSettingDataInteractionHelper>(
 			GET_FUNCTION_NAME_STRING_CHECKED(UFrontendGameUserSettings,IsVSyncEnabled)));
 			VerticalSync->SetDataDynamicSetter(MakeShared<FSettingDataInteractionHelper>(
@@ -483,9 +493,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 					== EWindowMode::Fullscreen;
 			});
 			IsWindowModeFullScreen.SetDisabledRichReason(
-				FString::Format(TEXT("\n\n<{0}>The VerticalSync is only editable "
-						 "when fullscreen mode is full screen.</>"), 
-					{DISABLED_RICH_TEXT_STYLE}));
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_DISABLED_REASON(VerticalSync)).ToString());
 			IsWindowModeFullScreen.SetDisabledForcedStringValue(UListSettingDataObjectStringBool::GetFalseString());
 			VerticalSync->AddEditCondition(IsWindowModeFullScreen);
 			ADD_CHILD_TO_COLLECTION(VerticalSync, AdvancedGraphics);

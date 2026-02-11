@@ -12,3 +12,6 @@ SoundFXVolumeSettingNameKey,音效音量
 VoiceVolumeSettingNameKey,语音音量
 AmbientVolumeSettingNameKey,环境音量
 AllowBackgroundMusicSettingNameKey,允许后台音频
+,
+AllowBackgroundMusicSettingValue1,允许
+AllowBackgroundMusicSettingValue2,不允许
