@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FunctionLibraries/UtilityMacros.h"
+#include "UE_DebugUtilities/Public/GetterAndSetterGenerateMacro.h"
 #include "SettingDataEditConditionDetail.generated.h"
 /**
  * 

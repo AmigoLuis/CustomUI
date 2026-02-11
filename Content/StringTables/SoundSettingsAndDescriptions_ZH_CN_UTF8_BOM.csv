@@ -9,6 +9,6 @@ AllowBackgroundMusicSettingDescriptionKey,当游戏窗口失去焦点或切换�
 OverallVolumeSettingNameKey,总音量
 MusicVolumeSettingNameKey,音乐音量
 SoundFXVolumeSettingNameKey,音效音量
-VoiceVolumeSettingNameKey,语言音量
+VoiceVolumeSettingNameKey,语音音量
 AmbientVolumeSettingNameKey,环境音量
 AllowBackgroundMusicSettingNameKey,允许后台音频

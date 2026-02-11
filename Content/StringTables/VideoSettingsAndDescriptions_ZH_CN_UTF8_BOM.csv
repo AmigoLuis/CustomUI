@@ -1,9 +1,9 @@
 ﻿Key,SourceString
 WindowModeSettingDescriptionKey,<Bold>窗口模式：</>您可以更轻松地与其他窗口进行交互，并拖动窗口边缘来调整大小。\n\n<Bold>无边框窗口：</>您可以轻松地在应用程序之间切换。\n\n<Bold>全屏模式：</>您无法像在窗口模式中那样轻松地与其他窗口进行交互，但游戏运行速度会稍快一些。
 ScreenResolutionsSettingDescriptionKey,在窗口模式下，显示分辨率决定窗口的大小。在全屏模式下，显示分辨率决定显卡的输出分辨率，这可能会因显示器和显卡的不同而产生黑边。在窗口全屏模式下，显示分辨率不起作用。
-DisplayGammaSettingDescriptionKey,调整亮度。
+BrightnessSettingDescriptionKey,调整亮度。
 OverallQualitySettingDescriptionKey,“质量预设”功能可让您一次性调整多个视频选项。尝试几个选项，看看哪些选项符合您的偏好和设备的性能。
-ResolutionScaleSettingDescriptionKey,3D分辨率决定了游戏中物体的渲染分辨率，但不影响主菜单。较低的分辨率可以显著提高帧率。
+ResolutionScaleNormalizedSettingDescriptionKey,3D分辨率决定了游戏中物体的渲染分辨率，但不影响主菜单。较低的分辨率可以显著提高帧率。
 GlobalIlluminationQualitySettingDescriptionKey,全局照明控制着动态计算的间接照明反弹、天空阴影和环境光遮挡的质量。“高”及以上的设置使用更精确的光线追踪方法来求解照明，但可能会降低性能。
 ShadowQualitySettingDescriptionKey,阴影质量决定了动态阴影的分辨率和可视距离。阴影能提升视觉质量，增强深度感，但可能会降低性能。
 AntiAliasingSettingDescriptionKey,抗锯齿功能可减少几何体边缘的锯齿状瑕疵。提高此设置将使边缘看起来更平滑，但可能会降低性能。设置越高，抗锯齿效果越好。
@@ -17,9 +17,9 @@ FrameRateLimitSettingDescriptionKey,帧率限制设定了允许的最高帧率�
 ,
 WindowModeSettingNameKey,窗口模式
 ScreenResolutionsSettingNameKey,屏幕分辨率
-DisplayGammaSettingNameKey,亮度
+BrightnessSettingNameKey,亮度
 OverallQualitySettingNameKey,质量预设
-ResolutionScaleSettingNameKey,3D分辨率
+ResolutionScaleNormalizedSettingNameKey,3D分辨率
 GlobalIlluminationQualitySettingNameKey,全局光照
 ShadowQualitySettingNameKey,阴影质量
 AntiAliasingSettingNameKey,抗锯齿质量

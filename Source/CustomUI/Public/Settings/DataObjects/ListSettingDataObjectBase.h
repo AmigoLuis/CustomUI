@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Enums/FrontEndEnumTypes.h"
-#include "FunctionLibraries/UtilityMacros.h"
+#include "UE_DebugUtilities/Public/GetterAndSetterGenerateMacro.h"
 #include "ListSettingDataObjectBase.generated.h"
 
 struct FSettingDataEditConditionDetail;

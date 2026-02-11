@@ -27,15 +27,7 @@ void UWidgetSettingDetailsView::UpdateDetailViewInfo(UListSettingDataObjectBase*
 		LazyImageDescription->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	RichTextBlockDescription->SetText(InDataObject->GetDescriptionRichText());
-#undef DYNAMIC_DETAILS_TEXT_STYLE
-#define DYNAMIC_DETAILS_TEXT_STYLE TEXT("Bold")
-	const FString& DynamicDetails = 
-		FString::Format(TEXT("Data Object Class: <{0}>{1}</>\n\nEntry Widget Class: <{0}>{2}</>"),{
-			DYNAMIC_DETAILS_TEXT_STYLE,
-			InDataObject->GetClass()->GetName(), 
-			InWidgetClass});
-	RichTextBlockDynamicDetails->SetText(FText::FromString(DynamicDetails));
-#undef DYNAMIC_DETAILS_TEXT_STYLE
+
 	RichTextBlockDisableReason->SetText(
 		InDataObject->IsSettingDataEditable() ? FText::GetEmpty() : InDataObject->GetDisabledRichText());
 }
@@ -45,7 +37,6 @@ void UWidgetSettingDetailsView::ClearDetailViewInfo()
 	TextBlockTitle->SetText(FText::GetEmpty());
 	LazyImageDescription->SetVisibility(ESlateVisibility::Collapsed);
 	RichTextBlockDescription->SetText(FText::GetEmpty());
-	RichTextBlockDynamicDetails->SetText(FText::GetEmpty());
 	RichTextBlockDisableReason->SetText(FText::GetEmpty());
 }
 

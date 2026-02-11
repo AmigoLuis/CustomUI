@@ -57,24 +57,31 @@ public:
 	void SetSoundFXVolume(const float& InVolume);
 	
 	UFUNCTION()
+	[[nodiscard]] float GetVoiceVolume() const
+	{return VoiceVolume;}
+	UFUNCTION()
+	void SetVoiceVolume(const float InVoiceVolume)
+	{VoiceVolume = InVoiceVolume;}
+	
+	UFUNCTION()
+	[[nodiscard]] float GetAmbientVolume() const
+	{return AmbientVolume;}
+	UFUNCTION()
+	void SetAmbientVolume(const float InAmbientVolume)
+	{AmbientVolume = InAmbientVolume;}
+	
+	UFUNCTION()
 	[[nodiscard]] bool GetAllowBackgroundMusic() const
 	{return AllowBackgroundMusic;}
 	UFUNCTION()
 	void SetAllowBackgroundMusic(const bool InAllowBackgroundMusic)
 	{AllowBackgroundMusic = InAllowBackgroundMusic;}
 	
-	UFUNCTION()
-	[[nodiscard]] bool GetUseHDRAudio() const
-	{return UseHDRAudio;}
-	UFUNCTION()
-	void SetUseHDRAudio(const bool InUseHDRAudio)
-	{UseHDRAudio = InUseHDRAudio;}
 	//*** Audio Collection Tab
 	//*** Video Collection Tab
 	UFUNCTION()
 	[[nodiscard]] float GetBrightness() const;
-	UFUNCTION()
-	void SetBrightness(const float InBrightness);
+	UFUNCTION()void SetBrightness(const float InBrightness);
 	//*** Video Collection Tab
 private:
 	// Gameplay Tab
@@ -90,8 +97,10 @@ private:
 	UPROPERTY(Config)
 	float SoundFXVolume;
 	UPROPERTY(Config)
-	bool AllowBackgroundMusic;
+	float VoiceVolume;
 	UPROPERTY(Config)
-	bool UseHDRAudio;
+	float AmbientVolume;
+	UPROPERTY(Config)
+	bool AllowBackgroundMusic;
 	// Audio Tab
 };

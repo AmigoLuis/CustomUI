@@ -35,6 +35,9 @@
 # define GET_DESCRIPTION_FOR_KEY(KeyString) \
 LOCTABLE("/Game/StringTables/ST_SettingMenuDescription.ST_SettingMenuDescription", KeyString)
 
+#define DESCRIPTION_SUFFIX TEXT("SettingDescriptionKey")
+#define NAME_SUFFIX TEXT("SettingNameKey")
+
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
 {
 	InitGamePlayCollectionTab();
@@ -64,10 +67,11 @@ ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
 ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
 
 #undef INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME
-#define INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChileName) \
+#define INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChileName, StringTableLocation) \
 UListSettingDataObjectScalar* ChileName = NewObject<UListSettingDataObjectScalar>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) NAME_SUFFIX));\
+ChileName->SetDescriptionRichText(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) DESCRIPTION_SUFFIX));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME
@@ -164,47 +168,36 @@ void USettingDataRegistry::InitAudioCollectionTab()
 	{
 		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Volume);
 		ADD_CHILD_TO_COLLECTION(Volume, Audio);
+#define ADD_VOLUME_CHILD(ChildName) \
+INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChildName, ST_SOUND_SETTINGS);\
+ChildName->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));\
+ChildName->SetOutputValueRange(TRange<float>(0.0f, 2.0f));\
+ChildName->SetSliderStepSize(0.01f);\
+ChildName->SetDefaultValueFromString(LexToString(1.0f));\
+ChildName->SetDisplayNumericType(ECommonNumericType::Percentage);\
+ChildName->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());/* NoDecimal:50%, One Decimal:50.5%*/\
+ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ChildName);\
+ADD_CHILD_TO_COLLECTION(ChildName, Volume);\
+		
 		// Overall Volume
 		{
-			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(OverallVolume);
-			OverallVolume->SetDescriptionRichText(FText::FromString(
-				TEXT("Overall Volume Currently is not affecting real game sound volume")));
-			OverallVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
-			OverallVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
-			OverallVolume->SetSliderStepSize(0.01f);
-			OverallVolume->SetDefaultValueFromString(LexToString(1.0f));
-			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
-			OverallVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
-			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallVolume);
-			ADD_CHILD_TO_COLLECTION(OverallVolume, Volume);
+			ADD_VOLUME_CHILD(OverallVolume)
 		}
 		// Music Volume
 		{
-			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(MusicVolume);
-			MusicVolume->SetDescriptionRichText(FText::FromString(
-				TEXT("Music Volume Currently is not affecting real game sound volume")));
-			MusicVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
-			MusicVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
-			MusicVolume->SetSliderStepSize(0.01f);
-			MusicVolume->SetDefaultValueFromString(LexToString(1.0f));
-			MusicVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
-			MusicVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
-			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(MusicVolume);
-			ADD_CHILD_TO_COLLECTION(MusicVolume, Volume);
+			ADD_VOLUME_CHILD(MusicVolume)
 		}
 		// SoundFX Volume
 		{
-			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(SoundFXVolume);
-			SoundFXVolume->SetDescriptionRichText(FText::FromString(
-				TEXT("SoundFX Volume Currently is not affecting real game sound volume")));
-			SoundFXVolume->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
-			SoundFXVolume->SetOutputValueRange(TRange<float>(0.0f, 2.0f));
-			SoundFXVolume->SetSliderStepSize(0.01f);
-			SoundFXVolume->SetDefaultValueFromString(LexToString(1.0f));
-			SoundFXVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
-			SoundFXVolume->SetDisplayFormattingOptions(UListSettingDataObjectScalar::NoDecimal());// NoDecimal:50% // One Decimal:50.5%
-			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(SoundFXVolume);
-			ADD_CHILD_TO_COLLECTION(SoundFXVolume, Volume);
+			ADD_VOLUME_CHILD(SoundFXVolume)
+		}
+		// Voice Volume
+		{
+			ADD_VOLUME_CHILD(VoiceVolume)
+		}
+		// Ambient Volume
+		{
+			ADD_VOLUME_CHILD(AmbientVolume)
 		}
 	}
 	// Sound 
@@ -219,15 +212,6 @@ void USettingDataRegistry::InitAudioCollectionTab()
 			AllowBackgroundMusic->SetTrueAsDefaultValue();
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AllowBackgroundMusic);
 			ADD_CHILD_TO_COLLECTION(AllowBackgroundMusic, Sound);
-		}
-		// Use HDR Audio
-		{
-			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(UseHDRAudio);
-			UseHDRAudio->OverrideTrueDisplayText(FText::FromString(TEXT("Enabled")));
-			UseHDRAudio->OverrideFalseDisplayText(FText::FromString(TEXT("Disabled")));
-			UseHDRAudio->SetFalseAsDefaultValue();
-			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(UseHDRAudio);
-			ADD_CHILD_TO_COLLECTION(UseHDRAudio, Sound);
 		}
 	}
 }
@@ -298,8 +282,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		ADD_CHILD_TO_COLLECTION(Graphics, Video);
 		// Brightness
 		{
-			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(Brightness);
-			Brightness->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("DisplayGammaDescKey"));
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(Brightness, ST_VIDEO_SETTINGS);
 			Brightness->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
 			// default unreal brightness is 2.2, should be in the middle
 			Brightness->SetOutputValueRange(TRange<float>(1.7f, 2.7f));
@@ -329,8 +312,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		}
 		// ResolutionScaleNormalized
 		{
-			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ResolutionScaleNormalized);
-			ResolutionScaleNormalized->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("ResolutionScaleDescKey"));
+			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ResolutionScaleNormalized, ST_VIDEO_SETTINGS);
 			ResolutionScaleNormalized->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));
 			ResolutionScaleNormalized->SetOutputValueRange(TRange<float>(0.0f, 1.0f));
 			ResolutionScaleNormalized->SetDisplayNumericType(ECommonNumericType::Percentage);

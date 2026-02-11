@@ -34,8 +34,6 @@ private:
 	UPROPERTY(meta=(BindWidget))
 	UCommonRichTextBlock* RichTextBlockDescription;
 	UPROPERTY(meta=(BindWidget))
-	UCommonRichTextBlock* RichTextBlockDynamicDetails;
-	UPROPERTY(meta=(BindWidget))
 	UCommonRichTextBlock* RichTextBlockDisableReason;
 	/**** BindWidget ****/
 };
