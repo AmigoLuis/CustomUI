@@ -78,10 +78,11 @@ ChileName->SetDescriptionRichText(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation,
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME
-#define INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(ChileName) \
+#define INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(ChileName, StringTableLocation) \
 UListSettingDataObjectStringEnum* ChileName = NewObject<UListSettingDataObjectStringEnum>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) NAME_SUFFIX));\
+ChileName->SetDescriptionRichText(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) DESCRIPTION_SUFFIX));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME
@@ -242,11 +243,13 @@ void USettingDataRegistry::InitVideoCollectionTab()
 				{DISABLED_RICH_TEXT_STYLE}));
 		// Fullscreen Mode
 		{
-			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode);
-			FullscreenMode->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("WindowModeDescKey"));
-			FullscreenMode->AddEnumOption(EWindowMode::Fullscreen, FText::FromString(TEXT("Fullscreen")));
-			FullscreenMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Borderless Fullscreen")));
-			FullscreenMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed")));
+			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode, ST_VIDEO_SETTINGS);
+			FullscreenMode->AddEnumOption(EWindowMode::Fullscreen, 
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FullscreenMode, 1)));
+			FullscreenMode->AddEnumOption(EWindowMode::WindowedFullscreen, 
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FullscreenMode, 2)));
+			FullscreenMode->AddEnumOption(EWindowMode::Windowed, 
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FullscreenMode, 3)));
 			FullscreenMode->SetDefaultValueFromEnumOption(EWindowMode::WindowedFullscreen);
 			FullscreenMode->AddEditCondition(PackageBuildOnly);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FullscreenMode);
