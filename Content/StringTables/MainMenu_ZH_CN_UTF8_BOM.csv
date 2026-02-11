@@ -1,0 +1,11 @@
+﻿Key,SourceString
+StartGame,开始游戏
+Settings,设置
+Credits,制作团队
+QuitGame,退出游戏
+StartGameDescription,开始一轮新游戏或者继续游戏
+SettingsDescription,调整设置，获得更好体验
+CreditsDescription,查看制作团队成员名单
+QuitGameDescription,休息一下，喝一杯热水，或者活动一下身体
+ClickAction,点击菜单项
+BackAction,返回上一级

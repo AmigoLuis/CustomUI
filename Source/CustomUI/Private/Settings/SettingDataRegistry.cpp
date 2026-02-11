@@ -21,9 +21,11 @@
 #include "EnhancedInputSubsystems.h"
 #include "LogMacros.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
-#include "Internationalization/StringTableRegistry.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
+#include "Widgets/StringTableLocations.h"
 
+// TODO:ui中没有点击提示但是有back提示，应该实现点击提示
+// TODO:ui中鼠标应该额外添加一个back action就是鼠标右键，不然用鼠标左键click但是又要用键盘的esc返回，比较割裂
 // TODO:将所有显示的文本都通过StringTable管理，复用成功经验
 // TODO:实现多语言，国际化（doing）
 // TODO:实现可扩展的消息通知widget

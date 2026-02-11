@@ -1,0 +1,14 @@
+﻿Key,SourceString
+OverallVolumeSettingDescriptionKey,调整游戏的全局音量
+MusicVolumeSettingDescriptionKey,调整背景音乐的音量
+SoundFXVolumeSettingDescriptionKey,调整动作、环境及交互音效的音量
+VoiceVolumeSettingDescriptionKey,调整角色对话和语音的音量。
+AmbientVolumeSettingDescriptionKey,调整环境氛围声（如风声、雨声）的音量。
+AllowBackgroundMusicSettingDescriptionKey,当游戏窗口失去焦点或切换至后台时，是否继续播放音乐。
+,
+OverallVolumeSettingNameKey,总音量
+MusicVolumeSettingNameKey,音乐音量
+SoundFXVolumeSettingNameKey,音效音量
+VoiceVolumeSettingNameKey,语言音量
+AmbientVolumeSettingNameKey,环境音量
+AllowBackgroundMusicSettingNameKey,允许后台音频
