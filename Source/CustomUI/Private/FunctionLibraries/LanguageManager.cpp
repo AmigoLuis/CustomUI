@@ -3,10 +3,12 @@
 
 #include "FunctionLibraries/LanguageManager.h"
 
+#include "CheckAndLogAndReturn.h"
 #include "PrintInLog.h"
 #include "Internationalization/Internationalization.h"
 #include "Internationalization/Culture.h"
 #include "Kismet/KismetInternationalizationLibrary.h"
+#include "Settings/FrontendGameUserSettings.h"
 
 FLanguageManager& FLanguageManager::Get()
 {
@@ -14,72 +16,96 @@ FLanguageManager& FLanguageManager::Get()
 	return FLanguageManager;
 }
 
-TArray<FString> FLanguageManager::GetAvailableLanguageNames(const bool bForceRefresh)
+const TArray<FLanguageInfo>& FLanguageManager::GetAvailableLanguageInfo(const bool bForceRefresh)
 {   
-	if (!bForceRefresh
-		&& AllAvailableLanguageDisplayNames.Num() > 0 
-		&& AllAvailableLanguageNames.Num() > 0)
+	if (!bForceRefresh && AllAvailableLanguageInfo.Num() > 0)
 	{
-		return AllAvailableLanguageDisplayNames;
+		return AllAvailableLanguageInfo;
 	}
 	// 1. 获取所有已本地化的语言代码 (IETF标签, 如 "zh-Hans", "ja", "fr")
-	AllAvailableLanguageNames = 
+	const TArray<FString>& SupportedLanguageNames =
 		UKismetInternationalizationLibrary::GetLocalizedCultures(true);
 
-	for (const FString& CultureName : AllAvailableLanguageNames)
+	for (const FString& LanguageName : SupportedLanguageNames)
 	{
 		// 2. 通过语言代码获取该语言的“显示名称”（该语言自己的名字）
 		FString DisplayName = 
-			UKismetInternationalizationLibrary::GetCultureDisplayName(CultureName, true);
-		AllAvailableLanguageDisplayNames.Add(DisplayName);
-		PrintInLogDisplay(TEXT("Detected language: ") + DisplayName);
+			UKismetInternationalizationLibrary::GetCultureDisplayName(LanguageName, false);
+		AllAvailableLanguageInfo.Emplace(LanguageName, DisplayName);
+		PrintInLogDisplay(FString::Format(TEXT("Detected new language, IETF tag: {0}, DisplayName: {1}."),
+			{LanguageName,DisplayName}));
 	}
 
-	return AllAvailableLanguageDisplayNames;
+	return AllAvailableLanguageInfo;
 }
 
-void FLanguageManager::ChangeLanguage(FString TargetCultureName)
+void FLanguageManager::ChangeLanguage(FString LanguageTagToSet)
 {
 	// 方法 A：使用内置库函数（最推荐，简单且安全）
-	// TargetCultureName 传入类似 "en", "zh-Hans", "ja"
-	CurrentLanguageName = TargetCultureName;
-	UKismetInternationalizationLibrary::SetCurrentCulture(TargetCultureName, true);
+	// LanguageTagToSet 传入类似 "en", "zh-Hans", "ja"
+	CurrentLanguageName = LanguageTagToSet;
+	UKismetInternationalizationLibrary::SetCurrentCulture(LanguageTagToSet, true);
 	PrintInLogDisplay(FString::Format(TEXT("Language changed to: {0} ."), 
-		{TargetCultureName}));
+		{LanguageTagToSet}));
 }
 
 void FLanguageManager::TrySetDefaultLanguage()
 {
-	// 获取操作系统当前文化代码（如 "en-US" 或 "zh-CN"），跨平台支持。
-	PlayerOSLanguageName = FInternationalization::Get().GetCurrentCulture()->GetName();
-	PrintInLogDisplay(TEXT("Player OS language is :") + PlayerOSLanguageName);
-	// 获取项目支持的所有本地化文化代码
-	GetAvailableLanguageNames();
-	TArray<FString> SupportedCultures = AllAvailableLanguageNames;
-	
-	// 判断操作系统文化是否被支持，否则使用默认文化（如第一个支持文化或英文）
-	FString TargetCulture = PlayerOSLanguageName;
-	if (SupportedCultures.Contains(TargetCulture))
+	const UFrontendGameUserSettings* FrontendGameUserSettings = UFrontendGameUserSettings::Get();
+	CHECK_NULL_RETURN(FrontendGameUserSettings);
+	if (const FString& SavedDisplayLanguageTag = FrontendGameUserSettings->GetDisplayLanguageTag(); 
+		SavedDisplayLanguageTag.IsEmpty())
 	{
-		PrintInLogDisplay(FString::Format(TEXT("OS culture :{0} is supported. Using it."), 
-			{PlayerOSLanguageName}));
+		PrintInLogDisplay(TEXT("No SavedDisplayLanguageTag."));
 	}
 	else
 	{
-		if (const FString EnglishCulture = TEXT("en"); SupportedCultures.Contains(EnglishCulture))
+		const bool bSavedDisplayLanguageTagSupported = IsLanguageTagSupported(SavedDisplayLanguageTag);
+		PrintInLogDisplay(FString::Format(TEXT("SavedDisplayLanguageTag is '{0}', it's {1}."),
+			{SavedDisplayLanguageTag, 
+				bSavedDisplayLanguageTagSupported ? TEXT("supported"):TEXT("not supported")}));
+		if (bSavedDisplayLanguageTagSupported)
 		{
-			TargetCulture = EnglishCulture;
+			ChangeLanguage(SavedDisplayLanguageTag);
+			return;
+		}
+	}
+	// 获取操作系统当前文化代码（如 "en-US" 或 "zh-CN"），跨平台支持。
+	PlayerOSLanguageTag = FInternationalization::Get().GetCurrentCulture()->GetName();
+	PrintInLogDisplay(TEXT("Player OS language IETF tag is :") + PlayerOSLanguageTag);
+	
+	// 判断操作系统文化是否被支持，否则使用默认文化（如第一个支持文化或英文）
+	FString LanguageTagToSet = PlayerOSLanguageTag;
+	if (IsLanguageTagSupported(LanguageTagToSet))
+	{
+		PrintInLogDisplay(FString::Format(TEXT("Player OS language IETF tag '{0}' is supported. Using it."), 
+			{PlayerOSLanguageTag}));
+	}
+	else
+	{
+		if (const FString EnglishTag = TEXT("en"); IsLanguageTagSupported(EnglishTag))
+		{
+			LanguageTagToSet = EnglishTag;
 		} 
-		else if (SupportedCultures.Num() > 0)
+		else if (GetAvailableLanguageInfo().Num() > 0)
 		{
-			TargetCulture = SupportedCultures[0];
+			LanguageTagToSet = GetAvailableLanguageInfo()[0].LanguageTag;
 		}
 		else
 		{
-			TargetCulture = EnglishCulture;
+			LanguageTagToSet = EnglishTag;
 		}
-		PrintInLogDisplay(FString::Format(TEXT("OS culture {0} is not supported, fallback to {1}."), 
-			{PlayerOSLanguageName, TargetCulture}));
+		PrintInLogDisplay(FString::Format(TEXT("Player OS language IETF tag '{0}' is not supported, fallback to {1}."), 
+			{PlayerOSLanguageTag, LanguageTagToSet}));
 	}
-	ChangeLanguage(TargetCulture);
+	ChangeLanguage(LanguageTagToSet);
+}
+
+bool FLanguageManager::IsLanguageTagSupported(const FString& LanguageTag)
+{
+	for (const FLanguageInfo& AvailableLanguageInfo : GetAvailableLanguageInfo())
+	{
+		if (AvailableLanguageInfo.LanguageTag == LanguageTag) return true;
+	}
+	return false;
 }

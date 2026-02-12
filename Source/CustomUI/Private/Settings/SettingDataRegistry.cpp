@@ -20,6 +20,7 @@
 #include "Settings/DataObjects/SettingDataEditConditionDetail.h"
 #include "EnhancedInputSubsystems.h"
 #include "LogMacros.h"
+#include "FunctionLibraries/LanguageManager.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 #include "Widgets/StringTableLocations.h"
@@ -142,28 +143,45 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 void USettingDataRegistry::InitGamePlayCollectionTab()
 {
 	INIT_COLLECTION_TAB(Gameplay);
-	INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(Difficulty);
-	ADD_CHILD_SETTING_NAME(Difficulty, Easy);
-	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
-	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
-	SET_CHILD_DEFAULT_VALUE_FROM_STRING(Difficulty, Normal);
-	ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
-	Difficulty->SetDescriptionRichText(FText::FromString(TEXT("Adjusts the difficulty of the game experience.\n\n"
-	"<Bold>Easy:</> Focuses on the story experience. Provides the most relaxing combat.\n\n"
-	"<Bold>Normal:</> Offers slightly harder combat experience\n\n"
-	"<Bold>Hard:</> Offers a much more challenging combat experience\n\n"
-	"<Bold>Vert Hard:</> Provides the most challenging combat experience. Not recommended for first play through.")));
-	ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
+	// Difficulty
+	{
+		INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(Difficulty);
+		ADD_CHILD_SETTING_NAME(Difficulty, Easy);
+		ADD_CHILD_SETTING_NAME(Difficulty, Normal);
+		ADD_CHILD_SETTING_NAME(Difficulty, Hard);
+		SET_CHILD_DEFAULT_VALUE_FROM_STRING(Difficulty, Normal);
+		ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
+		Difficulty->SetDescriptionRichText(FText::FromString(TEXT("Adjusts the difficulty of the game experience.\n\n"
+		"<Bold>Easy:</> Focuses on the story experience. Provides the most relaxing combat.\n\n"
+		"<Bold>Normal:</> Offers slightly harder combat experience\n\n"
+		"<Bold>Hard:</> Offers a much more challenging combat experience\n\n"
+		"<Bold>Vert Hard:</> Provides the most challenging combat experience. Not recommended for first play through.")));
+		ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
+	}
+	//AutoSave
+	{
+		INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(AutoSave);
+		ADD_CHILD_SETTING_NAME(AutoSave, On);
+		ADD_CHILD_SETTING_NAME(AutoSave, Off);
+		AutoSave->SetSoftDescriptionImage(UUIFunctionLibrary::GetSoftImageByTagFromSettings(
+			FrontEndGameplayTags::FrontEnd_Image_SettingsMenuDetailTest));
+		AutoSave->SetDescriptionRichText(FText::FromString(
+			TEXT("The image to display can be specified in the project settings."
+				" It can be anything the developer assigned in there")));
+		ADD_CHILD_TO_COLLECTION(AutoSave, Gameplay);
+	}
 	
-	INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(AutoSave);
-	ADD_CHILD_SETTING_NAME(AutoSave, On);
-	ADD_CHILD_SETTING_NAME(AutoSave, Off);
-	AutoSave->SetSoftDescriptionImage(UUIFunctionLibrary::GetSoftImageByTagFromSettings(
-		FrontEndGameplayTags::FrontEnd_Image_SettingsMenuDetailTest));
-	AutoSave->SetDescriptionRichText(FText::FromString(
-		TEXT("The image to display can be specified in the project settings."
-	   " It can be anything the developer assigned in there")));
-	ADD_CHILD_TO_COLLECTION(AutoSave, Gameplay);
+	{
+		INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(DisplayLanguageTag);
+		for (const auto& AvailableLanguageInfo = 
+			FLanguageManager::Get().GetAvailableLanguageInfo(); 
+			const auto& [LanguageTag, LanguageDisplayName] : AvailableLanguageInfo)
+		{
+			DisplayLanguageTag->AddSettingEntry(LanguageTag, FText::FromString(LanguageDisplayName));
+		}
+		ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(DisplayLanguageTag);
+		ADD_CHILD_TO_COLLECTION(DisplayLanguageTag, Gameplay);
+	}
 }
 
 void USettingDataRegistry::InitAudioCollectionTab()

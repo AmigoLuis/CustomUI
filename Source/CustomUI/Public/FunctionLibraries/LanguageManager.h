@@ -4,6 +4,12 @@
 
 #include "CoreMinimal.h"
 
+struct FLanguageInfo
+{
+	FString LanguageTag;
+	FString LanguageDisplayName;
+};
+
 /**
  * 
  */
@@ -14,15 +20,15 @@ public:
 	// TODO:2列举出所有可用的语言
 	// TODO:3运行时设置当前使用的语言
 	static FLanguageManager& Get();
-	TArray<FString> GetAvailableLanguageNames(const bool bForceRefresh = false);
-	void ChangeLanguage(FString TargetCultureName);
+	const TArray<FLanguageInfo>& GetAvailableLanguageInfo(const bool bForceRefresh = false);
+	void ChangeLanguage(FString LanguageTagToSet);
 	void TrySetDefaultLanguage();
 private:
-	TArray<FString> AllAvailableLanguageDisplayNames;
-	TArray<FString> AllAvailableLanguageNames;
+	TArray<FLanguageInfo> AllAvailableLanguageInfo;
 	FString CurrentLanguageName;
-	FString PlayerOSLanguageName;
+	FString PlayerOSLanguageTag;
 
+	bool IsLanguageTagSupported(const FString& LanguageTag);
 	FLanguageManager(){};
 	FLanguageManager(const FLanguageManager& Other) = delete;
 	FLanguageManager(FLanguageManager&& Other) noexcept = delete;

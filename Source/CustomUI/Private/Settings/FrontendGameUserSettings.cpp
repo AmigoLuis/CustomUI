@@ -6,9 +6,10 @@
 #include "CheckAndLogAndReturn.h"
 #include "LogMacros.h"
 #include "UILogger.h"
+#include "FunctionLibraries/LanguageManager.h"
 
 UFrontendGameUserSettings::UFrontendGameUserSettings() : OverallVolume(1.0f), MusicVolume(1.0f), 
-	SoundFXVolume(1.0f), VoiceVolume(1.0f), AmbientVolume(1.0f), AllowBackgroundMusic(true)
+                                                         SoundFXVolume(1.0f), VoiceVolume(1.0f), AmbientVolume(1.0f), AllowBackgroundMusic(true)
 {
 }
 
@@ -24,6 +25,12 @@ UFrontendGameUserSettings* UFrontendGameUserSettings::Get()
 			TEXT(" as GameUserSetting in project settings."));
 	}
 	return Settings;
+}
+
+void UFrontendGameUserSettings::SetDisplayLanguageTag(const FString& InDisplayLanguage)
+{
+	this->DisplayLanguageTag = InDisplayLanguage;
+	FLanguageManager::Get().ChangeLanguage(InDisplayLanguage);
 }
 
 void UFrontendGameUserSettings::SetOverallVolume(const float& InVolume)
