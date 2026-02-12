@@ -15,3 +15,17 @@ GameplayCollection,游戏设置
 AudioCollection,音频设置
 VideoCollection,视频设置
 ControlCollection,控制设置
+,
+NewGame,新游戏
+ContinueGame,继续游戏
+NewGamePlus,新游戏+
+NewGameDescription,开始一段新的冒险
+ContinueGameDescription,从上次您离开的地方继续
+NewGamePlusDescription,开始新游戏，继承之前通关的数据
+,
+Yes,是的
+No,不是
+OK,好的
+Cancel,取消
+Accept,接受
+Decline,拒绝

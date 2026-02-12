@@ -16,8 +16,9 @@ class CUSTOMUI_API UFrontEndButtonBase : public UCommonButtonBase
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable)
 	void SetButtonText(FText NewButtonText);
+	UFUNCTION(BlueprintCallable)
+	void SetButtonTextByKey(const FString& ButtonTextKey);
 	UFUNCTION(BlueprintCallable)
 	FText GetButtonText() const;
 	UFUNCTION(BlueprintCallable)
@@ -30,11 +31,11 @@ private:
 	UCommonLazyImage* ButtonLazyImage;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FrontEnd Button", meta=(AllowPrivateAccess = "true"))
-	FText ButtonDisplayText;
+	FString ButtonDisplayTextKey;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FrontEnd Button", meta=(AllowPrivateAccess = "true"))
 	bool bUseUpperCaseForButtonText = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FrontEnd Button", meta=(AllowPrivateAccess = "true"))
-	FText ButtonTooltipText;
+	FString ButtonTooltipTextKey;
 
 protected:
 	void BroadcastUpdatedButtonDescription(bool bNotBroadCastEmpty);
