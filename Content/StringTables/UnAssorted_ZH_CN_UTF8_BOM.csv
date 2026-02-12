@@ -6,4 +6,5 @@ No,不是
 QuitGameHint,您确定要退出游戏吗？
 ,
 ,
-DisplayLanguage,显示语言
+DisplayLanguageTagSettingDescriptionKey,
+DisplayLanguageTagSettingNameKey,显示语言

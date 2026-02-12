@@ -9,3 +9,9 @@ CreditsDescription,查看制作团队成员名单
 QuitGameDescription,休息一下，喝一杯热水，或者活动一下身体
 ClickAction,点击菜单项
 BackAction,返回上一级
+,
+,
+GameplayCollection,游戏设置
+AudioCollection,音频设置
+VideoCollection,视频设置
+ControlCollection,控制设置

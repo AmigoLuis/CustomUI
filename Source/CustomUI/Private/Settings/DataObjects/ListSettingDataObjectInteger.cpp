@@ -4,6 +4,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectInteger.h"
 
 #include "Settings/FSettingDataInteractionHelper.h"
+#include "Widgets/StringTableLocations.h"
 
 void UListSettingDataObjectInteger::AddIntegerSetting(int32 Value, const FText& InDisplayText)
 {
@@ -15,7 +16,7 @@ void UListSettingDataObjectInteger::OnInitializeDataObject()
 	Super::OnInitializeDataObject();
 	if (!TrySetTextAccordingToString(CurrentSettingNameString))
 	{
-		CurrentSettingNameText = FText::FromString(TEXT("Custom"));
+		CurrentSettingNameText = GET_VIDEO_SETTING_FOR_KEY("CustomVideoSettingDescription");
 	}
 }
 
@@ -31,7 +32,7 @@ void UListSettingDataObjectInteger::OnEditDependencyDataModified(UListSettingDat
 	
 		if (!TrySetTextAccordingToString(CurrentSettingNameString))
 		{
-			CurrentSettingNameText = FText::FromString(TEXT("Custom"));
+			CurrentSettingNameText = GET_VIDEO_SETTING_FOR_KEY("CustomVideoSettingDescription");
 		}
 		NotifyListDataModified(this, ESettingsListDataModifyReason::DependencyModified);
 	}
