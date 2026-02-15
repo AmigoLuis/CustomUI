@@ -20,3 +20,5 @@ LOCTABLE(StringTable, KeyString)
 # define GET_VALUE_FOR_KEY_FROM_ST_DIRECT(StringTableId, KeyString) \
 FStringTableRegistry::Get().Internal_FindLocTableEntry(StringTableId, KeyString, EStringTableLoadingPolicy::FindOrLoad)
 # define GET_MAIN_MENU_FOR_KEY_DIRECT(KeyString) GET_VALUE_FOR_KEY_FROM_ST_DIRECT(TEXT(ST_MAIN_MENU), KeyString)
+# define GET_UN_ASSORTED_FOR_KEY_DIRECT(KeyString) \
+	GET_VALUE_FOR_KEY_FROM_ST_DIRECT(TEXT(ST_UN_ASSORTED), KeyString)

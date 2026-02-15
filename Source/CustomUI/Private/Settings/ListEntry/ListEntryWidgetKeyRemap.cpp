@@ -9,6 +9,7 @@
 #include "FunctionLibraries/UIFunctionLibrary.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
+#include "Widgets/StringTableLocations.h"
 #include "Widgets/WidgetKeyRemapConfirm.h"
 #include "Widgets/Components/FrontEndButtonBase.h"
 
@@ -71,10 +72,8 @@ void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
 	{
 		UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
 			EConfirmScreenType::OK, 
-			FText::FromString(TEXT("Reset key binding")), 
-FText::FromString(FString::Format(
-				TEXT("This key binding {0} is already set to default or has no default value."), 
-				{OwningKeyRemapObject->GetDataDisplayName().ToString()}) ), 
+			GET_UN_ASSORTED_FOR_KEY("KeyBindingCanNotResetToDefaultValueTitle"),
+			GET_UN_ASSORTED_FOR_KEY("KeyBindingCanNotResetToDefaultValueHint"),
 [](EConfirmScreenButtonType ConfirmType){});
 		return;
 	}
@@ -87,14 +86,14 @@ void UListEntryWidgetKeyRemap::OnKeyRemapSucceeded(const FKey& PressedKey)
 	
 	OwningKeyRemapObject->BindNewInputKey(PressedKey);
 	
-	PrintInLog(TEXT("Key remapped to: " + PressedKey.GetDisplayName().ToString()));
+	PrintInLogDisplay(TEXT("Key remapped to: " + PressedKey.GetDisplayName().ToString()));
 }
 
 void UListEntryWidgetKeyRemap::OnKeyRemapCanceled(const FString& CanceledReason)
 {
 	UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
-		EConfirmScreenType::OK, 
-		FText::FromString(TEXT("key remap canceled")),
-FText::FromString(CanceledReason), 
+		EConfirmScreenType::OK,
+		GET_UN_ASSORTED_FOR_KEY("KeyBindingRemapTitle"),
+		GET_UN_ASSORTED_FOR_KEY_DIRECT(CanceledReason),
 [](EConfirmScreenButtonType ConfirmType){});
 }

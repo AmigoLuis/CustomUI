@@ -6,10 +6,21 @@
 #include "CheckAndLogAndReturn.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
+#include "Widgets/StringTableLocations.h"
 
 UAsyncPushConfirmationWidget* UAsyncPushConfirmationWidget::PushConfirmWidgetToStackAsync(
-	const UObject* WorldContextObject, const EConfirmScreenType ConfirmScreenType, const FText& InTitleText,
-	const FText& InMessageText)
+	const UObject* WorldContextObject, const EConfirmScreenType ConfirmScreenType,
+	const FString& InTitleTextKeyInSt, const FString& InMessageTextKeyInSt)
+{
+	return PushConfirmWidgetToStackAsyncWithFullParameter(
+		WorldContextObject, ConfirmScreenType, InTitleTextKeyInSt,
+		InMessageTextKeyInSt, TEXT(ST_UN_ASSORTED));
+}
+
+UAsyncPushConfirmationWidget* UAsyncPushConfirmationWidget::PushConfirmWidgetToStackAsyncWithFullParameter(
+	const UObject* WorldContextObject, const EConfirmScreenType ConfirmScreenType,
+	const FString& InTitleTextKeyInSt,
+	const FString& InMessageTextKeyInSt, const FName& StringTableID)
 {
 	CHECK_NULL_RETURN_VALUE(GEngine, nullptr);
 	
@@ -21,8 +32,10 @@ UAsyncPushConfirmationWidget* UAsyncPushConfirmationWidget::PushConfirmWidgetToS
 	CHECK_NULL_RETURN_VALUE(Node, nullptr);
 	Node->CachedOwningWorld = World;
 	Node->CachedConfirmScreenType = ConfirmScreenType;
-	Node->CachedTitleText = InTitleText;
-	Node->CachedMessageText = InMessageText;
+	Node->CachedTitleText =
+		GET_VALUE_FOR_KEY_FROM_ST_DIRECT(StringTableID, InTitleTextKeyInSt);
+	Node->CachedMessageText =
+		GET_VALUE_FOR_KEY_FROM_ST_DIRECT(StringTableID, InMessageTextKeyInSt);
 	Node->RegisterWithGameInstance(World);
 	return Node;
 }

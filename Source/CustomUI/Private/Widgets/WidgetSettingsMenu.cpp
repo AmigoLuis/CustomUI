@@ -14,6 +14,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
+#include "Widgets/StringTableLocations.h"
 #include "Widgets/Components/FrontEndCommonListView.h"
 #include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
@@ -85,12 +86,13 @@ void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 		Cast<UFrontEndButtonBase>(SettingsTabList->GetTabButtonBaseByID(SettingsTabList->GetActiveTab()));
 	CHECK_NULL_RETURN(TabButtonBase);
 	
+	const FText& ResetTabSettingsHintFormat = 
+		GET_UN_ASSORTED_FOR_KEY(SYMBOL_NAME_STR(ResetTabSettingsHintFormat));
 	UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
 		EConfirmScreenType::YesNo,
-		FText::FromString(TEXT("Reset")),
-		FText::FromString(TEXT("Are you sure you want to reset all settings in this ")
-			+ TabButtonBase->GetButtonText().ToString() 
-			+ TEXT(" tab to default values?")),[this](const EConfirmScreenButtonType ConfirmScreenButtonType)
+		GET_UN_ASSORTED_FOR_KEY("ResetTabSettingsTitle"), 
+		FText::Format(ResetTabSettingsHintFormat,TabButtonBase->GetButtonText()),
+		[this](const EConfirmScreenButtonType ConfirmScreenButtonType)
 			{
 				if (ConfirmScreenButtonType != EConfirmScreenButtonType::Confirmed)
 				{

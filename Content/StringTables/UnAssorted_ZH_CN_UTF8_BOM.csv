@@ -1,8 +1,23 @@
 ﻿Key,SourceString
 PressAnyKey,按任意键
-Notice,注意
+ConfirmationTitle,请注意
 ,
 QuitGameHint,您确定要退出游戏吗？
 ,
 DisplayLanguageTagSettingDescriptionKey,
 DisplayLanguageTagSettingNameKey,显示语言
+,
+Sorry,很抱歉
+StillInDevelopment,游戏的这部分还在开发中
+,
+KeyBindingCanNotResetToDefaultValueTitle,重置按键绑定
+KeyBindingCanNotResetToDefaultValueHint,此按键绑定已重置为默认值，或者没有默认值
+,
+KeyBindingRemapTitle,关于按键绑定
+Key map has been canceled by pressing Escape.,按下ESC后，按键重绑定已取消
+"Expecting MouseAndKeyboard key pressed but pressedKey type is not MouseAndKeyboard, key remap canceled.",正在进行键盘或鼠标的按键重绑定，但实际按下的键类型不是键盘或鼠标，按键重绑定已取消
+"Expecting Gamepad key pressed but pressedKey type is not Gamepad, key remap canceled.",正在进行手柄的按键重绑定，但实际按下的键类型不是手柄，按键重绑定已取消
+"Unsupported key pressed, key remap canceled.",按下了不支持的按键，按键重绑定已取消
+,
+ResetTabSettingsHintFormat,您确定要重置这个 {0} 页面上的所有设置项吗？
+ResetTabSettingsTitle,重置设置

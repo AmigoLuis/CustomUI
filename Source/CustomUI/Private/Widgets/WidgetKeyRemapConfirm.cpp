@@ -34,6 +34,7 @@ void UWidgetKeyRemapConfirm::NativeOnActivated()
 		InputDeviceName = TEXT("Unknown Device");
 		break;
 	}
+	// TODO:改成从string table获取文本
 	const FString& DefaultHintString = TEXT("<KeyRemapDefault>Press any</> <KeyRemapHighlight>") + 
 		InputDeviceName + TEXT("</> <KeyRemapDefault>key</>");
 	RemapKeyDescriptionRichText->SetText(FText::FromString(DefaultHintString));
