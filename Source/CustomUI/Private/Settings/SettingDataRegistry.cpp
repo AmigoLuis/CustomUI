@@ -546,7 +546,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 				const auto Profile = KeyMapping.Value;
 				if (Profile == nullptr) continue;
 				for (const auto& MappingRow : Profile->GetPlayerMappingRows())
-				{
+				{// TODO:这里可能导致顺序不确定，两次启动时，按键绑定的顺序可能不一致
 					for (const auto& RowKeyMapping : MappingRow.Value.Mappings)
 					{
 						const FString* MappingTypePtr = &UnknownMappingType;
