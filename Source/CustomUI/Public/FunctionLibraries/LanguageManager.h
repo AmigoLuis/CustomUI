@@ -16,9 +16,6 @@ struct FLanguageInfo
 class CUSTOMUI_API FLanguageManager
 {
 public:
-	// TODO:1根据用户的操作系统语言，设置默认语言
-	// TODO:2列举出所有可用的语言
-	// TODO:3运行时设置当前使用的语言
 	static FLanguageManager& Get();
 	const TArray<FLanguageInfo>& GetAvailableLanguageInfo(const bool bForceRefresh = false);
 	void ChangeLanguage(FString LanguageTagToSet);

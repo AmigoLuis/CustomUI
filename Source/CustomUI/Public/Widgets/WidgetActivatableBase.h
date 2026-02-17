@@ -17,6 +17,18 @@ class CUSTOMUI_API UWidgetActivatableBase : public UCommonActivatableWidget
 protected:
 	UFUNCTION(BlueprintPure)
 	AFrontEndPlayerController* GetOwningFrontEndPlayerController();
+	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	bool bShowClickActionBinding = true;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	bool bShowBackActionBinding = true;
+	FUIActionBindingHandle BackActionHandle;
+	FUIActionBindingHandle ClickActionHandle;
+	// UUserWidget
+	virtual void NativeOnInitialized() override;
+	// UUserWidget
+	virtual void HandleDefaultClickAction();
+	virtual void HandleDefaultBackAction();
 private:
 	TWeakObjectPtr<AFrontEndPlayerController> CachedOwningFrontEndPC;
 };

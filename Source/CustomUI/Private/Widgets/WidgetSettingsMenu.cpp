@@ -22,12 +22,6 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
-		ICommonInputModule::GetSettings().GetDefaultBackAction(), true,
-		FSimpleDelegate::CreateUObject(
-			this, 
-			&UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu)));
-
 	CHECK_BOOL_TRUE_RETURN_WARNING(ResetAction.IsNull());
 	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
 		ResetAction, true,
@@ -122,12 +116,6 @@ void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 				this->bIsResettingData = false;
 			});
 	
-}
-
-void UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu()
-{
-	PrintInLog(TEXT("Back Action Triggered from Settings Menu"), Display);
-	DeactivateWidget();
 }
 
 FString UWidgetSettingsMenu::TryGetEntryWidgetClassName(UObject* InOwningListItem) const

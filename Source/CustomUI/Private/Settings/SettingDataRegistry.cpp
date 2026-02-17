@@ -31,8 +31,6 @@
 // TODO:实现多语言，国际化（doing）
 // TODO:实现可扩展的消息通知widget
 // TODO:在通过键盘导航时，暂时消除鼠标，防止在循环导航时，如果list过长导致触发scroll to select index。鼠标刚好在触发悬浮的范围内的话，就会触发悬浮，影响details view里面展示的内容
-// TODO:实现根据用户操作系统语言设置默认语言
-// TODO:实现语言切换项设置
 
 #define DESCRIPTION_SUFFIX TEXT("SettingDescriptionKey")
 #define NAME_SUFFIX TEXT("SettingNameKey")
