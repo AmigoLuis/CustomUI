@@ -23,11 +23,13 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 	Super::NativeOnInitialized();
 
 	CHECK_BOOL_TRUE_RETURN_WARNING(ResetAction.IsNull());
-	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
+	FBindUIActionArgs ResetActionArgs = FBindUIActionArgs(
 		ResetAction, true,
 		FSimpleDelegate::CreateUObject(
 			this, 
-			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu)));
+			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu));
+	ResetActionArgs.OverrideDisplayName = GET_UN_ASSORTED_FOR_KEY("ResetAction");
+	ResetActionHandle = RegisterUIActionBinding(ResetActionArgs);
 	
 	SettingsTabList->OnTabSelected.AddUniqueDynamic(
 		this, &UWidgetSettingsMenu::OnTabSelectedInSettingsMenu);

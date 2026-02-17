@@ -21,3 +21,4 @@ Key map has been canceled by pressing Escape.,按下ESC后，按键重绑定已�
 ,
 ResetTabSettingsHintFormat,您确定要重置这个 {0} 页面上的所有设置项吗？
 ResetTabSettingsTitle,重置设置
+ResetAction,重置

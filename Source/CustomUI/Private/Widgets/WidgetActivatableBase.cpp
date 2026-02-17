@@ -8,6 +8,7 @@
 #include "PlayerController/FrontEndPlayerController.h"
 #include "Input/CommonUIInputTypes.h"
 #include "UILogger.h"
+#include "Widgets/StringTableLocations.h"
 
 AFrontEndPlayerController* UWidgetActivatableBase::GetOwningFrontEndPlayerController()
 {
@@ -26,19 +27,23 @@ void UWidgetActivatableBase::NativeOnInitialized()
 	
 	if (bShowClickActionBinding)
 	{
-		ClickActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
+		FBindUIActionArgs ClickActionArgs = FBindUIActionArgs(
 			ICommonInputModule::GetSettings().GetDefaultClickAction(), true,
 			FSimpleDelegate::CreateUObject(
 				this, 
-				&UWidgetActivatableBase::HandleDefaultClickAction)));
+				&UWidgetActivatableBase::HandleDefaultClickAction));
+		ClickActionArgs.OverrideDisplayName = GET_MAIN_MENU_FOR_KEY("ClickAction");
+		ClickActionHandle = RegisterUIActionBinding(ClickActionArgs);
 	}
 	if (bShowBackActionBinding)
 	{
-		BackActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
+		FBindUIActionArgs BackActionArgs = FBindUIActionArgs(
 			ICommonInputModule::GetSettings().GetDefaultBackAction(), true,
 			FSimpleDelegate::CreateUObject(
 				this, 
-				&UWidgetActivatableBase::HandleDefaultBackAction)));
+				&UWidgetActivatableBase::HandleDefaultBackAction));
+		BackActionArgs.OverrideDisplayName = GET_MAIN_MENU_FOR_KEY("BackAction");
+		BackActionHandle = RegisterUIActionBinding(BackActionArgs);
 	}
 
 }
