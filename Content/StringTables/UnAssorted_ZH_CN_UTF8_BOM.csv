@@ -27,3 +27,10 @@ KeyRemapHint,<KeyRemapDefault>按下任意</> <KeyRemapHighlight>{0}</> <KeyRema
 Mouse and Keyboard,键盘或鼠标
 Gamepad,手柄
 Unknown Device,未知设备
+,
+Loading,加载中
+Waiting For Texture Streaming,等待纹理流送完成
+Loading Level,正在加载关卡
+Initializing World,正在初始化世界
+World hasn't begun play yet,世界尚未开始运行
+Player Controller isn't valid yet,玩家控制器尚未生效

@@ -48,6 +48,12 @@ void FLanguageManager::ChangeLanguage(FString LanguageTagToSet)
 	// LanguageTagToSet 传入类似 "en", "zh-Hans", "ja"
 	CurrentLanguageName = LanguageTagToSet;
 	UKismetInternationalizationLibrary::SetCurrentCulture(LanguageTagToSet, true);
+	// 如果没保存设置的语言，就保存到用户设置
+	UFrontendGameUserSettings* FrontendGameUserSettings = UFrontendGameUserSettings::Get();
+	if (!FrontendGameUserSettings->GetDisplayLanguageTag().Equals(CurrentLanguageName))
+	{
+		FrontendGameUserSettings->SetDisplayLanguageTag(CurrentLanguageName);
+	}	
 	PrintInLogDisplay(FString::Format(TEXT("Language changed to: {0} ."), 
 		{LanguageTagToSet}));
 }
