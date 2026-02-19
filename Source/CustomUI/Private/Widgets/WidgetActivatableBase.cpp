@@ -35,7 +35,7 @@ void UWidgetActivatableBase::NativeOnInitialized()
 		ClickActionArgs.OverrideDisplayName = GET_MAIN_MENU_FOR_KEY("ClickAction");
 		ClickActionHandle = RegisterUIActionBinding(ClickActionArgs);
 	}
-	if (bShowBackActionBinding)
+	if (bShowBackActionBinding && !bIsBackHandler)
 	{
 		FBindUIActionArgs BackActionArgs = FBindUIActionArgs(
 			ICommonInputModule::GetSettings().GetDefaultBackAction(), true,
