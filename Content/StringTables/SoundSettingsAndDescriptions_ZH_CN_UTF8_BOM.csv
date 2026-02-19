@@ -15,3 +15,6 @@ AllowBackgroundMusicSettingNameKey,允许后台音频
 ,
 AllowBackgroundMusicSettingValue1,允许
 AllowBackgroundMusicSettingValue2,不允许
+,
+VolumeCategory,音量设置
+OtherSoundCategory,其他声音设置

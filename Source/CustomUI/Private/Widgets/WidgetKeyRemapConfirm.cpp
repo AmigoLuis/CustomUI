@@ -8,6 +8,7 @@
 #include "CommonRichTextBlock.h"
 #include "UILogger.h"
 #include "FunctionLibraries/KeyRemapInputProcessor.h"
+#include "Widgets/StringTableLocations.h"
 
 void UWidgetKeyRemapConfirm::NativeOnActivated()
 {
@@ -21,22 +22,21 @@ void UWidgetKeyRemapConfirm::NativeOnActivated()
 		this, &UWidgetKeyRemapConfirm::OnKeySelectCanceled);
 	FSlateApplication::Get().RegisterInputPreProcessor(CachedKeyRemapInputProcessor, -1);
 	
-	FString InputDeviceName;
+	FString InputDeviceNameKey;
 	switch (CurrentInputTypeToListen)
 	{
 	case ECommonInputType::MouseAndKeyboard:
-		InputDeviceName = TEXT("Mouse and Keyboard");
+		InputDeviceNameKey = TEXT("Mouse and Keyboard");
 		break;
 	case ECommonInputType::Gamepad:
-		InputDeviceName = TEXT("Gamepad");
+		InputDeviceNameKey = TEXT("Gamepad");
 		break;
 	default:
-		InputDeviceName = TEXT("Unknown Device");
+		InputDeviceNameKey = TEXT("Unknown Device");
 		break;
 	}
-	const FString& DefaultHintString = TEXT("<KeyRemapDefault>Press any</> <KeyRemapHighlight>") + 
-		InputDeviceName + TEXT("</> <KeyRemapDefault>key</>");
-	RemapKeyDescriptionRichText->SetText(FText::FromString(DefaultHintString));
+	RemapKeyDescriptionRichText->SetText(FText::Format(GET_UN_ASSORTED_FOR_KEY("KeyRemapHint"), 
+		GET_UN_ASSORTED_FOR_KEY_DIRECT(InputDeviceNameKey)));
 }
 
 void UWidgetKeyRemapConfirm::OnValidKeyDown(const FKey& PressedKey)

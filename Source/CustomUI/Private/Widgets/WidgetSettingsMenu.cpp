@@ -14,6 +14,7 @@
 #include "Settings/DataObjects/ListSettingDataObjectCollection.h"
 #include "Settings/ListEntry/ListEntryWidgetBase.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
+#include "Widgets/StringTableLocations.h"
 #include "Widgets/Components/FrontEndCommonListView.h"
 #include "Widgets/Components/FrontEndTabListWidgetBase.h"
 
@@ -21,18 +22,14 @@ void UWidgetSettingsMenu::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
-		ICommonInputModule::GetSettings().GetDefaultBackAction(), true,
-		FSimpleDelegate::CreateUObject(
-			this, 
-			&UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu)));
-
 	CHECK_BOOL_TRUE_RETURN_WARNING(ResetAction.IsNull());
-	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(
+	FBindUIActionArgs ResetActionArgs = FBindUIActionArgs(
 		ResetAction, true,
 		FSimpleDelegate::CreateUObject(
 			this, 
-			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu)));
+			&UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu));
+	ResetActionArgs.OverrideDisplayName = GET_UN_ASSORTED_FOR_KEY("ResetAction");
+	ResetActionHandle = RegisterUIActionBinding(ResetActionArgs);
 	
 	SettingsTabList->OnTabSelected.AddUniqueDynamic(
 		this, &UWidgetSettingsMenu::OnTabSelectedInSettingsMenu);
@@ -85,12 +82,13 @@ void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 		Cast<UFrontEndButtonBase>(SettingsTabList->GetTabButtonBaseByID(SettingsTabList->GetActiveTab()));
 	CHECK_NULL_RETURN(TabButtonBase);
 	
+	const FText& ResetTabSettingsHintFormat = 
+		GET_UN_ASSORTED_FOR_KEY(SYMBOL_NAME_STR(ResetTabSettingsHintFormat));
 	UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
 		EConfirmScreenType::YesNo,
-		FText::FromString(TEXT("Reset")),
-		FText::FromString(TEXT("Are you sure you want to reset all settings in this ")
-			+ TabButtonBase->GetButtonText().ToString() 
-			+ TEXT(" tab to default values?")),[this](const EConfirmScreenButtonType ConfirmScreenButtonType)
+		GET_UN_ASSORTED_FOR_KEY("ResetTabSettingsTitle"), 
+		FText::Format(ResetTabSettingsHintFormat,TabButtonBase->GetButtonText()),
+		[this](const EConfirmScreenButtonType ConfirmScreenButtonType)
 			{
 				if (ConfirmScreenButtonType != EConfirmScreenButtonType::Confirmed)
 				{
@@ -120,12 +118,6 @@ void UWidgetSettingsMenu::OnResetActionTriggeredInSettingsMenu()
 				this->bIsResettingData = false;
 			});
 	
-}
-
-void UWidgetSettingsMenu::OnBackActionTriggeredInSettingsMenu()
-{
-	PrintInLog(TEXT("Back Action Triggered from Settings Menu"), Display);
-	DeactivateWidget();
 }
 
 FString UWidgetSettingsMenu::TryGetEntryWidgetClassName(UObject* InOwningListItem) const

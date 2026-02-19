@@ -45,4 +45,5 @@ public:
 		const TFunction<void(EConfirmScreenButtonType)>& ConfirmCallback);
 	UPROPERTY(BlueprintAssignable)
 	FOnButtonDescriptionUpdatedDelegate OnButtonDescriptionUpdatedDelegate;
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 };

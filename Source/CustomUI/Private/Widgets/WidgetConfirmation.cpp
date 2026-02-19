@@ -10,9 +10,10 @@
 #include "Widgets/Components/FrontEndButtonBase.h"
 #include "ICommonInputModule.h"
 #include "PrintInLog.h"
+#include "Widgets/StringTableLocations.h"
 
 UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateConfirmWidget(const FText& Title, const FText& Message, 
-                                                                          const EConfirmScreenType ConfirmationWidgetType)
+                                                                        const EConfirmScreenType ConfirmationWidgetType)
 {
 	UConfirmWidgetInfoObject* InfoObject = NewObject<UConfirmWidgetInfoObject>();
 	InfoObject->WidgetTitle = Title;
@@ -21,7 +22,7 @@ UConfirmWidgetInfoObject* UConfirmWidgetInfoObject::CreateConfirmWidget(const FT
 	if (ConfirmationWidgetType == EConfirmScreenType::OK)
 	{
 		FConfirmWidgetButtonInfo ButtonInfo;
-		ButtonInfo.ButtonText = FText::FromString(TEXT("OK"));
+		ButtonInfo.ButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("OK"));
 		ButtonInfo.ConfirmationChoiceType = EConfirmScreenButtonType::Closed;
 		InfoObject->AvailableButtonsInfo.Add(ButtonInfo);
 	}
@@ -60,16 +61,16 @@ void UConfirmWidgetInfoObject::FillButtonTextBasedOnEConfirmationWidgetType(
 	switch (ConfirmationWidgetType)
 	{
 	case EConfirmScreenType::YesNo:
-		InConfirmButtonText = FText::FromString(TEXT("Yes"));
-		InCancelButtonText = FText::FromString(TEXT("No"));
+		InConfirmButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("Yes"));
+		InCancelButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("No"));
 		return;
 	case EConfirmScreenType::OkCancel:
-		InConfirmButtonText = FText::FromString(TEXT("OK"));
-		InCancelButtonText = FText::FromString(TEXT("Cancel"));
+		InConfirmButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("OK"));
+		InCancelButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("Cancel"));
 		return;
 	case EConfirmScreenType::AcceptDecline:
-		InConfirmButtonText = FText::FromString(TEXT("Accept"));
-		InCancelButtonText = FText::FromString(TEXT("Decline"));
+		InConfirmButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("Accept"));
+		InCancelButtonText = GET_MAIN_MENU_FOR_KEY_DIRECT(TEXT("Decline"));
 		return;
 	default:
 		PrintInLog(TEXT("can not fill button text for CreateConfirmWidgetType: ") +

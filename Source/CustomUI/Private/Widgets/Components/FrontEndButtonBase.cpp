@@ -10,20 +10,26 @@
 #include "PrintInLog.h"
 #include "UILogger.h"
 #include "Subsystems/UIGameInstanceSubsystem.h"
+#include "Widgets/StringTableLocations.h"
 
 void UFrontEndButtonBase::SetButtonText(FText NewButtonText)
 {
 	if (ButtonTextBlock == nullptr)
 	{
-		PrintInLog(SYMBOL_NAME_TEXT(ButtonTextBlock) TEXT(" is nullptr ") IN_FUNC_AND_LINE, VeryVerbose);
+		PrintInLogVerbose(SYMBOL_NAME_TEXT(ButtonTextBlock) TEXT(" is nullptr ") IN_FUNC_AND_LINE);
 		return;
 	}
 	if (NewButtonText.IsEmpty())
 	{
-		PrintInLog(TEXT("Can't set empty text to button."), Warning);
+		PrintInLogVerbose(TEXT("Can't set empty text to button."));
 		return;
 	}
 	ButtonTextBlock->SetText(bUseUpperCaseForButtonText ? NewButtonText.ToUpper() : NewButtonText);
+}
+
+void UFrontEndButtonBase::SetButtonTextByKey(const FString& ButtonTextKey)
+{
+	 SetButtonText(GET_MAIN_MENU_FOR_KEY_DIRECT(ButtonTextKey));
 }
 
 FText UFrontEndButtonBase::GetButtonText() const
@@ -46,10 +52,12 @@ void UFrontEndButtonBase::BroadcastUpdatedButtonDescription(const bool bNotBroad
 	}
 	else
 	{
-		if (!ButtonTooltipText.IsEmpty()) // 这里是空就不广播了，会不会导致文本未更新的问题？
+		const FText& ButtonTooltipTextFromStringTable = GET_MAIN_MENU_FOR_KEY_DIRECT(ButtonTooltipTextKey);
+		if (!ButtonTooltipTextFromStringTable.IsEmpty()) // 这里是空就不广播了，会不会导致文本未更新的问题？
 		{
 			UUIGameInstanceSubsystem::Get(this)->
-				OnButtonDescriptionUpdatedDelegate.Broadcast(this, ButtonTooltipText);
+				OnButtonDescriptionUpdatedDelegate.Broadcast(this, 
+					ButtonTooltipTextFromStringTable);
 		}
 	}
 }
@@ -77,7 +85,7 @@ void UFrontEndButtonBase::ForceHoverState(bool bIsHovered)
 void UFrontEndButtonBase::NativePreConstruct()
 {
 	Super::NativePreConstruct();
-	SetButtonText(ButtonDisplayText);
+	SetButtonTextByKey(ButtonDisplayTextKey);
 }
 
 void UFrontEndButtonBase::NativeOnCurrentTextStyleChanged()

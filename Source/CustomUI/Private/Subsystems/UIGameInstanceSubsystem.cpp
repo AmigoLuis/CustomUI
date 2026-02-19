@@ -7,6 +7,7 @@
 #include "FrontEndGameplayTags.h"
 #include "UILogger.h"
 #include "Engine/AssetManager.h"
+#include "FunctionLibraries/LanguageManager.h"
 #include "FunctionLibraries/UIFunctionLibrary.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 #include "Widgets/WidgetActivatableBase.h"
@@ -100,5 +101,12 @@ void UUIGameInstanceSubsystem::PushConfirmWidgetToModalStackAsync(
 				ConfirmWidget->InitializeConfirmWidget(ConfirmWidgetInfoObject, ConfirmCallback);
 			}
 		});
+}
+
+void UUIGameInstanceSubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+	FLanguageManager& LanguageManager = FLanguageManager::Get();
+	LanguageManager.TrySetDefaultLanguage();
 }
 

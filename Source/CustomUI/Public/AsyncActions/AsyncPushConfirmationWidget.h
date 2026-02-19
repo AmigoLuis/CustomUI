@@ -21,12 +21,24 @@ public:
 		WorldContext = "WorldContextObject", 
 		HidePin = "WorldContextObject",
 		BlueprintInternalUseOnly = "true"
-		), DisplayName="Push Confirmation Widget To Stack  Async")
+		), DisplayName="Push Confirmation Widget To Stack Async")
 	static UAsyncPushConfirmationWidget* PushConfirmWidgetToStackAsync(
 		const UObject* WorldContextObject,
 		const EConfirmScreenType ConfirmScreenType,
-		const FText& InTitleText,
-		const FText& InMessageText);
+		const FString& InTitleTextKeyInSt,
+		const FString& InMessageTextKeyInSt);
+	
+	UFUNCTION(BlueprintCallable, meta = (
+		WorldContext = "WorldContextObject", 
+		HidePin = "WorldContextObject",
+		BlueprintInternalUseOnly = "true"
+		), DisplayName="Push Confirmation Widget To Stack Async With Full Parameter")
+	static UAsyncPushConfirmationWidget* PushConfirmWidgetToStackAsyncWithFullParameter(
+		const UObject* WorldContextObject,
+		const EConfirmScreenType ConfirmScreenType,
+		const FString& InTitleTextKeyInSt,
+		const FString& InMessageTextKeyInSt,
+		const FName& StringTableID);
 	UPROPERTY(BlueprintAssignable)
 	FOnConfirmWidgetButtonClickedDelegate OnConfirmWidgetButtonClicked;
 		

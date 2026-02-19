@@ -15,7 +15,7 @@ class CUSTOMUI_API ULoadingScreenInstanceSubsystem : public UGameInstanceSubsyst
 	GENERATED_BODY()
 
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLoadingReasonUpdatedDelegate, const FString&, CurrentLoadingReason);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLoadingReasonUpdatedDelegate, const FString&, CurrentLoadingReasonKey);
 	UPROPERTY(BlueprintAssignable)
 	FOnLoadingReasonUpdatedDelegate OnLoadingReasonUpdated;
 	// USubsystem
@@ -44,6 +44,6 @@ private:
 	
 	bool bIsLoadingMap = false;
 	float HoldLoadingScreenStartUpTime = -1.0f;
-	FString CurrentLoadingReason;
+	FString CurrentLoadingReasonKey;
 	TSharedPtr<SWidget> CachedCreatedLoadingScreen;
 };

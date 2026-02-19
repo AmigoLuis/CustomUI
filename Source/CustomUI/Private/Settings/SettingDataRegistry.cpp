@@ -20,26 +20,24 @@
 #include "Settings/DataObjects/SettingDataEditConditionDetail.h"
 #include "EnhancedInputSubsystems.h"
 #include "LogMacros.h"
+#include "FunctionLibraries/LanguageManager.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 #include "Settings/DataObjects/ListSettingDataObjectKeyRemap.h"
 #include "Widgets/StringTableLocations.h"
 
-// TODO:ui中没有点击提示但是有back提示，应该实现点击提示
 // TODO:ui中鼠标应该额外添加一个back action就是鼠标右键，不然用鼠标左键click但是又要用键盘的esc返回，比较割裂
 // TODO:将所有显示的文本都通过StringTable管理，复用成功经验
-// TODO:实现多语言，国际化（doing）
+// TODO:实现多语言，国际化（doing），目前发现游戏中切换语言正常，但是在game instance里面设置语言不生效
 // TODO:实现可扩展的消息通知widget
 // TODO:在通过键盘导航时，暂时消除鼠标，防止在循环导航时，如果list过长导致触发scroll to select index。鼠标刚好在触发悬浮的范围内的话，就会触发悬浮，影响details view里面展示的内容
-// TODO:实现根据用户操作系统语言设置默认语言
-// TODO:实现语言切换项设置
-# define GET_DESCRIPTION_FOR_KEY(KeyString) \
-LOCTABLE("/Game/StringTables/ST_SettingMenuDescription.ST_SettingMenuDescription", KeyString)
 
 #define DESCRIPTION_SUFFIX TEXT("SettingDescriptionKey")
 #define NAME_SUFFIX TEXT("SettingNameKey")
+#define CATEGORY_SUFFIX TEXT("Category")
 #define SETTING_VALUE_KEY(SettingName, ValueIndex) \
 	SYMBOL_NAME_STR(SettingName) TEXT("SettingValue") INT_TO_STR(ValueIndex)
-#define SETTING_DISABLED_REASON(SettingName) SYMBOL_NAME_STR(SettingName) TEXT("SettingDisabledReason") 
+#define SETTING_DISABLED_REASON(SettingName) SYMBOL_NAME_STR(SettingName) TEXT("SettingDisabledReason")
+#define VIDEO_SETTING_DESCRIPTION_KEY(LevelInt) "GeneralVideoSettingDescription" INT_TO_STR(LevelInt)
 
 void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPlayer)
 {
@@ -52,22 +50,23 @@ void USettingDataRegistry::InitSettingDataRegistry(ULocalPlayer* InOwningLocalPl
 #undef INIT_COLLECTION_TAB
 #define INIT_COLLECTION_TAB(CollectionName) \
 UListSettingDataObjectCollection* CollectionName = NewObject<UListSettingDataObjectCollection>();\
-CollectionName->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)TEXT("Collection")));\
-CollectionName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(CollectionName)));\
+CollectionName->SetDataID(FName(SYMBOL_NAME_TEXT(CollectionName)));\
+CollectionName->SetDataDisplayName(GET_MAIN_MENU_FOR_KEY(SYMBOL_NAME_STR(CollectionName)));\
 RegisteredSettingsCollectionTabs.Add(CollectionName);
 
 #undef INIT_CHILD_STRING_DATA_AND_SET_ID_NAME
-#define INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(ChileName) \
+#define INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(ChileName, StringTableLocation) \
 UListSettingDataObjectString* ChileName = NewObject<UListSettingDataObjectString>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));\
+ChileName->SetDataDisplayName(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) NAME_SUFFIX));\
+ChileName->SetDescriptionRichText(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) DESCRIPTION_SUFFIX));\
 ChileName->SetbShouldApplySettingChangeImmediately(true);
 
 #undef INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME
-#define INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(ChileName) \
+#define INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(ChileName, StringTableLocation) \
 UListSettingDataObjectCollection* ChileName = NewObject<UListSettingDataObjectCollection>();\
 ChileName->SetDataID(FName(SYMBOL_NAME_TEXT(ChileName)));\
-ChileName->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ChileName)));
+ChileName->SetDataDisplayName(GET_VALUE_FOR_KEY_FROM_ST(StringTableLocation, SYMBOL_NAME_STR(ChileName) CATEGORY_SUFFIX));
 
 #undef INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME
 #define INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChileName, StringTableLocation) \
@@ -141,38 +140,55 @@ TArray<UListSettingDataObjectBase*> USettingDataRegistry::GetListSourceItemsBySe
 
 void USettingDataRegistry::InitGamePlayCollectionTab()
 {
-	INIT_COLLECTION_TAB(Gameplay);
-	INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(Difficulty);
-	ADD_CHILD_SETTING_NAME(Difficulty, Easy);
-	ADD_CHILD_SETTING_NAME(Difficulty, Normal);
-	ADD_CHILD_SETTING_NAME(Difficulty, Hard);
-	SET_CHILD_DEFAULT_VALUE_FROM_STRING(Difficulty, Normal);
-	ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
-	Difficulty->SetDescriptionRichText(FText::FromString(TEXT("Adjusts the difficulty of the game experience.\n\n"
-	"<Bold>Easy:</> Focuses on the story experience. Provides the most relaxing combat.\n\n"
-	"<Bold>Normal:</> Offers slightly harder combat experience\n\n"
-	"<Bold>Hard:</> Offers a much more challenging combat experience\n\n"
-	"<Bold>Vert Hard:</> Provides the most challenging combat experience. Not recommended for first play through.")));
-	ADD_CHILD_TO_COLLECTION(Difficulty, Gameplay);
+	INIT_COLLECTION_TAB(GameplayCollection);
+	// Difficulty
+	{
+		INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(Difficulty, ST_UN_ASSORTED);
+		ADD_CHILD_SETTING_NAME(Difficulty, Easy);
+		ADD_CHILD_SETTING_NAME(Difficulty, Normal);
+		ADD_CHILD_SETTING_NAME(Difficulty, Hard);
+		SET_CHILD_DEFAULT_VALUE_FROM_STRING(Difficulty, Normal);
+		ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(Difficulty);
+		Difficulty->SetDescriptionRichText(FText::FromString(TEXT("Adjusts the difficulty of the game experience.\n\n"
+		"<Bold>Easy:</> Focuses on the story experience. Provides the most relaxing combat.\n\n"
+		"<Bold>Normal:</> Offers slightly harder combat experience\n\n"
+		"<Bold>Hard:</> Offers a much more challenging combat experience\n\n"
+		"<Bold>Vert Hard:</> Provides the most challenging combat experience. Not recommended for first play through.")));
+		ADD_CHILD_TO_COLLECTION(Difficulty, GameplayCollection);
+	}
+	//AutoSave
+	{
+		INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(AutoSave, ST_UN_ASSORTED);
+		ADD_CHILD_SETTING_NAME(AutoSave, On);
+		ADD_CHILD_SETTING_NAME(AutoSave, Off);
+		AutoSave->SetSoftDescriptionImage(UUIFunctionLibrary::GetSoftImageByTagFromSettings(
+			FrontEndGameplayTags::FrontEnd_Image_SettingsMenuDetailTest));
+		AutoSave->SetDescriptionRichText(FText::FromString(
+			TEXT("The image to display can be specified in the project settings."
+				" It can be anything the developer assigned in there")));
+		ADD_CHILD_TO_COLLECTION(AutoSave, GameplayCollection);
+	}
 	
-	INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(AutoSave);
-	ADD_CHILD_SETTING_NAME(AutoSave, On);
-	ADD_CHILD_SETTING_NAME(AutoSave, Off);
-	AutoSave->SetSoftDescriptionImage(UUIFunctionLibrary::GetSoftImageByTagFromSettings(
-		FrontEndGameplayTags::FrontEnd_Image_SettingsMenuDetailTest));
-	AutoSave->SetDescriptionRichText(FText::FromString(
-		TEXT("The image to display can be specified in the project settings."
-	   " It can be anything the developer assigned in there")));
-	ADD_CHILD_TO_COLLECTION(AutoSave, Gameplay);
+	{
+		INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(DisplayLanguageTag, ST_UN_ASSORTED);
+		for (const auto& AvailableLanguageInfo = 
+			FLanguageManager::Get().GetAvailableLanguageInfo(); 
+			const auto& [LanguageTag, LanguageDisplayName] : AvailableLanguageInfo)
+		{
+			DisplayLanguageTag->AddSettingEntry(LanguageTag, FText::FromString(LanguageDisplayName));
+		}
+		ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(DisplayLanguageTag);
+		ADD_CHILD_TO_COLLECTION(DisplayLanguageTag, GameplayCollection);
+	}
 }
 
 void USettingDataRegistry::InitAudioCollectionTab()
 {
-	INIT_COLLECTION_TAB(Audio);
+	INIT_COLLECTION_TAB(AudioCollection);
 	// Volume
 	{
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Volume);
-		ADD_CHILD_TO_COLLECTION(Volume, Audio);
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Volume, ST_SOUND_SETTINGS);
+		ADD_CHILD_TO_COLLECTION(Volume, AudioCollection);
 #define ADD_VOLUME_CHILD(ChildName) \
 INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(ChildName, ST_SOUND_SETTINGS);\
 ChildName->SetDisplayValueRange(TRange<float>(0.0f, 1.0f));\
@@ -205,10 +221,10 @@ ADD_CHILD_TO_COLLECTION(ChildName, Volume);\
 			ADD_VOLUME_CHILD(AmbientVolume)
 		}
 	}
-	// Sound 
+	// OtherSound 
 	{
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Sound);
-		ADD_CHILD_TO_COLLECTION(Sound, Audio);
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(OtherSound, ST_SOUND_SETTINGS);
+		ADD_CHILD_TO_COLLECTION(OtherSound, AudioCollection);
 		// Allow Background Music
 		{
 			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(AllowBackgroundMusic, ST_SOUND_SETTINGS);
@@ -218,7 +234,7 @@ ADD_CHILD_TO_COLLECTION(ChildName, Volume);\
 				GET_SOUND_SETTING_FOR_KEY(SETTING_VALUE_KEY(AllowBackgroundMusic, 2)));
 			AllowBackgroundMusic->SetTrueAsDefaultValue();
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AllowBackgroundMusic);
-			ADD_CHILD_TO_COLLECTION(AllowBackgroundMusic, Sound);
+			ADD_CHILD_TO_COLLECTION(AllowBackgroundMusic, OtherSound);
 		}
 	}
 }
@@ -227,11 +243,26 @@ ADD_CHILD_TO_COLLECTION(ChildName, Volume);\
 void USettingDataRegistry::InitVideoCollectionTab()
 {
 	UListSettingDataObjectStringEnum* CachedFullscreenMode;
-	INIT_COLLECTION_TAB(Video);
+	INIT_COLLECTION_TAB(VideoCollection);
 	// Display Category
 	{
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Display);
-		ADD_CHILD_TO_COLLECTION(Display, Video);
+#define VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(SettingName) \
+	SettingName->SetDataDisplayName(\
+		GET_VIDEO_SETTING_FOR_KEY(SYMBOL_NAME_STR(SettingName) NAME_SUFFIX));\
+	SettingName->SetDescriptionRichText(\
+		GET_VIDEO_SETTING_FOR_KEY(SYMBOL_NAME_STR(SettingName) DESCRIPTION_SUFFIX));\
+	SettingName->AddIntegerSetting(0, \
+		GET_VIDEO_SETTING_FOR_KEY(VIDEO_SETTING_DESCRIPTION_KEY(0)));\
+	SettingName->AddIntegerSetting(1, \
+		GET_VIDEO_SETTING_FOR_KEY(VIDEO_SETTING_DESCRIPTION_KEY(1)));\
+	SettingName->AddIntegerSetting(2, \
+		GET_VIDEO_SETTING_FOR_KEY(VIDEO_SETTING_DESCRIPTION_KEY(2)));\
+	SettingName->AddIntegerSetting(3, \
+		GET_VIDEO_SETTING_FOR_KEY(VIDEO_SETTING_DESCRIPTION_KEY(3)));\
+	SettingName->AddIntegerSetting(4, \
+		GET_VIDEO_SETTING_FOR_KEY(VIDEO_SETTING_DESCRIPTION_KEY(4)));
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Display, ST_VIDEO_SETTINGS);
+		ADD_CHILD_TO_COLLECTION(Display, VideoCollection);
 		
 		FSettingDataEditConditionDetail PackageBuildOnly;
 		PackageBuildOnly.SetEditCondition([]()
@@ -243,6 +274,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 				{DISABLED_RICH_TEXT_STYLE}));
 		// Fullscreen Mode
 		{
+			// TODO:这个好像没生效，都是全屏，没看出来有区别
 			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode, ST_VIDEO_SETTINGS);
 			FullscreenMode->AddEnumOption(EWindowMode::Fullscreen, 
 				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FullscreenMode, 1)));
@@ -260,8 +292,10 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{
 			UListSettingDataObjectResolution* ScreenResolution = NewObject<UListSettingDataObjectResolution>();
 			ScreenResolution->SetDataID(FName(SYMBOL_NAME_TEXT(ScreenResolution)));
-			ScreenResolution->SetDataDisplayName(FText::FromString(SYMBOL_NAME_TEXT(ScreenResolution)));
-			ScreenResolution->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("ScreenResolutionsDescKey"));
+			ScreenResolution->SetDataDisplayName(
+				GET_VIDEO_SETTING_FOR_KEY(SYMBOL_NAME_STR(ScreenResolution) NAME_SUFFIX));
+			ScreenResolution->SetDescriptionRichText(
+				GET_VIDEO_SETTING_FOR_KEY(SYMBOL_NAME_STR(ScreenResolution) DESCRIPTION_SUFFIX));
 			ScreenResolution->InitResolutionValue();
 			ScreenResolution->SetbShouldApplySettingChangeImmediately(true);
 			ScreenResolution->AddEditCondition(PackageBuildOnly);
@@ -273,10 +307,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 					!= EWindowMode::WindowedFullscreen;
 			});
 			BasedOnWindowMode.SetDisabledRichReason(
-				FString::Format(TEXT("\n\n<{0}>The screen resolution is not editable "
-						 "when fullscreen mode is borderless full screen, "
-						 "the screen resolution must match maximum supported resolution.</>"), 
-					{DISABLED_RICH_TEXT_STYLE}));
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_DISABLED_REASON(BasedOnWindowMode)).ToString());
+			
 			BasedOnWindowMode.SetDisabledForcedStringValue(ScreenResolution->GetMaxSupportedResolutions());
 			ScreenResolution->AddEditCondition(BasedOnWindowMode);
 			ScreenResolution->AddEditDependencyData(CachedFullscreenMode);
@@ -287,8 +319,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 	// Graphics Category
 	{
 		UListSettingDataObjectInteger* CachedOverallScalabilityLevel;
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Graphics);
-		ADD_CHILD_TO_COLLECTION(Graphics, Video);
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(Graphics, ST_VIDEO_SETTINGS);
+		ADD_CHILD_TO_COLLECTION(Graphics, VideoCollection);
 		// Brightness
 		{
 			INIT_CHILD_SCALAR_DATA_AND_SET_ID_NAME(Brightness, ST_VIDEO_SETTINGS);
@@ -306,13 +338,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* OverallScalabilityLevel = NewObject<UListSettingDataObjectInteger>();
 			OverallScalabilityLevel->SetDataID(FName(TEXT("OverallScalabilityLevel")));
-			OverallScalabilityLevel->SetDataDisplayName(FText::FromString(TEXT("Overall Video Quality")));
-			OverallScalabilityLevel->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("OverallQualityDescKey"));
-			OverallScalabilityLevel->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			OverallScalabilityLevel->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			OverallScalabilityLevel->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			OverallScalabilityLevel->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			OverallScalabilityLevel->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(OverallScalabilityLevel);
 			OverallScalabilityLevel->SetbShouldApplySettingChangeImmediately(true);
 			// OverallScalabilityLevel->SetDefaultValueFromString(LexToString(1));
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(OverallScalabilityLevel);
@@ -338,14 +364,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* GlobalIlluminationQuality = NewObject<UListSettingDataObjectInteger>();
 			GlobalIlluminationQuality->SetDataID(FName(TEXT("GlobalIlluminationQuality")));
-			GlobalIlluminationQuality->SetDataDisplayName(FText::FromString(TEXT("Global Illumination Quality")));
-			GlobalIlluminationQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("GlobalIlluminationQualityDescKey"));
 			GlobalIlluminationQuality->SetbShouldApplySettingChangeImmediately(true);
-			GlobalIlluminationQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			GlobalIlluminationQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			GlobalIlluminationQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			GlobalIlluminationQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			GlobalIlluminationQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(GlobalIlluminationQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(GlobalIlluminationQuality);
 			GlobalIlluminationQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(GlobalIlluminationQuality);
@@ -355,14 +375,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* ShadowQuality = NewObject<UListSettingDataObjectInteger>();
 			ShadowQuality->SetDataID(FName(TEXT("ShadowQuality")));
-			ShadowQuality->SetDataDisplayName(FText::FromString(TEXT("Shadow Quality")));
-			ShadowQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("ShadowQualityDescKey"));
 			ShadowQuality->SetbShouldApplySettingChangeImmediately(true);
-			ShadowQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			ShadowQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			ShadowQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			ShadowQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			ShadowQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(ShadowQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ShadowQuality);
 			ShadowQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(ShadowQuality);
@@ -373,14 +387,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* AntiAliasingQuality = NewObject<UListSettingDataObjectInteger>();
 			AntiAliasingQuality->SetDataID(FName(TEXT("AntiAliasingQuality")));
-			AntiAliasingQuality->SetDataDisplayName(FText::FromString(TEXT("AntiAliasing Quality")));
-			AntiAliasingQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("AntiAliasingDescKey"));
 			AntiAliasingQuality->SetbShouldApplySettingChangeImmediately(true);
-			AntiAliasingQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			AntiAliasingQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			AntiAliasingQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			AntiAliasingQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			AntiAliasingQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(AntiAliasingQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(AntiAliasingQuality);
 			AntiAliasingQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(AntiAliasingQuality);
@@ -390,14 +398,21 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* ViewDistanceQuality = NewObject<UListSettingDataObjectInteger>();
 			ViewDistanceQuality->SetDataID(FName(TEXT("ViewDistanceQuality")));
-			ViewDistanceQuality->SetDataDisplayName(FText::FromString(TEXT("View Distance")));
-			ViewDistanceQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("ViewDistanceDescKey"));
 			ViewDistanceQuality->SetbShouldApplySettingChangeImmediately(true);
-			ViewDistanceQuality->AddIntegerSetting(0, FText::FromString(TEXT("Near")));
-			ViewDistanceQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			ViewDistanceQuality->AddIntegerSetting(2, FText::FromString(TEXT("Far")));
-			ViewDistanceQuality->AddIntegerSetting(3, FText::FromString(TEXT("Very Far")));
-			ViewDistanceQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			ViewDistanceQuality->SetDataDisplayName(
+				GET_VIDEO_SETTING_FOR_KEY(SYMBOL_NAME_STR(ViewDistanceQuality) NAME_SUFFIX));
+			ViewDistanceQuality->SetDescriptionRichText(
+				GET_VIDEO_SETTING_FOR_KEY(SYMBOL_NAME_STR(ViewDistanceQuality) DESCRIPTION_SUFFIX));
+			ViewDistanceQuality->AddIntegerSetting(0, 
+				GET_VIDEO_SETTING_FOR_KEY("ViewDistanceQualityValue0"));
+			ViewDistanceQuality->AddIntegerSetting(1, 
+				GET_VIDEO_SETTING_FOR_KEY("ViewDistanceQualityValue1"));
+			ViewDistanceQuality->AddIntegerSetting(2, 
+				GET_VIDEO_SETTING_FOR_KEY("ViewDistanceQualityValue2"));
+			ViewDistanceQuality->AddIntegerSetting(3, 
+				GET_VIDEO_SETTING_FOR_KEY("ViewDistanceQualityValue3"));
+			ViewDistanceQuality->AddIntegerSetting(4, 
+				GET_VIDEO_SETTING_FOR_KEY("ViewDistanceQualityValue4"));
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ViewDistanceQuality);
 			ViewDistanceQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(ViewDistanceQuality);
@@ -407,14 +422,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* TextureQuality = NewObject<UListSettingDataObjectInteger>();
 			TextureQuality->SetDataID(FName(TEXT("TextureQuality")));
-			TextureQuality->SetDataDisplayName(FText::FromString(TEXT("Texture Quality")));
-			TextureQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("TextureQualityDescKey"));
 			TextureQuality->SetbShouldApplySettingChangeImmediately(true);
-			TextureQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			TextureQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			TextureQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			TextureQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			TextureQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(TextureQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(TextureQuality);
 			TextureQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(TextureQuality);
@@ -424,14 +433,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* VisualEffectQuality = NewObject<UListSettingDataObjectInteger>();
 			VisualEffectQuality->SetDataID(FName(TEXT("VisualEffectQuality")));
-			VisualEffectQuality->SetDataDisplayName(FText::FromString(TEXT("Visual Effect Quality")));
-			VisualEffectQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("VisualEffectQualityDescKey"));
 			VisualEffectQuality->SetbShouldApplySettingChangeImmediately(true);
-			VisualEffectQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			VisualEffectQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			VisualEffectQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			VisualEffectQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			VisualEffectQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(VisualEffectQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(VisualEffectQuality);
 			VisualEffectQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(VisualEffectQuality);
@@ -441,14 +444,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* ReflectionQuality = NewObject<UListSettingDataObjectInteger>();
 			ReflectionQuality->SetDataID(FName(TEXT("ReflectionQuality")));
-			ReflectionQuality->SetDataDisplayName(FText::FromString(TEXT("Reflection Quality")));
-			ReflectionQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("ReflectionQualityDescKey"));
 			ReflectionQuality->SetbShouldApplySettingChangeImmediately(true);
-			ReflectionQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			ReflectionQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			ReflectionQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			ReflectionQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			ReflectionQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(ReflectionQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(ReflectionQuality);
 			ReflectionQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(ReflectionQuality);
@@ -458,14 +455,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		{	
 			UListSettingDataObjectInteger* PostProcessingQuality = NewObject<UListSettingDataObjectInteger>();
 			PostProcessingQuality->SetDataID(FName(TEXT("PostProcessingQuality")));
-			PostProcessingQuality->SetDataDisplayName(FText::FromString(TEXT("Post Processing Quality")));
-			PostProcessingQuality->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("PostProcessingQualityDescKey"));
 			PostProcessingQuality->SetbShouldApplySettingChangeImmediately(true);
-			PostProcessingQuality->AddIntegerSetting(0, FText::FromString(TEXT("Low")));
-			PostProcessingQuality->AddIntegerSetting(1, FText::FromString(TEXT("Medium")));
-			PostProcessingQuality->AddIntegerSetting(2, FText::FromString(TEXT("High")));
-			PostProcessingQuality->AddIntegerSetting(3, FText::FromString(TEXT("Epic")));
-			PostProcessingQuality->AddIntegerSetting(4, FText::FromString(TEXT("Cinematic")));
+			VIDEO_SETTING_NAME_DESC_AND_VALUE_GENERAL(PostProcessingQuality);
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(PostProcessingQuality);
 			PostProcessingQuality->AddEditDependencyData(CachedOverallScalabilityLevel);
 			CachedOverallScalabilityLevel->AddEditDependencyData(PostProcessingQuality);
@@ -474,8 +465,8 @@ void USettingDataRegistry::InitVideoCollectionTab()
 	}
 	// Advanced Graphics Category
 	{
-		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(AdvancedGraphics);
-		ADD_CHILD_TO_COLLECTION(AdvancedGraphics, Video);
+		INIT_CHILD_COLLECTION_DATA_AND_SET_ID_NAME(AdvancedGraphics, ST_VIDEO_SETTINGS);
+		ADD_CHILD_TO_COLLECTION(AdvancedGraphics, VideoCollection);
 		// VerticalSync
 		{
 			INIT_CHILD_STRING_BOOL_DATA_AND_SET_ID_NAME(VerticalSync, ST_VIDEO_SETTINGS);
@@ -503,16 +494,20 @@ void USettingDataRegistry::InitVideoCollectionTab()
 		}
 		// FrameRateLimit
 		{
-			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(FrameRateLimit);
-			FrameRateLimit->AddSettingEntry(LexToString(30.0f), FText::FromString(TEXT("30 FPS")));
-			FrameRateLimit->AddSettingEntry(LexToString(60.0f), FText::FromString(TEXT("60 FPS")));
-			FrameRateLimit->AddSettingEntry(LexToString(90.0f), FText::FromString(TEXT("90 FPS")));
-			FrameRateLimit->AddSettingEntry(LexToString(120.0f), FText::FromString(TEXT("120 FPS")));
-			FrameRateLimit->AddSettingEntry(LexToString(0.0f), FText::FromString(TEXT("No Limit")));
+			INIT_CHILD_STRING_DATA_AND_SET_ID_NAME(FrameRateLimit, ST_VIDEO_SETTINGS);
+			FrameRateLimit->AddSettingEntry(LexToString(30.0f),
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FrameRateLimit, 1)));
+			FrameRateLimit->AddSettingEntry(LexToString(60.0f),
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FrameRateLimit, 2)));
+			FrameRateLimit->AddSettingEntry(LexToString(90.0f),
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FrameRateLimit, 3)));
+			FrameRateLimit->AddSettingEntry(LexToString(120.0f),
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FrameRateLimit, 4)));
+			FrameRateLimit->AddSettingEntry(LexToString(0.0f),
+				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FrameRateLimit, 0)));
 			FrameRateLimit->SetDefaultValueFromString(LexToString(0.0f));
 
 			ADD_CHILD_DYNAMIC_GETTER_AND_SETTER(FrameRateLimit);
-			FrameRateLimit->SetDescriptionRichText(GET_DESCRIPTION_FOR_KEY("FrameRateLimitDescKey"));
 			ADD_CHILD_TO_COLLECTION(FrameRateLimit, AdvancedGraphics);
 		}
 	}
@@ -520,7 +515,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 
 void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalPlayer)
 {
-	INIT_COLLECTION_TAB(Control);
+	INIT_COLLECTION_TAB(ControlCollection);
 	
 	CHECK_NULL_RETURN(InOwningLocalPlayer);
 	
@@ -536,7 +531,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 		UListSettingDataObjectCollection* Keyboard_And_Mouse = NewObject<UListSettingDataObjectCollection>();
 		Keyboard_And_Mouse->SetDataID(FName(TEXT("Keyboard & Mouse")));
 		Keyboard_And_Mouse->SetDataDisplayName(FText::FromString(TEXT("Keyboard & Mouse")));
-		ADD_CHILD_TO_COLLECTION(Keyboard_And_Mouse, Control);
+		ADD_CHILD_TO_COLLECTION(Keyboard_And_Mouse, ControlCollection);
 		// Keyboard_Mouse Input
 		{
 			FPlayerMappableKeyQueryOptions KeyboardQueryOptions;
@@ -550,7 +545,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 				const auto Profile = KeyMapping.Value;
 				if (Profile == nullptr) continue;
 				for (const auto& MappingRow : Profile->GetPlayerMappingRows())
-				{
+				{// TODO:这里可能导致顺序不确定，两次启动时，按键绑定的顺序可能不一致
 					for (const auto& RowKeyMapping : MappingRow.Value.Mappings)
 					{
 						const FString* MappingTypePtr = &UnknownMappingType;
@@ -583,7 +578,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 		UListSettingDataObjectCollection* GamepadCategory = NewObject<UListSettingDataObjectCollection>();
 		GamepadCategory->SetDataID(FName(TEXT("Gamepad")));
 		GamepadCategory->SetDataDisplayName(FText::FromString(TEXT("Gamepad")));
-		ADD_CHILD_TO_COLLECTION(GamepadCategory, Control);
+		ADD_CHILD_TO_COLLECTION(GamepadCategory, ControlCollection);
 		// Gamepad Input //TODO:后续看能否区分xbox和ps4手柄
 		{
 			FPlayerMappableKeyQueryOptions GamepadQueryOptions;

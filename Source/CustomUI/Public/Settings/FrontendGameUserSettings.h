@@ -27,6 +27,14 @@ public:
 	{
 		this->Difficulty = InDifficulty;
 	}
+	
+	UFUNCTION()
+	[[nodiscard]] FString GetDisplayLanguageTag() const
+	{
+		return DisplayLanguageTag;
+	}
+	UFUNCTION()
+	void SetDisplayLanguageTag(const FString& InDisplayLanguage);
 	//*** Gameplay Collection Tab
 	//*** Audio Collection Tab
 	UFUNCTION()
@@ -87,6 +95,8 @@ private:
 	// Gameplay Tab
 	UPROPERTY(Config)
 	FString Difficulty;
+	UPROPERTY(Config)
+	FString DisplayLanguageTag;
 	// Gameplay Tab
 	
 	// Audio Tab

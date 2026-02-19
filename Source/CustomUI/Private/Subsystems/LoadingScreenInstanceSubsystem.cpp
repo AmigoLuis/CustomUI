@@ -50,7 +50,7 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 	{
 		// 展示 游戏关卡加载界面
 		TryShowLoadingScreen();
-		OnLoadingReasonUpdated.Broadcast(CurrentLoadingReason);
+		OnLoadingReasonUpdated.Broadcast(CurrentLoadingReasonKey);
 	}
 	else
 	{
@@ -92,7 +92,7 @@ bool ULoadingScreenInstanceSubsystem::ShouldShowLoadingScreen()
 		GameViewportClient->bDisableWorldRendering = true;
 		return true;
 	}
-	CurrentLoadingReason = TEXT("Waiting For Texture Streaming");
+	CurrentLoadingReasonKey = TEXT("Waiting For Texture Streaming");
 	GameViewportClient->bDisableWorldRendering = false;
 	const float CurrentTime = FPlatformTime::Seconds();
 	if (HoldLoadingScreenStartUpTime < 0.0f)
@@ -112,7 +112,7 @@ bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded()
 {
 	if (bIsLoadingMap)
 	{
-		CurrentLoadingReason = TEXT("Loading Level");
+		CurrentLoadingReasonKey = TEXT("Loading Level");
 		return true;
 	}
 	const UGameInstance* OwningGameInstance = GetGameInstance();
@@ -120,17 +120,17 @@ bool ULoadingScreenInstanceSubsystem::IsLoadingScreenNeeded()
 	const UWorld* OwningWorld = OwningGameInstance->GetWorld();
 	if (OwningWorld == nullptr)
 	{
-		CurrentLoadingReason = TEXT("Initializing World");
+		CurrentLoadingReasonKey = TEXT("Initializing World");
 		return true;
 	}
 	if (!OwningWorld->HasBegunPlay())
 	{
-		CurrentLoadingReason = TEXT("World hasn't begun play yet");
+		CurrentLoadingReasonKey = TEXT("World hasn't begun play yet");
 		return true;
 	}
 	if (!OwningWorld->GetFirstPlayerController())
 	{
-		CurrentLoadingReason = TEXT("Player Controller isn't valid yet");
+		CurrentLoadingReasonKey = TEXT("Player Controller isn't valid yet");
 		return true;
 	}
 	// we can also check if game states, player states or actors are ready
