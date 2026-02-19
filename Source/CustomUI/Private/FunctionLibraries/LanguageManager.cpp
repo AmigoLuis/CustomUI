@@ -25,7 +25,10 @@ const TArray<FLanguageInfo>& FLanguageManager::GetAvailableLanguageInfo(const bo
 	// 1. 获取所有已本地化的语言代码 (IETF标签, 如 "zh-Hans", "ja", "fr")
 	const TArray<FString>& SupportedLanguageNames =
 		UKismetInternationalizationLibrary::GetLocalizedCultures(true);
-
+	if (SupportedLanguageNames.IsEmpty())
+	{
+		PrintInLog(TEXT("UKismetInternationalizationLibrary::GetLocalizedCultures(true) is empty"));	
+	}
 	for (const FString& LanguageName : SupportedLanguageNames)
 	{
 		// 2. 通过语言代码获取该语言的“显示名称”（该语言自己的名字）
