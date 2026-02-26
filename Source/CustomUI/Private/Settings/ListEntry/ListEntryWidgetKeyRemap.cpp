@@ -70,11 +70,10 @@ void UListEntryWidgetKeyRemap::OnResetKeyBindingButtonClicked()
 	
 	if (!OwningKeyRemapObject->CanResetToDefaultValue())
 	{
-		UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
-			EConfirmScreenType::OK, 
-			GET_UN_ASSORTED_FOR_KEY("KeyBindingCanNotResetToDefaultValueTitle"),
-			GET_UN_ASSORTED_FOR_KEY("KeyBindingCanNotResetToDefaultValueHint"),
-[](EConfirmScreenButtonType ConfirmType){});
+		//不影响用户操作的右下角提示消息，提示用户，用户不需要点击确认按键
+		UUIFunctionLibrary::ShowUserMessageWidget(GetOwningPlayer(), 
+			TEXT("KeyBindingCanNotResetToDefaultValueHint"), 
+			TEXT("KeyBindingCanNotResetToDefaultValueTitle"));
 		return;
 	}
 	OwningKeyRemapObject->TryResetToDefaultValue();
@@ -91,9 +90,7 @@ void UListEntryWidgetKeyRemap::OnKeyRemapSucceeded(const FKey& PressedKey)
 
 void UListEntryWidgetKeyRemap::OnKeyRemapCanceled(const FString& CanceledReason)
 {
-	UUIGameInstanceSubsystem::Get(this)->PushConfirmWidgetToModalStackAsync(
-		EConfirmScreenType::OK,
-		GET_UN_ASSORTED_FOR_KEY("KeyBindingRemapTitle"),
-		GET_UN_ASSORTED_FOR_KEY_DIRECT(CanceledReason),
-[](EConfirmScreenButtonType ConfirmType){});
+	//不影响用户操作的右下角提示消息，提示用户，用户不需要点击确认按键
+	UUIFunctionLibrary::ShowUserMessageWidget(GetOwningPlayer(), CanceledReason, 
+		TEXT("KeyBindingRemapTitle"));
 }

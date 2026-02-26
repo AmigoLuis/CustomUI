@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Widgets/UserMessageBase.h"
 #include "UIFunctionLibrary.generated.h"
 
 class UWidgetActivatableBase;
@@ -28,4 +29,15 @@ public:
 	static bool IsPlayerHaveRecord();
 	UFUNCTION(BlueprintPure, Category = "UI Library")
 	static bool IsPlayerHaveCompletedGameOnce();
+	
+	UFUNCTION(BlueprintCallable, Category = "UI Library")
+	static void ShowChildUserMessageWidget(
+	APlayerController* OwningPC, const FString& InDetailTextKey, 
+	const TSubclassOf<UUserMessageBase> UserMessageWidgetClass, 
+	const FString& InTitleTextKey = TEXT("MessageTitle"), const float InTimeToLiveMs = 5000.0f);
+	
+	UFUNCTION(BlueprintCallable, Category = "UI Library")
+	static void ShowUserMessageWidget( 
+		APlayerController* OwningPC, const FString& InDetailTextKey, 
+		const FString& InTitleTextKey = TEXT("MessageTitle"), const float InTimeToLiveMs = 5000.0f);
 };
