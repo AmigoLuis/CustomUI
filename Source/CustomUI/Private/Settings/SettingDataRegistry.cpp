@@ -26,9 +26,6 @@
 #include "Widgets/StringTableLocations.h"
 
 // TODO:ui中鼠标应该额外添加一个back action就是鼠标右键，不然用鼠标左键click但是又要用键盘的esc返回，比较割裂
-// TODO:将所有显示的文本都通过StringTable管理，复用成功经验
-// TODO:实现多语言，国际化（doing），目前发现游戏中切换语言正常，但是在game instance里面设置语言不生效
-// TODO:实现可扩展的消息通知widget
 // TODO:在通过键盘导航时，暂时消除鼠标，防止在循环导航时，如果list过长导致触发scroll to select index。鼠标刚好在触发悬浮的范围内的话，就会触发悬浮，影响details view里面展示的内容
 
 #define DESCRIPTION_SUFFIX TEXT("SettingDescriptionKey")

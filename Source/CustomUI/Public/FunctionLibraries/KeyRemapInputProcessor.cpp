@@ -39,7 +39,7 @@ bool FKeyRemapInputProcessor::HandleMouseButtonDownEvent(FSlateApplication& Slat
 void FKeyRemapInputProcessor::ProcessPressedKey(const FKey& PressedKey)
 {
 	if (PressedKey == EKeys::Escape)
-	{//TODO:后续修改为不影响用户操作的右下角提示消息，提示用户，用户不需要点击确认按键
+	{
 		OnKeySelectCanceledDelegate.ExecuteIfBound(TEXT("Key map has been canceled by pressing Escape."));
 		return;
 	}
