@@ -39,7 +39,6 @@ void UUserMessageBase::SetUserMessageLazyImage()
 		PrintInLogDisplay(SYMBOL_NAME_TEXT(UserMessageLazyImage) TEXT(" is nullptr ") IN_FUNC_AND_LINE);
 		return;
 	}
-	// TODO: 目前没有实现设置消息的图片
 	// UserMessageLazyImage->SetBrushFromLazyTexture()
 }
 
