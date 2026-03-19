@@ -52,6 +52,11 @@ public:
 	}
 	// TODO: 目前拖动滑条会比较卡，推测是因为每次修改都会存储，考虑实现阶段性保存，就是修改参数后2s没有其他操作才去异步保存，防止修改滑条浮点属性时高频同步存储数据带来的卡顿
 	// TODO: 保存用户设置成功后，通过消息通知widget去通知用户保存已完成
+	//
+	//TODO1: 尝试将custom ui作为一个插件导入，发现以下问题：
+	//TODO1:1、复制过去的蓝图中的某些节点参数都丢失了，类似RegisterInputMappingContex这种节点里面设置IMC参数这种，ai说是需要通过迁移去做，不能直接复制，但我没有继续研究
+	//TODO1:2、custom ui项目设置中，有一些自定义的设置，但是没找到作为插件一起导出的方法
+	//TODO1: 如果把custom ui通过插件导入其他项目不好搞的话，看看能不能把custom ui所有source、content作为都分别整合到一个文件夹下，然后直接复制到其他项目，但是可能还是得找一下有哪些需要复制的项目设置
 	//TODO1: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置MusicVolume的值
 	UFUNCTION()
 	void SetMusicVolume(const float& InVolume);

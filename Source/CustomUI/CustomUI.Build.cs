@@ -11,7 +11,7 @@ public class CustomUI : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayTags", "CommonUI", "UMG", 
-			"CommonInput", "PropertyPath", "UE_DebugUtilities"
+			"CommonInput", "PropertyPath", "UE_DebugUtilities", "DeveloperSettings"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "PreLoadScreen", "UE_DebugUtilities" });
