@@ -271,7 +271,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 				{DISABLED_RICH_TEXT_STYLE}));
 		// Fullscreen Mode
 		{
-			// TODO:这个好像没生效，都是全屏，没看出来有区别
+			// TODO1:这个好像没生效，都是全屏，没看出来有区别
 			INIT_CHILD_ENUM_DATA_AND_SET_ID_NAME(FullscreenMode, ST_VIDEO_SETTINGS);
 			FullscreenMode->AddEnumOption(EWindowMode::Fullscreen, 
 				GET_VIDEO_SETTING_FOR_KEY(SETTING_VALUE_KEY(FullscreenMode, 1)));
@@ -380,7 +380,7 @@ void USettingDataRegistry::InitVideoCollectionTab()
 			ADD_CHILD_TO_COLLECTION(ShadowQuality, Graphics);
 		}
 		// AntiAliasingQuality
-		// TODO:发现这里所有的Graphics修改都不会触发重置按键出现，是bug吗
+		// TODO1:发现这里所有的Graphics修改都不会触发重置按键出现，是bug吗
 		{	
 			UListSettingDataObjectInteger* AntiAliasingQuality = NewObject<UListSettingDataObjectInteger>();
 			AntiAliasingQuality->SetDataID(FName(TEXT("AntiAliasingQuality")));
@@ -576,7 +576,7 @@ void USettingDataRegistry::InitControlCollectionTab(ULocalPlayer* InOwningLocalP
 		GamepadCategory->SetDataID(FName(TEXT("Gamepad")));
 		GamepadCategory->SetDataDisplayName(FText::FromString(TEXT("Gamepad")));
 		ADD_CHILD_TO_COLLECTION(GamepadCategory, ControlCollection);
-		// Gamepad Input //TODO:后续看能否区分xbox和ps4手柄
+		// Gamepad Input //TODO1:后续看能否区分xbox和ps4手柄
 		{
 			FPlayerMappableKeyQueryOptions GamepadQueryOptions;
 			GamepadQueryOptions.KeyToMatch = EKeys::Gamepad_FaceButton_Bottom;

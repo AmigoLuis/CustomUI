@@ -27,7 +27,7 @@ bool UListSettingDataObjectBase::IsSettingDataEditable()
 		if (!SettingDataEditCondition.IsConditionValid() || SettingDataEditCondition.IsEditable()) continue;
 		bIsEditable = false;
 		CachedDisabledRichReason.Append(SettingDataEditCondition.GetDisabledRichReason());
-		// TODO:确认下这里是否需要移除到循环外
+		// TODO1:确认下这里是否需要移除到循环外
 		SetDisabledRichText(FText::FromString(CachedDisabledRichReason));
 		if (SettingDataEditCondition.HasForcedStringValue())
 		{

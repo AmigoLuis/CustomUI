@@ -58,7 +58,7 @@ void ULoadingScreenInstanceSubsystem::TryUpdateLoadingScreen()
 		TryRemoveLoadingScreen();
 		
 		HoldLoadingScreenStartUpTime = -1.0f;
-		// 通知加载结束 //TODO: 当以独立进程启动游戏时，如果 LoadScreenSettings->bShouldShowLoadingScreenInEditor 为false 无法显示 press any key 界面，无论是不是编辑器中启动，如果为true则没有问题
+		// 通知加载结束 //TODO1: 当以独立进程启动游戏时，如果 LoadScreenSettings->bShouldShowLoadingScreenInEditor 为false 无法显示 press any key 界面，无论是不是编辑器中启动，如果为true则没有问题
 		NotifyLoadingScreenVisibilityChange(false);
 		// 禁用ticking
 		SetTickableTickType(ETickableTickType::Never);
@@ -88,7 +88,7 @@ bool ULoadingScreenInstanceSubsystem::ShouldShowLoadingScreen()
 	if (GameViewportClient == nullptr) return false;
 	if (IsLoadingScreenNeeded())
 	{
-		// TODO:搞清楚为什么需要加载界面时，要禁用 世界渲染 
+		// TODO1:搞清楚为什么需要加载界面时，要禁用 世界渲染 
 		GameViewportClient->bDisableWorldRendering = true;
 		return true;
 	}

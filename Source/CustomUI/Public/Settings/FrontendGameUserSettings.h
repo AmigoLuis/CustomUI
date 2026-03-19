@@ -42,7 +42,7 @@ public:
 	{
 		return OverallVolume;
 	}
-	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置OverallVolume的值
+	//TODO1: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置OverallVolume的值
 	UFUNCTION()
 	void SetOverallVolume(const float& InVolume);
 	UFUNCTION()
@@ -52,7 +52,7 @@ public:
 	}
 	// TODO: 目前拖动滑条会比较卡，推测是因为每次修改都会存储，考虑实现阶段性保存，就是修改参数后2s没有其他操作才去异步保存，防止修改滑条浮点属性时高频同步存储数据带来的卡顿
 	// TODO: 保存用户设置成功后，通过消息通知widget去通知用户保存已完成
-	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置MusicVolume的值
+	//TODO1: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置MusicVolume的值
 	UFUNCTION()
 	void SetMusicVolume(const float& InVolume);
 	UFUNCTION()
@@ -60,7 +60,7 @@ public:
 	{
 		return SoundFXVolume;
 	}
-	//TODO: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置SoundFXVolume的值
+	//TODO1: 目前没有真的设置音量，后续需要设置到游戏设置中，而不只是设置SoundFXVolume的值
 	UFUNCTION()
 	void SetSoundFXVolume(const float& InVolume);
 	
